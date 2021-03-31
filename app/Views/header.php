@@ -73,6 +73,18 @@
                     </div>
                 </div>
 
+                <a class="nav-link collapsed" data-toggle="collapse" data-target="#config_menu"
+                    aria-expanded="true" aria-controls="config_menu" type='button'>
+                    <i class="fas fa-tools"></i>
+                    <span>Configuración</span>
+                </a>
+
+                <div id="config_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="<?= base_url() ?>/configuracion">Configuración</a>
+                    </div>
+                </div>
+
             </li>
 
             <?php if(false) { ?>

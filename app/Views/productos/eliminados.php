@@ -6,7 +6,7 @@
 
         <div class="">
             <p class="">
-                <a href="<?= base_url() ?>/unidades" class='btn btn-warning'>Unidades</a>
+                <a href="<?= base_url() ?>/productos" class='btn btn-warning'>Productos</a>
             </p>
         </div>
 
@@ -17,17 +17,21 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Unidad ID</th>
+                                <th>Producto ID</th>
+                                <th>Código</th>
                                 <th>Nombre</th>
-                                <th>Nombre Corto</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>Unidad ID</th>
+                                <th>Producto ID</th>
+                                <th>Código</th>
                                 <th>Nombre</th>
-                                <th>Nombre Corto</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
                                 <th></th>
                             </tr>
                         </tfoot>
@@ -36,11 +40,13 @@
                                 foreach ($datos as $key => $value) { ?>
                                     
                                     <tr>
-                                        <td><?= $value['unidad_id'] ?></td>
-                                        <td><?= $value['unidad_nombre'] ?></td>
-                                        <td><?= $value['unidad_corto'] ?></td>
+                                        <td><?= $value['producto_id'] ?></td>
+                                        <td><?= $value['producto_codigo'] ?></td>
+                                        <td><?= $value['producto_nombre'] ?></td>
+                                        <td><?= $value['producto_precioventa'] ?></td>
+                                        <td><?= $value['producto_stock'] ?></td>
 
-                                        <td><a type='button' data-href="<?= base_url() ?>/unidades/reingresar/<?= $value['unidad_id'] ?>" class='btn btn-success' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Reingresar Registro'><i class="fas fa-undo-alt"></i></a></td>
+                                        <td><a type='button' data-href="<?= base_url() ?>/productos/reingresar/<?= $value['producto_id'] ?>" class='btn btn-success' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Reingresar Registro'><i class="fas fa-undo-alt"></i></a></td>
 
                                     </tr>
                                 

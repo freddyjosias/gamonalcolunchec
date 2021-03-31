@@ -61,6 +61,18 @@
                     </div>
                 </div>
 
+                <a class="nav-link collapsed" data-toggle="collapse" data-target="#clientes_menu"
+                    aria-expanded="true" aria-controls="clientes_menu" type='button'>
+                    <i class="fas fa-users"></i>
+                    <span>Clientes</span>
+                </a>
+
+                <div id="clientes_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="<?= base_url() ?>/clientes">Clientes</a>
+                    </div>
+                </div>
+
             </li>
 
             <?php if(false) { ?>

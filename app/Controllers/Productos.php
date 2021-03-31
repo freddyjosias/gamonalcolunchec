@@ -9,14 +9,30 @@
     class Productos extends BaseController
     {
         protected $productos;
-        //protected $unidades;
-        //protected $categorias;
+        protected $reglas;
 
         public function __construct()
         {
             $this -> productos = new ProductosModel();
             $this -> unidades = new UnidadesModel();
             $this -> categorias = new CategoriasModel();
+            helper(['form']);
+
+            $this -> reglas = [
+                'codigo' => [
+                    'rules' => 'required|is_unique[producto.producto_codigo]',
+                    'errors' => [
+                        'required' => 'El campo {field} es obligatorio.',
+                        'is_unique' => 'El campo {field} debe ser unico.'
+                    ]
+                ], 
+                'nombre' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'El campo {field} es obligatorio.'
+                    ]
+                ]
+            ];
         }
 
         public function index($state = 1)
@@ -44,7 +60,7 @@
 
         public function insertar()
         {
-            if ($this -> request -> getMethod() == 'post') 
+            if ($this -> request -> getMethod() == 'post' && $this -> validate($this -> reglas)) 
             {
                 $this -> productos -> save([
                     'producto_codigo' => $this -> request -> getPost('codigo'), 
@@ -61,20 +77,29 @@
             }
             else
             {
-                $data = ['title' => 'Agregar Unidad'];
+                $unidades = $this -> unidades -> where('unidad_state', 1) -> findAll();
+                $categorias = $this -> categorias -> where('categoria_state', 1) -> findAll();
+
+                $data = [
+                    'title' => 'Agregar Producto', 
+                    'unidades' => $unidades, 
+                    'categorias' => $categorias, 
+                    'validation' => $this -> validator
+                ];
 
                 echo view('header');
                 echo view('productos/nuevo', $data);
                 echo view('footer');
             }
 
-            
         }
 
         public function editar($id)
         {
+            $unidades = $this -> unidades -> where('unidad_state', 1) -> findAll();
+            $categorias = $this -> categorias -> where('categoria_state', 1) -> findAll();
             $producto = $this -> productos -> where('producto_id', $id) -> first();
-            $data = ['title' => 'Editar Unidad', 'datos' => $producto];
+            $data = ['title' => 'Editar Producto', 'unidades' => $unidades, 'categorias' => $categorias, 'producto' => $producto];
 
             echo view('header');
             echo view('productos/editar', $data);
@@ -91,6 +116,20 @@
                 ]
             );
 
+            $this -> productos -> update(
+                $this -> request -> getPost('id'), 
+                [
+                    'producto_codigo' => $this -> request -> getPost('codigo'), 
+                    'producto_nombre' => $this -> request -> getPost('nombre'), 
+                    'producto_precioventa' => $this -> request -> getPost('precio_venta'), 
+                    'producto_preciocompra' => $this -> request -> getPost('pracio_compra'), 
+                    //'producto_stock' => $this -> request -> getPost('nombre'), 
+                    'producto_stockminimo' => $this -> request -> getPost('stock_minimo'), 
+                    'unidad_id' => $this -> request -> getPost('id_unidad'), 
+                    'categoria_id' => $this -> request -> getPost('id_categoria'), 
+                    'producto_inventariable' => $this -> request -> getPost('inventariable')
+                ]
+            );
             return redirect() -> to(base_url() . '/productos');
         }
 

@@ -4,6 +4,12 @@
         <!-- Page Heading -->
         <h1 class="h1 mb-2 text-gray-800"><?= $title ?></h1>
 
+        <?php if (isset($validation)) { ?>
+            <div class="alert alert-danger">
+            <?= $validation -> listErrors() ?>
+            </div>
+        <?php } ?>
+
         <form method='POST' action='<?= base_url() ?>/unidades/actualizar' autocomplete='off'>
 
             <div class="form-group">
@@ -11,14 +17,14 @@
                     <div class="col-12 col-sm-6">
 
                         <label for="">Nombre</label>
-                        <input type="text" class='form-control' value='<?= $datos['unidad_nombre'] ?>' id='nombre' name='nombre' autofocus require>
+                        <input type="text" class='form-control' value='<?= $datos['unidad_nombre'] ?>' id='nombre' name='nombre' autofocus required>
 
                     </div>
 
                     <div class="col-12 col-sm-6">
 
                         <label for="">Nombre Corto</label>
-                        <input type="text" class='form-control' value='<?= $datos['unidad_corto'] ?>' id='nombre_corto' name='nombre_corto' require>
+                        <input type="text" class='form-control' value='<?= $datos['unidad_corto'] ?>' id='nombre_corto' name='nombre_corto' required>
 
                     </div>
                 </div>

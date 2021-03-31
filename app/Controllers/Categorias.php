@@ -16,7 +16,7 @@
         public function index($state = 1)
         {
             $categorias = $this -> categorias -> where('categoria_state', $state) -> findAll();
-            $data = ['title' => 'Categoriís', 'datos' => $categorias];
+            $data = ['title' => 'Categorías', 'datos' => $categorias];
 
             echo view('header');
             echo view('categorias/categorias', $data);

@@ -6,8 +6,7 @@
 
         <div class="">
             <p class="">
-                <a href="<?= base_url() ?>/productos/nuevo" class='btn btn-info'>Agregar</a>
-                <a href="<?= base_url() ?>/productos/eliminados" class='btn btn-warning'>Eliminado</a>
+                <a href="<?= base_url() ?>/clientes" class='btn btn-warning'>Clientes</a>
             </p>
         </div>
 
@@ -18,22 +17,22 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Producto ID</th>
-                                <th>Código</th>
+                                <th>Cliente ID</th>
                                 <th>Nombre</th>
-                                <th>Precio</th>
-                                <th>Stock</th>
+                                <th>Dirección</th>
+                                <th>Teléfono</th>
+                                <th>Correo</th>
                                 <th></th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>Producto ID</th>
-                                <th>Código</th>
+                                <th>Cliente ID</th>
                                 <th>Nombre</th>
-                                <th>Precio</th>
-                                <th>Stock</th>
+                                <th>Dirección</th>
+                                <th>Teléfono</th>
+                                <th>Correo</th>
                                 <th></th>
                                 <th></th>
                             </tr>
@@ -43,15 +42,14 @@
                                 foreach ($datos as $key => $value) { ?>
                                     
                                     <tr>
-                                        <td><?= $value['producto_id'] ?></td>
-                                        <td><?= $value['producto_codigo'] ?></td>
-                                        <td><?= $value['producto_nombre'] ?></td>
-                                        <td><?= $value['producto_precioventa'] ?></td>
-                                        <td><?= $value['producto_stock'] ?></td>
+                                        <td><?= $value['cliente_id'] ?></td>
+                                        <td><?= $value['cliente_nombre'] ?></td>
+                                        <td><?= $value['cliente_direccion'] ?></td>
+                                        <td><?= $value['cliente_telefono'] ?></td>
+                                        <td><?= $value['cliente_correo'] ?></td>
 
-                                        <td><a href="<?= base_url() ?>/productos/editar/<?= $value['producto_id'] ?>" class='btn btn-warning'><i class="fas fa-edit"></i></a></td>
+                                        <td><a type='button' data-href="<?= base_url() ?>/clientes/reingresar/<?= $value['cliente_id'] ?>" class='btn btn-success' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Reingresar Registro'><i class="fas fa-undo-alt"></i></a></td>
 
-                                        <td><a type='button' data-href="<?= base_url() ?>/productos/eliminar/<?= $value['producto_id'] ?>" class='btn btn-danger' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Eliminar Registro'><i class="fas fa-trash-alt"></i></a></td>
                                     </tr>
                                 
                             <?php }
@@ -74,14 +72,14 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Eliminar Registro</h5>
+                <h5 class="modal-title">Reingresar Registro</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
 
             <div class="modal-body">
-                ¿Desea eliminar este registro?
+                ¿Desea reingresar este registro?
             </div>
                                     
             <div class="modal-footer">

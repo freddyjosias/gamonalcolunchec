@@ -1,3 +1,9 @@
+<?php
+
+    $user_session = session();
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -13,9 +19,7 @@
 
     <!-- Custom fonts for this template -->
     <link href="<?= base_url() ?>/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="<?= base_url() ?>/css/sb-admin-2.min.css" rel="stylesheet">
@@ -73,15 +77,29 @@
                     </div>
                 </div>
 
-                <a class="nav-link collapsed" data-toggle="collapse" data-target="#config_menu"
-                    aria-expanded="true" aria-controls="config_menu" type='button'>
-                    <i class="fas fa-tools"></i>
-                    <span>Configuración</span>
+                <a class="nav-link collapsed" data-toggle="collapse" data-target="#compras_menu"
+                    aria-expanded="true" aria-controls="compras_menu" type='button'>
+                    <i class="fas fa-cash-register"></i>
+                    <span>Compras</span>
                 </a>
 
-                <div id="config_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div id="compras_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="<?= base_url() ?>/compras/nuevo">Nueva Compra</a>
+                        <a class="collapse-item" href="<?= base_url() ?>/compras">Compras</a>
+                    </div>
+                </div>
+
+                <a class="nav-link collapsed" data-toggle="collapse" data-target="#admin_menu"
+                    aria-expanded="true" aria-controls="admin_menu" type='button'>
+                    <i class="fas fa-tools"></i>
+                    <span>Administración</span>
+                </a>
+
+                <div id="admin_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="<?= base_url() ?>/configuracion">Configuración</a>
+                        <a class="collapse-item" href="<?= base_url() ?>/usuarios">Usuarios</a>
                     </div>
                 </div>
 
@@ -327,7 +345,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Gamonal Colunche</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $user_session->nombre ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="<?= base_url() ?>/img/undraw_profile.svg">
                             </a>
@@ -338,18 +356,18 @@
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="<?= base_url() ?>/usuarios/cambiarpassword">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
+                                    Cambiar contraseña
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="<?= base_url() ?>/usuarios/logout">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
+                                    Cerrar 
                                 </a>
                             </div>
                         </li>

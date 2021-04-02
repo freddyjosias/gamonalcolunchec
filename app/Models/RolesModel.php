@@ -3,21 +3,21 @@
     namespace App\Models;
     use CodeIgniter\Model;
 
-    class ConfiguracionModel extends Model 
+    class RolesModel extends Model 
     {
-        protected $table      = 'configuracion';
-        protected $primaryKey = 'configuracion_id';
+        protected $table      = 'rol';
+        protected $primaryKey = 'rol_id';
 
         protected $useAutoIncrement = true;
 
         protected $returnType     = 'array';
         protected $useSoftDeletes = false;
 
-        protected $allowedFields = ['configuracion_nombre', 'configuracion_valor'];
+        protected $allowedFields = ['rol_nombre', 'rol_state'];
 
         protected $useTimestamps = true;
-        protected $createdField  = null;
-        protected $updatedField  = null;
+        protected $createdField  = 'rol_creation';
+        protected $updatedField  = 'rol_update';
         protected $deletedField  = 'deleted_at';
 
         protected $validationRules    = [];

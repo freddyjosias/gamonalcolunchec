@@ -3,21 +3,21 @@
     namespace App\Models;
     use CodeIgniter\Model;
 
-    class ConfiguracionModel extends Model 
+    class UnidadesModel extends Model 
     {
-        protected $table      = 'configuracion';
-        protected $primaryKey = 'configuracion_id';
+        protected $table      = 'unidad';
+        protected $primaryKey = 'unidad_id';
 
         protected $useAutoIncrement = true;
 
         protected $returnType     = 'array';
         protected $useSoftDeletes = false;
 
-        protected $allowedFields = ['configuracion_nombre', 'configuracion_valor'];
+        protected $allowedFields = ['unidad_nombre', 'unidad_corto', 'unidad_state'];
 
         protected $useTimestamps = true;
-        protected $createdField  = null;
-        protected $updatedField  = null;
+        protected $createdField  = 'unidad_creation';
+        protected $updatedField  = 'unidad_update';
         protected $deletedField  = 'deleted_at';
 
         protected $validationRules    = [];

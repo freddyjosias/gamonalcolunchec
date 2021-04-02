@@ -78,13 +78,18 @@
         {
             if ($this -> request -> getMethod() == 'post' && $this -> validate($this -> reglas)) 
             {    
-                $this -> configuracion -> update(
-                    $this -> request -> getPost('id'), 
-                    [
-                        'unidad_nombre' => $this -> request -> getPost('nombre'), 
-                        'unidad_corto' => $this -> request -> getPost('nombre_corto')
-                    ]
-                );
+                $this -> configuracion -> whereIn('configuracion_nombre', ['nombre_tienda']) -> set(['configuracion_valor' => $this -> request -> getPost('tienda_nombre')]) -> update();
+
+                $this -> configuracion -> whereIn('configuracion_nombre', ['tienda_rfc']) -> set(['configuracion_valor' => $this -> request -> getPost('tienda_rfc')]) -> update();
+
+                $this -> configuracion -> whereIn('configuracion_nombre', ['tienda_telefono']) -> set(['configuracion_valor' => $this -> request -> getPost('tienda_telefono')]) -> update();
+
+                $this -> configuracion -> whereIn('configuracion_nombre', ['tienda_email']) -> set(['configuracion_valor' => $this -> request -> getPost('tienda_correo')]) -> update();
+
+                $this -> configuracion -> whereIn('configuracion_nombre', ['tienda_direccion']) -> set(['configuracion_valor' => $this -> request -> getPost('tienda_direccion')]) -> update();
+
+                $this -> configuracion -> whereIn('configuracion_nombre', ['ticket_leyenda']) -> set(['configuracion_valor' => $this -> request -> getPost('leyenda_ticket')]) -> update();
+
                 return redirect() -> to(base_url() . '/configuracion');
             }
             else

@@ -14,7 +14,7 @@
                     </div>
                 <?php } ?>
 
-                <form method='POST' action='<?= base_url() ?>/unidades/insertar' autocomplete='off'>
+                <form method='POST' action='<?= base_url() ?>/configuracion/actualizar' autocomplete='off'>
                     <?= csrf_field() ?>
 
                     <div class="form-group">

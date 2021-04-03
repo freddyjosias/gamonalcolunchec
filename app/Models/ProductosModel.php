@@ -28,9 +28,16 @@
 
         protected $useTimestamps = true;
         protected $createdField  = 'producto_creation';
-        protected $updatedField  = 'producto_update';
+        protected $updatedField  = null;
         protected $deletedField  = 'deleted_at';
 
         protected $validationRules    = [];
         protected $validationMessages = [];
+
+        public function actualizaStock($idProducto, $cantidad)
+        {
+            $this -> set('producto_stock', 'producto_stock + ' . $cantidad, FALSE);
+            $this -> where('producto_id', $idProducto);
+            $this -> update();
+        }
     }

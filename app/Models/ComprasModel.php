@@ -3,23 +3,34 @@
     namespace App\Models;
     use CodeIgniter\Model;
 
-    class UnidadesModel extends Model 
+    class ComprasModel extends Model 
     {
-        protected $table      = 'unidad';
-        protected $primaryKey = 'unidad_id';
+        protected $table      = 'compra';
+        protected $primaryKey = 'compra_id';
 
         protected $useAutoIncrement = true;
 
         protected $returnType     = 'array';
         protected $useSoftDeletes = false;
 
-        protected $allowedFields = ['unidad_nombre', 'unidad_corto', 'unidad_state'];
+        protected $allowedFields = ['compra_folio', 'compra_total', 'usuario_id', 'compra_state'];
 
         protected $useTimestamps = true;
-        protected $createdField  = 'unidad_creation';
-        protected $updatedField  = 'unidad_update';
+        protected $createdField  = 'compra_creation';
+        protected $updatedField  = null;
         protected $deletedField  = 'deleted_at';
 
         protected $validationRules    = [];
         protected $validationMessages = [];
+
+        public function insertaCompra($idCompra, $total, $idUsuario)
+        {
+            $this -> insert([
+                'compra_folio' => $idCompra, 
+                'compra_total' => $total,
+                'usuario_id' => $idUsuario
+            ]);
+
+            return $this -> insertId();
+        }
     }

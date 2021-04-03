@@ -156,4 +156,28 @@
 
             return redirect() -> to(base_url() . '/productos');
         }
+
+        public function buscarporcodigo($codigo)
+        {
+            $this -> productos -> select('*');
+            $this -> productos -> where('producto_codigo', $codigo);
+            $this -> productos -> where('producto_state', 1);
+            $datos = $this -> productos -> get() -> getRow();
+
+            $res['existe'] = false;
+            $res['datos'] = '';
+            $res['error'] = '';
+
+            if ($datos) 
+            {
+                $res['datos'] = $datos;
+                $res['existe'] = true;
+            }
+            else
+            {
+                $res['error'] = 'No existe el producto';
+            }
+
+            echo json_encode($res);
+        }
     }

@@ -180,4 +180,26 @@
 
             echo json_encode($res);
         }
+
+        public function autocompleteData()
+        {
+            $returnData = array();
+
+            $valor = $this -> request -> getGet('term');
+            
+            $productos = $this -> productos -> like('producto_codigo', $valor) -> where('producto_state', 1) -> findAll();
+
+            if (!empty($productos)) 
+            {
+                foreach ($productos as $key => $value) 
+                {
+                    $data['id'] = $value['producto_id'];
+                    $data['value'] = $value['producto_codigo'];
+                    $data['label'] = $value['producto_codigo'] . ' - ' . $value['producto_nombre'];
+                    array_push($returnData, $data);
+                }
+            }
+
+            echo json_encode($returnData);
+        }
     }

@@ -16,7 +16,7 @@
                         <input type="hidden" class='form-control' id='id_compra' name='id_compra' value='<?= $idUnico ?>'>
                         <label for="">Código</label>
                         <input type="text" class='form-control' id='codigo' name='codigo' autofocus placeholder='Escribe el código y enter'>
-                        <label for="codigo" id='res_error' class='color-red'></label>
+                        <label for="codigo" id='res_error'></label>
 
                     </div>
 

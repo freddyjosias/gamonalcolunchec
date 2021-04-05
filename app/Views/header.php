@@ -27,6 +27,8 @@
     <!-- Custom styles for this page -->
     <link href="<?= base_url() ?>/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <script src="<?= base_url() ?>/vendor/jquery/jquery.min.js"></script>
+    <link href="<?= base_url() ?>/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css">
+    <script src="<?= base_url() ?>/js/jquery-ui/jquery-ui.min.js"></script>
 
 </head>
 
@@ -75,6 +77,18 @@
                 <div id="clientes_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="<?= base_url() ?>/clientes">Clientes</a>
+                    </div>
+                </div>
+
+                <a class="nav-link collapsed" data-toggle="collapse" data-target="#caja_menu"
+                    aria-expanded="true" aria-controls="caja_menu" type='button'>
+                    <i class="fas fa-cash-register"></i>
+                    <span>Caja</span>
+                </a>
+
+                <div id="caja_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="<?= base_url() ?>/ventas/ventas">Caja</a>
                     </div>
                 </div>
 

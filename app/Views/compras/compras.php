@@ -6,7 +6,6 @@
 
         <div class="">
             <p class="">
-                <a href="<?= base_url() ?>/unidades/nuevo" class='btn btn-info'>Agregar</a>
                 <a href="<?= base_url() ?>/unidades/eliminados" class='btn btn-warning'>Eliminado</a>
             </p>
         </div>
@@ -18,19 +17,19 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Unidad ID</th>
-                                <th>Nombre</th>
-                                <th>Nombre Corto</th>
-                                <th></th>
+                                <th>Compra ID</th>
+                                <th>Folio</th>
+                                <th>Total</th>
+                                <th>Fecha</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>Unidad ID</th>
-                                <th>Nombre</th>
-                                <th>Nombre Corto</th>
-                                <th></th>
+                                <th>Compra ID</th>
+                                <th>Folio</th>
+                                <th>Total</th>
+                                <th>Fecha</th>
                                 <th></th>
                             </tr>
                         </tfoot>
@@ -39,13 +38,12 @@
                                 foreach ($datos as $key => $value) { ?>
                                     
                                     <tr>
-                                        <td><?= $value['unidad_id'] ?></td>
-                                        <td><?= $value['unidad_nombre'] ?></td>
-                                        <td><?= $value['unidad_corto'] ?></td>
+                                        <td><?= $value['compra_id'] ?></td>
+                                        <td><?= $value['compra_folio'] ?></td>
+                                        <td><?= $value['compra_total'] ?></td>
+                                        <td><?= $value['compra_creation'] ?></td>
 
-                                        <td><a href="<?= base_url() ?>/unidades/editar/<?= $value['unidad_id'] ?>" class='btn btn-warning'><i class="fas fa-edit"></i></a></td>
-
-                                        <td><a type='button' data-href="<?= base_url() ?>/unidades/eliminar/<?= $value['unidad_id'] ?>" class='btn btn-danger' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Eliminar Registro'><i class="fas fa-trash-alt"></i></a></td>
+                                        <td><a type='button' href="<?= base_url() ?>/compras/muestracomprapdf/<?= $value['compra_id'] ?>" class='btn btn-primary'title=''><i class="fas fa-file-pdf"></i></a></td>
                                     </tr>
                                 
                             <?php }

@@ -23,7 +23,7 @@
 
         public function index($state = 1)
         {
-            $compras = $this -> compras -> where('unidad_state', $state) -> findAll();
+            $compras = $this -> compras -> where('compra_ustate', $state) -> findAll();
             $data = ['title' => 'Compras', 'datos' => $compras];
 
             echo view('header');

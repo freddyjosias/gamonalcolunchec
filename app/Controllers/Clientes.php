@@ -122,4 +122,25 @@
 
             return redirect() -> to(base_url() . '/clientes');
         }
+
+        public function autocompleteData()
+        {
+            $returnData = array();
+
+            $valor = $this -> request -> getGet('term');
+            
+            $clientes = $this -> clientes -> like('cliente_nombre', $valor) -> where('cliente_state', 1) -> findAll();
+
+            if (!empty($clientes)) 
+            {
+                foreach ($clientes as $key => $value) 
+                {
+                    $data['id'] = $value['cliente_id'];
+                    $data['value'] = $value['cliente_nombre'];
+                    array_push($returnData, $data);
+                }
+            }
+
+            echo json_encode($returnData);
+        }
     }

@@ -28,6 +28,9 @@
     <link href="<?= base_url() ?>/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <script src="<?= base_url() ?>/vendor/jquery/jquery.min.js"></script>
     <link href="<?= base_url() ?>/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css">
+    <script src="<?= base_url() ?>/js/all.min.js"></script>
+    <!--<script src="<?= base_url() ?>/js/jquery-3.5.1.min.js"></script>-->
+    <script src="<?= base_url() ?>/js/jquery-ui/external/jquery/jquery.js"></script>
     <script src="<?= base_url() ?>/js/jquery-ui/jquery-ui.min.js"></script>
 
 </head>

@@ -72,7 +72,7 @@
                             <th>Precio</th>
                             <th>Cantidad</th>
                             <th>Total</th>
-                            <th></th>
+                            <th whith="1%"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,4 +89,17 @@
 </div>
 <!-- End of Main Content -->
 
-<script src="<?= base_url() ?>/js/caja.js"></script>
+<script>
+    $(function(){
+        $('#cliente').autocomplete({
+            source: "<?php echo base_url(); ?>/clientes/autocompleteDate",
+            minLength: 3,
+            select: function (event, ui){
+                event.oreventDefault();
+                $("#id_cliente").val(ui.item.id);
+                $("#cliente").val(ui.item.value);
+            }
+        })
+    })
+
+</script>

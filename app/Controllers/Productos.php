@@ -193,9 +193,9 @@
             {
                 foreach ($productos as $key => $value) 
                 {
-                    $data['id'] = $value['producto_id'];
-                    $data['value'] = $value['producto_codigo'];
-                    $data['label'] = $value['producto_codigo'] . ' - ' . $value['producto_nombre'];
+                    $data['id'] = $value['id'];
+                    $data['value'] = $value['codigo'];
+                    $data['label'] = $value['codigo'] . ' - ' . $value['producto_nombre'];
                     array_push($returnData, $data);
                 }
             }

@@ -96,10 +96,16 @@
             minLength: 3,
             select: function (event, ui){
                 event.oreventDefault();
-                $("#id_cliente").val(ui.item.id);
-                $("#cliente").val(ui.item.value);
+                $("#codigo").val(ui.item.value);
+                setTimeout(
+
+                function(){
+                    e=jQuery.Event("keypress");
+                    e.which =13;
+                    AgregarProducto();
+                }
             }
-        })
-    })
+        }
+    });
 
 </script>

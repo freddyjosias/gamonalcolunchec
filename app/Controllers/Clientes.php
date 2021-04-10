@@ -127,9 +127,9 @@
         {
             $returnData = array();
 
-            $valor = $this -> request -> getGet('term');
+            $valor = $this->request->getGet('term');
             
-            $clientes = $this -> clientes -> like('cliente_nombre', $valor) -> where('cliente_state', 1) -> findAll();
+            $clientes = $this->clientes->like('cliente_nombre', $valor)->where('cliente_state', 1)->findAll();
 
             if (!empty($clientes)) 
             {

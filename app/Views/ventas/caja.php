@@ -88,24 +88,4 @@
 
 </div>
 <!-- End of Main Content -->
-
-<script>
-    $(function(){
-        $('#cliente').autocomplete({
-            source: "<?php echo base_url(); ?>/clientes/autocompleteDate",
-            minLength: 3,
-            select: function (event, ui){
-                event.oreventDefault();
-                $("#codigo").val(ui.item.value);
-                setTimeout(
-
-                function(){
-                    e=jQuery.Event("keypress");
-                    e.which =13;
-                    AgregarProducto();
-                }
-            }
-        }
-    });
-
-</script>
+<script src="<?= base_url() ?>/js/caja.js"></script>

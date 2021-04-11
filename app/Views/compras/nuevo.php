@@ -61,7 +61,7 @@
             </div>
 
             <div class="">
-                <table id='tableproducto' class='table table-hover table-striped table-sm tabla_productos' >
+                <table id='tableproducto' class='table table-hover table-striped table-sm tabla_productos' width="100%">
                     <thead class='thead-dark'>
                         <tr>
                             <th>#</th>

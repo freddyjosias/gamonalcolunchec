@@ -31,36 +31,9 @@ $(document).ready(function() {
                     {
                         e = jQuery.Event('keypress');
                         e.which = 13;
-                        agregarProducto(e, id_producto, cantidad, id_venta); {   
-                        let enterkey = 13;
-                        if (codigo != '') {
-                            if (e.whitch == enterkey) {
-                                if (id_producto != null && id_producto != 0 && cantidad >0) {
-                                    $.ajax({
-                                        url: '<?php echo base_url(); ?>/temporalcompra/inserta/' + id_Producto + '/' + cantidad,
-                                        
-                                        success:function (resultado) {
-                                            
-                                            if (resultado == 0) 
-                                            { 
-                                            }else{
-                                                var resultado = JSON.parse(resultado);
-                                                if (resultado.error == '') 
-                                                {
-                                                    $('#tableproducto tbody').empty();
-                                                    $('#tableproducto tbody').append(resp.datos);
-                                                    $('.label_total').html(resp.total);
-                                                    $('#total').val(resp.totalinput);
-                                                    $('#codigo').focus();
-                                                    
-                                                    $('#id_producto').val('');
-                                                    $('#nombre').val('');
-                                                    $('#cantidad').val('');
-                                                    $('#precio_compra').val('');
-                                                    $('#subtotal').val('');
-                                                }
-                                            }  
-                        }
+                        let idCompra = $('.input-codpro').attr('data-idcompra');
+                        agregarProducto(e, ui.item.id, 1, idCompra);
+                    }
 
                 )
             }
@@ -68,34 +41,92 @@ $(document).ready(function() {
 
     });
 
-});
-function eliminarProducto(idProducto, id_venta) 
-{
-    $.ajax({
-        url: '../temporalcompra/eliminar/' + idProducto + '/' + id_venta,
-        dataType: 'json',
-        success:function (resp) {
-            
-            if (resp != 0) 
+    function agregarProducto(e, id_producto, cantidad, id_venta)
+    {
+        let enterkey = 13;
+        if (codigo != '') 
+        {
+            if (e.which == enterkey) 
             { 
-                if (resp.error == '') 
+                if (id_producto != null && id_producto != 0 && cantidad >0) 
                 {
-                    $('#tableproducto tbody').empty();
-                    $('#tableproducto tbody').append(resultado.datos);
-                    $('#total').val(resultado.total);
-                    
+                    $.ajax({
+                        url: '../temporalcompra/insertar/' + id_producto + '/' + cantidad + '/' + id_venta,
+                        
+                        success:function (resp) {
+                            
+                            if (resp == 0) 
+                            { 
+                            }
+                            else
+                            {
+                                var resp = JSON.parse(resp);
+
+                                if (resp.error == '') 
+                                {
+                                    $('#tableproducto tbody').empty();
+                                    $('#tableproducto tbody').append(resp.datos);
+                                    $('.label_total').html(resp.total);
+                                    $('#total').val(resp.totalinput);
+                                    $('#codigo').focus();
+                                    
+                                    $('#id_producto').val('');
+                                    $('#nombre').val('');
+                                    $('#cantidad').val('');
+                                    $('#precio_compra').val('');
+                                    $('#subtotal').val('');
+                                }
+                            }
+                        }
+                    });
                 }
             }
         }
-    });
-}
-$(function(){
-    $('#completa_venta').click(function(){
-let nFilas = $('#tablaProductos tr').length;
-        if (nFilas < 2) {
+    }
 
-        } else {
-            
-        }
+    $(document).on("click", ".btn-deleteProducto", function(e) {
+        
+        let idProducto = $(this).attr('data-idproducto');
+        let idCompra = $(this).attr('data-idcompra');
+
+        eliminarProducto(idProducto, idCompra);
+
     });
+
+    function eliminarProducto(idProducto, id_venta) 
+    {
+        $.ajax({
+            url: '../temporalcompra/eliminar/' + idProducto + '/' + id_venta,
+            dataType: 'json',
+            success:function (resp) {
+                
+                if (resp != 0) 
+                { 
+                    if (resp.error == '') 
+                    {
+                        $('#tableproducto tbody').empty();
+                        $('#tableproducto tbody').append(resp.datos);
+                        $('#total').val(resp.total);
+                        
+                    }
+                }
+            }
+        });
+    }
+
+    $('#completa_venta').click(function () {
+        
+        let nFilas = $('#tableproducto tr').length;
+        
+        if (nFilas < 2) 
+        {
+            alert('Debe de agregar un producto');
+        }
+        else
+        {
+            $('#form_venta').submit();
+        }
+
+    });
+
 });

@@ -46,7 +46,7 @@
                     <div class="col-sm-2">
 
                         <label for="codigo" id='res_error' class=''>&nbsp;</label>
-                        <input type="text" class='form-control d-none' id='subtotal' name='subtotal'>
+                        <input type="text" class='form-control d-none input-codpro' id='subtotal' name='subtotal' data-idcompra='<?= $idUnico ?>'>
 
                     </div>
 

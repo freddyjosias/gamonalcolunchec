@@ -34,9 +34,9 @@
         protected $validationRules    = [];
         protected $validationMessages = [];
 
-        public function actualizaStock($idProducto, $cantidad)
+        public function actualizaStock($idProducto, $cantidad, $operador = '+')
         {
-            $this -> set('producto_stock', 'producto_stock + ' . $cantidad, FALSE);
+            $this -> set('producto_stock', 'producto_stock ' . $operador . ' ' . $cantidad, FALSE);
             $this -> where('producto_id', $idProducto);
             $this -> update();
         }

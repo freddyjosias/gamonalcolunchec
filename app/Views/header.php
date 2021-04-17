@@ -22,7 +22,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="<?= base_url() ?>/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="<?= base_url() ?>/css/sb-admin-2.css" rel="stylesheet">
 
     <!-- Custom styles for this page -->
     <link href="<?= base_url() ?>/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -68,6 +68,7 @@
                         <a class="collapse-item" href="<?= base_url() ?>/productos">Productos</a>
                         <a class="collapse-item" href="<?= base_url() ?>/unidades">Unidades</a>
                         <a class="collapse-item" href="<?= base_url() ?>/categorias">Categorías</a>
+                        <a class="collapse-item" href="<?= base_url() ?>/marcas">Marcas</a>
                     </div>
                 </div>
 
@@ -86,12 +87,13 @@
                 <a class="nav-link collapsed" data-toggle="collapse" data-target="#caja_menu"
                     aria-expanded="true" aria-controls="caja_menu" type='button'>
                     <i class="fas fa-cash-register"></i>
-                    <span>Caja</span>
+                    <span>Ventas</span>
                 </a>
 
                 <div id="caja_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="<?= base_url() ?>/ventas/ventas">Caja</a>
+                        <a class="collapse-item" href="<?= base_url() ?>/ventas/ventas">Nueva Venta</a>
+                        <a class="collapse-item" href="<?= base_url() ?>/ventas">Ventas</a>
                     </div>
                 </div>
 
@@ -118,6 +120,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="<?= base_url() ?>/configuracion">Configuración</a>
                         <a class="collapse-item" href="<?= base_url() ?>/usuarios">Usuarios</a>
+                        <a class="collapse-item" href="<?= base_url() ?>/cajas">Cajas</a>
                     </div>
                 </div>
 

@@ -14,7 +14,7 @@
                     </div>
                 <?php } ?>
 
-                <form method='POST' action='<?= base_url() ?>/configuracion/actualizar' autocomplete='off'>
+                <form method='POST' enctype="multipart/form-data" action='<?= base_url() ?>/configuracion/actualizar' autocomplete='off'>
                     <?= csrf_field() ?>
 
                     <div class="form-group">
@@ -22,14 +22,14 @@
                             <div class="col-12 col-sm-6">
 
                                 <label for="">Nombre de la tienda</label>
-                                <input type="text" class='form-control' id='tienda_nombre' name='tienda_nombre' autofocus  value='<?= $nombre['configuracion_valor'] ?>' required>
+                                <input type="text" class='form-control' id='tienda_nombre' name='tienda_nombre' autofocus  value='<?= $nombreTienda ?>' required>
 
                             </div>
 
                             <div class="col-12 col-sm-6">
 
-                                <label for="">RFC</label>
-                                <input type="text" class='form-control' id='tienda_rfc' name='tienda_rfc'  value='<?= $rfl['configuracion_valor'] ?>' required>
+                                <label for="">RUC</label>
+                                <input type="text" class='form-control' id='tienda_rfc' name='tienda_rfc'  value='<?= $rucTienda ?>' required>
 
                             </div>
                         </div>
@@ -40,14 +40,14 @@
                             <div class="col-12 col-sm-6">
 
                                 <label for="">Teléfono de la Tienda</label>
-                                <input type="text" class='form-control' id='tienda_telefono' name='tienda_telefono'  value='<?= $telefono['configuracion_valor'] ?>' required>
+                                <input type="text" class='form-control' id='tienda_telefono' name='tienda_telefono'  value='<?= $telefonoTienda ?>' required>
 
                             </div>
 
                             <div class="col-12 col-sm-6">
 
                                 <label for="">Correo de la Tienda</label>
-                                <input type="text" class='form-control' id='tienda_correo' name='tienda_correo'  value='<?= $email['configuracion_valor'] ?>' required>
+                                <input type="text" class='form-control' id='tienda_correo' name='tienda_correo'  value='<?= $emailTienda ?>' required>
 
                             </div>
                         </div>
@@ -59,16 +59,26 @@
                             <div class="col-12 col-sm-6">
 
                                 <label for="">Dirección de la tienda</label>
-                                <input type="text" class='form-control' id='tienda_direccion' name='tienda_direccion'  value='<?= $direccion['configuracion_valor'] ?>' required>
+                                <input type="text" class='form-control' id='tienda_direccion' name='tienda_direccion'  value='<?= $direccionTienda ?>' required>
 
                             </div>
 
                             <div class="col-12 col-sm-6">
 
                                 <label for="">Leyenda del Ticket</label>
-                                <input type="text" class='form-control' id='leyenda_ticket' name='leyenda_ticket'  value='<?= $leyenda['configuracion_valor'] ?>' required>
+                                <input type="text" class='form-control' id='leyenda_ticket' name='leyenda_ticket'  value='<?= $leyendaTicket ?>' required>
 
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <label for="">Logotipo</label> <br>
+                                <img src="<?= base_url() . '/img/logotienda.jpg' ?>" class='w-50' alt=""> <br>
+                                <input type="file" id='tienda_logo' name='tienda_logo' accept="image/png,image/jpeg">
+                            </div>                        
                         </div>
                     </div>
 

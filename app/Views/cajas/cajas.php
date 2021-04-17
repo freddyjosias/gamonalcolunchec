@@ -6,8 +6,8 @@
 
         <div class="">
             <p class="">
-                <a href="<?= base_url() ?>/categorias/nuevo" class='btn btn-info'>Agregar</a>
-                <a href="<?= base_url() ?>/categorias/eliminados" class='btn btn-warning'>Eliminado</a>
+                <a href="<?= base_url() ?>/cajas/nuevo" class='btn btn-info'>Agregar</a>
+                <a href="<?= base_url() ?>/cajas/eliminados" class='btn btn-warning'>Eliminado</a>
             </p>
         </div>
 
@@ -35,13 +35,13 @@
                                 foreach ($datos as $key => $value) { ?>
                                     
                                     <tr>
-                                        <td><?= $value['categoria_id'] ?></td>
-                                        <td><?= $value['categoria_nombre'] ?></td>
+                                        <td><?= $value['caja_id'] ?></td>
+                                        <td><?= $value['caja_nombre'] ?></td>
 
                                         <td class='text-center'>
-                                            <a href="<?= base_url() ?>/categorias/editar/<?= $value['categoria_id'] ?>" class='btn btn-warning py-1 my-1 px-2'><i class="fas fa-edit"></i></a>
+                                            <a href="<?= base_url() ?>/cajas/editar/<?= $value['caja_id'] ?>" class='btn btn-warning py-1 my-1 px-2'><i class="fas fa-edit"></i></a>
                                             
-                                            <a href="<?= base_url() ?>/categorias/eliminar/<?= $value['categoria_id'] ?>" class='btn btn-danger py-1 my-1 px-2 ml-2'><i class="fas fa-trash-alt"></i></a>
+                                            <a href="<?= base_url() ?>/cajas/eliminar/<?= $value['caja_id'] ?>" class='btn btn-danger py-1 my-1 px-2 ml-2'><i class="fas fa-trash-alt"></i></a>
                                         </td>
                                     </tr>
                                 

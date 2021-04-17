@@ -18,20 +18,18 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Usuario ID</th>
+                                <th>Id</th>
                                 <th>Usuario</th>
                                 <th>Nombre</th>
-                                <th></th>
-                                <th></th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>Usuario ID</th>
+                                <th>Id</th>
                                 <th>Usuario</th>
                                 <th>Nombre</th>
-                                <th></th>
-                                <th></th>
+                                <th>Acciones</th>
                             </tr>
                         </tfoot>
                         <tbody>
@@ -43,9 +41,11 @@
                                         <td><?= $value['usuario_user'] ?></td>
                                         <td><?= $value['usuario_nombre'] ?></td>
 
-                                        <td><a href="<?= base_url() ?>/usuarios/editar/<?= $value['usuario_id'] ?>" class='btn btn-warning'><i class="fas fa-edit"></i></a></td>
-
-                                        <td><a type='button' data-href="<?= base_url() ?>/usuarios/eliminar/<?= $value['usuario_id'] ?>" class='btn btn-danger' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Eliminar Registro'><i class="fas fa-trash-alt"></i></a></td>
+                                        <td class='text-center'>
+                                            <a href="<?= base_url() ?>/usuarios/editar/<?= $value['usuario_id'] ?>" class='btn btn-warning  py-1 my-1 px-2'><i class="fas fa-edit"></i></a>
+                                        
+                                            <a type='button' data-href="<?= base_url() ?>/usuarios/eliminar/<?= $value['usuario_id'] ?>" class='btn btn-danger  py-1 my-1 px-2 ml-2' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Eliminar Registro'><i class="fas fa-trash-alt"></i></a>
+                                        </td>
                                     </tr>
                                 
                             <?php }

@@ -6,7 +6,7 @@
 
         <div class="">
             <p class="">
-                <a href="<?= base_url() ?>/unidades" class='btn btn-warning'>Unidades</a>
+                <a href="<?= base_url() ?>/ventas" class='btn btn-success'>Ventas</a>
             </p>
         </div>
 
@@ -17,18 +17,22 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Id</th>
-                                <th>Nombre</th>
-                                <th>Nombre Corto</th>
-                                <th>Acciones</th>
+                                <th>Fecha</th>
+                                <th>Folio</th>
+                                <th>Cliente</th>
+                                <th>Total</th>
+                                <th>Cajero</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>Id</th>
-                                <th>Nombre</th>
-                                <th>Nombre Corto</th>
-                                <th>Acciones</th>
+                                <th>Fecha</th>
+                                <th>Folio</th>
+                                <th>Cliente</th>
+                                <th>Total</th>
+                                <th>Cajero</th>
+                                <th></th>
                             </tr>
                         </tfoot>
                         <tbody>
@@ -36,12 +40,13 @@
                                 foreach ($datos as $key => $value) { ?>
                                     
                                     <tr>
-                                        <td><?= $value['unidad_id'] ?></td>
-                                        <td><?= $value['unidad_nombre'] ?></td>
-                                        <td><?= $value['unidad_corto'] ?></td>
+                                        <td><?= $value['venta_creation'] ?></td>
+                                        <td><?= $value['venta_folio'] ?></td>
+                                        <td><?= $value['cliente_nombre'] ?></td>
+                                        <td><?= $value['venta_total'] ?></td>
+                                        <td><?= $value['usuario_user'] ?></td>
 
-                                        <td class='text-center'><a type='button' data-href="<?= base_url() ?>/unidades/reingresar/<?= $value['unidad_id'] ?>" class='btn btn-success py-1 my-1 px-2' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Reingresar Registro'><i class="fas fa-undo-alt"></i></a></td>
-
+                                        <td><a href="<?= base_url() ?>/ventas/muestraTicket/<?= $value['venta_id'] ?>" class='btn btn-warning'><i class="fas fa-file-pdf"></i></a></td>
                                     </tr>
                                 
                             <?php }
@@ -64,14 +69,14 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Reingresar Registro</h5>
+                <h5 class="modal-title">Eliminar Registro</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
 
             <div class="modal-body">
-                ¿Desea reingresar este registro?
+                ¿Desea eliminar este registro?
             </div>
                                     
             <div class="modal-footer">

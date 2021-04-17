@@ -6,8 +6,7 @@
 
         <div class="">
             <p class="">
-                <a href="<?= base_url() ?>/categorias/nuevo" class='btn btn-info'>Agregar</a>
-                <a href="<?= base_url() ?>/categorias/eliminados" class='btn btn-warning'>Eliminado</a>
+                <a href="<?= base_url() ?>/cajas" class='btn btn-warning'>Unidades</a>
             </p>
         </div>
 
@@ -35,14 +34,11 @@
                                 foreach ($datos as $key => $value) { ?>
                                     
                                     <tr>
-                                        <td><?= $value['categoria_id'] ?></td>
-                                        <td><?= $value['categoria_nombre'] ?></td>
+                                        <td><?= $value['cajas_id'] ?></td>
+                                        <td><?= $value['cajas_nombre'] ?></td>
 
-                                        <td class='text-center'>
-                                            <a href="<?= base_url() ?>/categorias/editar/<?= $value['categoria_id'] ?>" class='btn btn-warning py-1 my-1 px-2'><i class="fas fa-edit"></i></a>
-                                            
-                                            <a href="<?= base_url() ?>/categorias/eliminar/<?= $value['categoria_id'] ?>" class='btn btn-danger py-1 my-1 px-2 ml-2'><i class="fas fa-trash-alt"></i></a>
-                                        </td>
+                                        <td class='text-center'><a href="<?= base_url() ?>/cajas/reingresar/<?= $value['cajas_id'] ?>" class='btn btn-success py-1 my-1 px-2'><i class="fas fa-undo-alt"></i></a></td>
+
                                     </tr>
                                 
                             <?php }

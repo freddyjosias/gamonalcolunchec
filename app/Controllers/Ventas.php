@@ -20,13 +20,23 @@
             helper(['form']);
         }
 
-        public function index($state = 1)
+        public function index()
         {
-            $ventas = $this -> ventas -> where('compra_ustate', $state) -> findAll();
-            $data = ['title' => 'Ventas', 'datos' => $ventas];
+            $datos = $this -> ventas -> obtener(1);
+            $data = ['title' => 'Ventas', 'datos' => $datos];
 
             echo view('header');
             echo view('ventas/ventas', $data);
+            echo view('footer');
+        }
+
+        public function eliminados()
+        {
+            $datos = $this -> ventas -> obtener(0);
+            $data = ['title' => 'Ventas Eliminados', 'datos' => $datos];
+
+            echo view('header');
+            echo view('ventas/eliminados', $data);
             echo view('footer');
         }
 
@@ -153,5 +163,21 @@
             $this -> response -> setHeader('Content-Type', 'application/pdf');
 
             $pdf -> Output('Ticket.pdf', 'I');
+        }
+
+        public function eliminar($id)
+        {
+            $productos = $this -> detVenta -> where('venta_id', $id) -> findAll();
+
+            $this -> productos = new ProductosModel();
+
+            foreach ($productos as $key => $value) 
+            {
+                $this -> productos -> actualizaStock($value['producto_id'], $value['det_venta_cantidad'], '+');
+            }
+
+            $this -> ventas -> update($id, ['venta_state' => 0]);
+
+            return redirect() -> to(base_url() . '/ventas');
         }
     }

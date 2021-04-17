@@ -18,7 +18,9 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
 
-        <title>Gamonal Colunche</title>
+        <title><?= $nombreTienda ?></title>
+
+        <link rel="shortcut icon" href="<?= base_url() . '/img/' . $logoTienda ?>" type="image/x-icon">
 
         <!-- Custom fonts for this template -->
         <link href="<?= base_url() ?>/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -30,6 +32,10 @@
         <!-- Custom styles for this page -->
         <link href="<?= base_url() ?>/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
+        <?php foreach ($css as $key => $value) { ?>
+                <link href="<?= base_url() ?>/css/<?= $value ?>.css" rel="stylesheet">
+        <?php } ?>
+
     </head>
     <body class="bg-primary">
         <div id="layoutAuthentication">
@@ -39,7 +45,14 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Iniciar Sesión</h3></div>
+
+                                    <div class="card-header text-center pt-5">
+
+                                        <img src="<?= base_url() . '/img/' . $logoTienda ?>" alt="" class='login_logotienda'>
+                                        <h3 class="text-center font-weight-light mt-4 mb-3">Iniciar Sesión</h3>
+                                    
+                                    </div>
+
                                     <div class="card-body">
                                         <form method='POST' action='<?= base_url() ?>/usuarios/valida'>
                                             <div class="form-group">
@@ -50,8 +63,8 @@
                                                 <label class="small mb-1" for="inputPassword">Contraseña</label>
                                                 <input class="form-control py-4" id="password" id="password" type="password" placeholder="Ingresa tu contraseña" name='password' />
                                             </div>
-                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                                                <button type='submit' class="btn btn-primary">Login</button>
+                                            <div class="form-group mt-4 mb-0 text-right">
+                                                <button type='submit' class="btn btn-primary">Iniciar Sesión</button>
                                             </div>
 
                                             <?php if (isset($validation)) { ?>
@@ -75,10 +88,10 @@
                 </main>
             </div>
             <div id="layoutAuthentication_footer mt-5">
-                <footer class="sticky-footer bg-white mt-5">
+                <footer class="sticky-footer bg-white mt-5 login_footer">
                     <div class="container my-auto">
                         <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; Gamonal Colunche <?= date('Y') ?></span>
+                            <span>Copyright &copy; <?= $nombreTienda . ' ' . date('Y') ?></span>
                         </div>
                     </div>
                 </footer>
@@ -101,11 +114,15 @@
         <!-- Page level custom scripts -->
         <script src="<?= base_url() ?>/js/demo/datatables-demo.js"></script>
 
-        <script>
-            $('#modal-confirma').on('show.bs.modal', function (e) {
-                $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-            });
-        </script>
+        <?php
+
+            foreach ($js as $key => $value) 
+            { ?>
+                <script src="<?= base_url() ?>/js/<?= $value ?>.js"></script>
+            <?php
+            }
+
+        ?>
 
     </body>
 </html>

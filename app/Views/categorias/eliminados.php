@@ -17,16 +17,16 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Categoria ID</th>
+                                <th>Id</th>
                                 <th>Nombre</th>
-                                <th></th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>Categoria ID</th>
+                                <th>Id</th>
                                 <th>Nombre</th>
-                                <th></th>
+                                <th>Acciones</th>
                             </tr>
                         </tfoot>
                         <tbody>
@@ -37,7 +37,7 @@
                                         <td><?= $value['categoria_id'] ?></td>
                                         <td><?= $value['categoria_nombre'] ?></td>
 
-                                        <td><a href="<?= base_url() ?>/categorias/reingresar/<?= $value['categoria_id'] ?>" class='btn btn-success'><i class="fas fa-undo-alt"></i></a></td>
+                                        <td class='text-center'><a href="<?= base_url() ?>/categorias/reingresar/<?= $value['categoria_id'] ?>" class='btn btn-success py-1 my-1 px-2'><i class="fas fa-undo-alt"></i></a></td>
 
                                     </tr>
                                 

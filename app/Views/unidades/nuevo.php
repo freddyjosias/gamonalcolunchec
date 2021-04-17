@@ -31,7 +31,7 @@
             </div>
 
             <div class=''>
-                <a href="<?= base_url() ?>/unidades" class='btn btn-primary'>Regresar</a>
+                <a href="<?= base_url() ?>/unidades" class='btn btn-light'>Regresar</a>
                 <button type="submit" class="btn btn-success">Guardar</button>
             </div>
             

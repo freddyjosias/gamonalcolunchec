@@ -71,7 +71,7 @@
         public function eliminados($state = 0)
         {
             $categorias = $this -> categorias -> where('categoria_state', $state) -> findAll();
-            $data = ['title' => 'Categoriís Eliminadas', 'datos' => $categorias];
+            $data = ['title' => 'Categorías Eliminadas', 'datos' => $categorias];
 
             echo view('header');
             echo view('categorias/eliminados', $data);

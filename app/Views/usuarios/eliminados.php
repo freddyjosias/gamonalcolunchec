@@ -6,7 +6,7 @@
 
         <div class="">
             <p class="">
-                <a href="<?= base_url() ?>/unidades" class='btn btn-warning'>Unidades</a>
+                <a href="<?= base_url() ?>/usuarios" class='btn btn-warning'>Usuarios</a>
             </p>
         </div>
 

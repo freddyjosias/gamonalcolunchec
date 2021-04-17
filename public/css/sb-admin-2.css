@@ -1486,14 +1486,22 @@ pre code {
 .table {
   width: 100%;
   margin-bottom: 1rem;
-  color: #858796;
+  color: rgb(19, 19, 19);
 }
 
-.table th,
-.table td {
-  padding: 0.75rem;
-  vertical-align: top;
+.table th {
+  padding: 0.5rem 0.75rem;
   border-top: 1px solid #e3e6f0;
+}
+
+.table td {
+  padding: 0 0.7rem;
+  margin: 0;
+  border-top: 1px solid #e3e6f0;
+}
+
+.table tbody tr:hover {
+  background-color: rgb(236, 235, 235);
 }
 
 .table thead th {

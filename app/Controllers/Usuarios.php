@@ -5,6 +5,7 @@
     use App\Models\UsuariosModel;
     use App\Models\CajasModel;
     use App\Models\RolesModel;
+    use App\Models\ConfiguracionModel;
 
     class Usuarios extends BaseController
     {
@@ -12,9 +13,17 @@
         protected $cajas;
         protected $roles;
         protected $reglas, $reglasLogin, $reglasCambian;
+        protected $isLogin = true;
 
         public function __construct()
         {
+            $session = session();
+            
+            if (is_null($session -> id_usuario)) 
+            {
+                $this -> isLogin = false;
+            }
+
             $this -> usuarios = new UsuariosModel();
             $this -> cajas = new CajasModel();
             $this -> roles = new RolesModel();
@@ -193,7 +202,7 @@
         public function eliminados($state = 0)
         {
             $usuarios = $this -> usuarios -> where('usuario_state', $state) -> findAll();
-            $data = ['title' => 'Usuarios Eliminadas', 'datos' => $usuarios];
+            $data = ['title' => 'Usuarios Eliminados', 'datos' => $usuarios];
 
             echo view('header');
             echo view('usuarios/eliminados', $data);
@@ -209,7 +218,25 @@
 
         public function login()
         {
-            echo view('login');
+            if ($this -> isLogin) 
+            {
+                return redirect() -> to(base_url() . '/configuracion');
+            }
+
+            $configModel = new ConfiguracionModel();
+            $datosTienda = $configModel -> getDatosTienda();
+
+            $js = ['login'];
+            $css = ['usuarios'];
+
+            $data = [
+                'nombreTienda' => $datosTienda['nombreTienda'], 
+                'logoTienda' => $datosTienda['logoTienda'],
+                'js' => $js,
+                'css' => $css
+            ];
+
+            echo view('login', $data);
         }
 
         public function valida()

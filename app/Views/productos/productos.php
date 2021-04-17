@@ -18,24 +18,22 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Producto ID</th>
+                                <th>Id</th>
                                 <th>Código</th>
                                 <th>Nombre</th>
                                 <th>Precio</th>
                                 <th>Stock</th>
-                                <th></th>
-                                <th></th>
+                                <th>Aciones</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>Producto ID</th>
+                                <th>Id</th>
                                 <th>Código</th>
                                 <th>Nombre</th>
                                 <th>Precio</th>
                                 <th>Stock</th>
-                                <th></th>
-                                <th></th>
+                                <th>Aciones</th>
                             </tr>
                         </tfoot>
                         <tbody>
@@ -49,9 +47,11 @@
                                         <td><?= $value['producto_precioventa'] ?></td>
                                         <td><?= $value['producto_stock'] ?></td>
 
-                                        <td><a href="<?= base_url() ?>/productos/editar/<?= $value['producto_id'] ?>" class='btn btn-warning'><i class="fas fa-edit"></i></a></td>
-
-                                        <td><a type='button' data-href="<?= base_url() ?>/productos/eliminar/<?= $value['producto_id'] ?>" class='btn btn-danger' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Eliminar Registro'><i class="fas fa-trash-alt"></i></a></td>
+                                        <td class='text-center'>
+                                            <a href="<?= base_url() ?>/productos/editar/<?= $value['producto_id'] ?>" class='btn btn-warning py-1 my-1 px-2'><i class="fas fa-edit"></i></a>
+                                            
+                                            <a type='button' data-href="<?= base_url() ?>/productos/eliminar/<?= $value['producto_id'] ?>" class='btn btn-danger py-1 my-1 px-2 ml-2' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Eliminar Registro'><i class="fas fa-trash-alt"></i></a>
+                                        </td>
                                     </tr>
                                 
                             <?php }

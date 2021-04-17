@@ -2,7 +2,7 @@
 
     namespace App\Controllers;
     use App\Controllers\BaseController;
-    use App\Models\ClientesModel;
+    //use App\Models\ClientesModel;
     use App\Models\ConfiguracionModel;
 
     class Configuracion extends BaseController
@@ -13,7 +13,7 @@
         public function __construct()
         {
             $this -> configuracion = new ConfiguracionModel();
-            helper(['form']);
+            helper(['form', 'upload']);
 
             $this -> reglas = [
                 'tienda_nombre' => [
@@ -33,23 +33,10 @@
 
         public function index($state = 1)
         {
-            $nombre = $this -> configuracion -> where('configuracion_nombre', 'nombre_tienda') -> first();
-            $rfl = $this -> configuracion -> where('configuracion_nombre', 'tienda_rfc') -> first();
-            $telefono = $this -> configuracion -> where('configuracion_nombre', 'tienda_telefono') -> first();
-            $email = $this -> configuracion -> where('configuracion_nombre', 'tienda_email') -> first();
-            $direccion = $this -> configuracion -> where('configuracion_nombre', 'tienda_direccion') -> first();
-            $leyenda = $this -> configuracion -> where('configuracion_nombre', 'ticket_leyenda') -> first();
+            $data = $this -> configuracion -> getDatosTienda();
 
-            $data = [
-                'title' => 'Configuración', 
-                'nombre' => $nombre,
-                'rfl' => $rfl,
-                'telefono' => $telefono,
-                'email' => $email,
-                'direccion' => $direccion,
-                'leyenda' => $leyenda
-            ];
-
+            $data['title'] = 'Configuración';
+            
             //var_dump($nombre); die;
             echo view('header');
             echo view('configuracion/configuracion', $data);
@@ -89,6 +76,23 @@
                 $this -> configuracion -> whereIn('configuracion_nombre', ['tienda_direccion']) -> set(['configuracion_valor' => $this -> request -> getPost('tienda_direccion')]) -> update();
 
                 $this -> configuracion -> whereIn('configuracion_nombre', ['ticket_leyenda']) -> set(['configuracion_valor' => $this -> request -> getPost('leyenda_ticket')]) -> update();
+
+                $validacion = $this -> validate([
+                    'tienda_logo' => [
+                        'uploaded[tienda_logo]'
+                    ]
+                ]);
+
+                if ($validacion) 
+                {
+                    $imgLogo = $this -> request -> getFile('tienda_logo');
+                    $imgLogo -> move('./img', 'logotienda.' . $imgLogo -> getExtension());
+                }
+                else
+                {
+                    echo 'ERROR en la validación';
+                    die;
+                }
 
                 return redirect() -> to(base_url() . '/configuracion');
             }

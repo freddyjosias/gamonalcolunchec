@@ -10,9 +10,17 @@
     {
         protected $productos;
         protected $reglas;
+        protected $isLogin = true;
 
         public function __construct()
         {
+            $session = session();
+            
+            if (is_null($session -> id_usuario)) 
+            {
+                $this -> isLogin = false;
+            }
+
             $this -> productos = new ProductosModel();
             $this -> unidades = new UnidadesModel();
             $this -> categorias = new CategoriasModel();
@@ -37,6 +45,11 @@
 
         public function index($state = 1)
         {
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+
             $productos = $this -> productos -> where('producto_state', $state) -> findAll();
 
             $data = ['title' => 'Productos', 'datos' => $productos];

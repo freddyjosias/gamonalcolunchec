@@ -36,4 +36,15 @@
 
             return $this -> insertId();
         }
+
+        public function obtener($activo = 1)
+        {
+            $this -> select('venta.*, usuario_user, cliente_nombre');
+            $this -> join('usuario', 'venta.usuario_id = usuario.usuario_id');
+            $this -> join('cliente', 'venta.cliente_id = cliente.cliente_id');
+            $this -> where('venta_state', $activo);
+            $this -> orderBy('venta_creation', 'DESC');
+            $datos = $this -> findAll();
+            return $datos;
+        }
     }

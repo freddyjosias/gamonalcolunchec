@@ -15,10 +15,13 @@
 
         protected $allowedFields = [
             'cliente_nombre', 
+            'cliente_apellido', 
             'cliente_direccion', 
+            'cliente_dni', 
             'cliente_telefono', 
             'cliente_correo', 
-            'cliente_state'
+            'cliente_state',
+            'cliente_documento'
         ];
 
         protected $useTimestamps = true;

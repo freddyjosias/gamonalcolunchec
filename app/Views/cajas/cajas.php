@@ -20,6 +20,7 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Nombre</th>
+                                <th>Número</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -27,6 +28,7 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Nombre</th>
+                                <th>Número</th>
                                 <th>Acciones</th>
                             </tr>
                         </tfoot>
@@ -37,6 +39,7 @@
                                     <tr>
                                         <td><?= $value['caja_id'] ?></td>
                                         <td><?= $value['caja_nombre'] ?></td>
+                                        <td><?= $value['caja_numero'] ?></td>
 
                                         <td class='text-center'>
                                             <a href="<?= base_url() ?>/cajas/editar/<?= $value['caja_id'] ?>" class='btn btn-warning py-1 my-1 px-2'><i class="fas fa-edit"></i></a>

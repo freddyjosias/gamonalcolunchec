@@ -8,7 +8,7 @@
     class Clientes extends BaseController
     {
         protected $clientes;
-        protected $reglas;
+        protected $reglas, $reglasDni;
         protected $isLogin = true, $detPermisos, $session, $permisosUser;
 
         public function __construct()
@@ -33,13 +33,29 @@
                 'nombre' => [
                     'rules' => 'required',
                     'errors' => [
-                        'required' => 'El campo {field} es obligatorio.'
+                        'required' => 'El campo Nombres es obligatorio.'
+                    ]
+                ]
+            ];
+
+            $this -> reglasDni = [
+                'nombre' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'El campo Nombres es obligatorio.'
+                    ]
+                ],
+                'documento' => [
+                    'rules' => 'required|in_list[DNI,RUC]',
+                    'errors' => [
+                        'required' => 'El campo Tipo de Documento es obligatorio cuando se ingresa un valor en el campo DNI/RUC.',
+                        'in_list' => 'El campo Tipo de Documento solo puede tener valor DNI o RUC cuando se ingresa un valor en el campo DNI/RUC.'
                     ]
                 ]
             ];
         }
 
-        public function index($state = 1)
+        public function index()
         {
             if (!$this -> isLogin) 
             {
@@ -53,7 +69,7 @@
                 }
             }
 
-            $clientes = $this -> clientes -> where('cliente_state', $state) -> findAll();
+            $clientes = $this -> clientes -> where('cliente_state', 1) -> findAll();
 
             $data = ['title' => 'Clientes', 'datos' => $clientes];
 
@@ -64,7 +80,7 @@
             echo view('footer');
         }
 
-        public function nuevo()
+        public function nuevo($valid = null)
         {
             if (!$this -> isLogin) 
             {
@@ -78,7 +94,14 @@
                 }
             }
 
-            $data = ['title' => 'Agregar Cliente'];
+            if ($valid != null && method_exists($valid,'listErrors')) 
+            {
+                $data = ['title' => 'Agregar Cliente', 'validation' => $valid];
+            }
+            else
+            {
+                $data = ['title' => 'Agregar Cliente'];
+            }
 
             $dataHeader = ['permisos' => $this -> permisosUser];
             
@@ -101,30 +124,41 @@
                 }
             }
 
-            if ($this -> request -> getMethod() == 'post' && $this -> validate($this -> reglas)) 
+            $documento = '';
+            $dni = $this -> request -> getPost('dni');
+            
+            if ($dni != '') 
+            {
+                $documento = $this -> request -> getPost('documento');
+                $validate = $this -> validate($this -> reglasDni);
+            }
+
+            if (!isset($validate)) 
+            {
+                $validate = $this -> validate($this -> reglas);
+            }
+
+            if ($this -> request -> getMethod() == 'post' && $validate) 
             {
                 $this -> clientes -> save([
                     'cliente_nombre' => $this -> request -> getPost('nombre'), 
+                    'cliente_apellido' => $this -> request -> getPost('apellido'), 
                     'cliente_direccion' => $this -> request -> getPost('direccion'), 
+                    'cliente_dni' => $dni, 
                     'cliente_telefono' => $this -> request -> getPost('telefono'), 
-                    'cliente_correo' => $this -> request -> getPost('correo')
+                    'cliente_correo' => $this -> request -> getPost('correo'),
+                    'cliente_documento' => $documento
                 ]);
                 return redirect() -> to(base_url() . '/clientes');
             }
             else
             {
-                $data = ['title' => 'Agregar Cliente', 'validation' => $this -> validator];
-
-                $dataHeader = ['permisos' => $this -> permisosUser];
-            
-            echo view('header', $dataHeader);
-                echo view('clientes/nuevo', $data);
-                echo view('footer');
+                return $this -> nuevo($this -> validator);
             }
 
         }
 
-        public function editar($id)
+        public function editar($id = 0, $valid = null)
         {
             if (!$this -> isLogin) 
             {
@@ -138,8 +172,21 @@
                 }
             }
 
-            $cliente = $this -> clientes -> where('cliente_id', $id) -> first();
-            $data = ['title' => 'Editar Cliente', 'cliente' => $cliente];
+            $cliente = $this -> clientes -> where('cliente_id', $id) -> where('cliente_state', 1) -> first();
+
+            if (is_null($cliente)) 
+            {
+                return redirect() -> to(base_url() . '/clientes');
+            }
+
+            if ($valid != null && method_exists($valid,'listErrors')) 
+            {
+                $data = ['title' => 'Editar Cliente', 'cliente' => $cliente, 'validation' => $valid];
+            }
+            else
+            {
+                $data = ['title' => 'Editar Cliente', 'cliente' => $cliente];
+            }
 
             $dataHeader = ['permisos' => $this -> permisosUser];
             
@@ -162,27 +209,58 @@
                 }
             }
 
-            $this -> clientes -> update(
-                $this -> request -> getPost('id'), 
-                [
-                    'cliente_nombre' => $this -> request -> getPost('nombre'), 
-                    'cliente_corto' => $this -> request -> getPost('nombre_corto')
-                ]
-            );
+            $id = $this -> request -> getPost('id');
 
-            $this -> clientes -> update(
-                $this -> request -> getPost('id'), 
-                [
-                    'cliente_nombre' => $this -> request -> getPost('nombre'), 
-                    'cliente_direccion' => $this -> request -> getPost('direccion'), 
-                    'cliente_telefono' => $this -> request -> getPost('telefono'), 
-                    'cliente_correo' => $this -> request -> getPost('correo')
-                ]
-            );
-            return redirect() -> to(base_url() . '/clientes');
+            if (is_null($id)) 
+            {
+                return redirect() -> to(base_url() . '/clientes');
+            }
+
+            $cliente = $this -> clientes -> where('cliente_id', $id) -> where('cliente_state', 1) -> first();
+
+            if (is_null($cliente)) 
+            {
+                return redirect() -> to(base_url() . '/clientes');
+            }
+
+            $documento = '';
+            $dni = $this -> request -> getPost('dni');
+            
+            if ($dni != '') 
+            {
+                $documento = $this -> request -> getPost('documento');
+                $validate = $this -> validate($this -> reglasDni);
+            }
+
+            if (!isset($validate)) 
+            {
+                $validate = $this -> validate($this -> reglas);
+            }
+
+            if ($this -> request -> getMethod() == 'post' && $validate) 
+            {
+                $this -> clientes -> update(
+                    $this -> request -> getPost('id'), 
+                    [
+                        'cliente_nombre' => $this -> request -> getPost('nombre'), 
+                        'cliente_apellido' => $this -> request -> getPost('apellido'), 
+                        'cliente_direccion' => $this -> request -> getPost('direccion'), 
+                        'cliente_dni' => $dni, 
+                        'cliente_telefono' => $this -> request -> getPost('telefono'), 
+                        'cliente_correo' => $this -> request -> getPost('correo'),
+                        'cliente_documento' => $documento
+                    ]
+                );
+
+                return redirect() -> to(base_url() . '/clientes');
+            }
+            else
+            {
+                return $this -> editar($id, $this -> validator);
+            }
         }
 
-        public function eliminar($id)
+        public function eliminar($id = 0)
         {
             if (!$this -> isLogin) 
             {
@@ -194,6 +272,13 @@
                 {
                     return redirect() -> to(base_url() . '/dashboard');
                 }
+            }
+
+            $cliente = $this -> clientes -> where('cliente_id', $id) -> where('cliente_state', 1) -> first();
+
+            if (is_null($cliente)) 
+            {
+                return redirect() -> to(base_url() . '/clientes');
             }
 
             $this -> clientes -> update($id, ['cliente_state' => 0]);
@@ -201,7 +286,7 @@
             return redirect() -> to(base_url() . '/clientes');
         }
 
-        public function eliminados($state = 0)
+        public function eliminados()
         {
             if (!$this -> isLogin) 
             {
@@ -215,7 +300,7 @@
                 }
             }
 
-            $clientes = $this -> clientes -> where('cliente_state', $state) -> findAll();
+            $clientes = $this -> clientes -> where('cliente_state', 0) -> findAll();
             $data = ['title' => 'Clientes Eliminadas', 'datos' => $clientes];
 
             $dataHeader = ['permisos' => $this -> permisosUser];

@@ -17,24 +17,18 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Cliente ID</th>
                                 <th>Nombre</th>
                                 <th>Dirección</th>
-                                <th>Teléfono</th>
                                 <th>Correo</th>
-                                <th></th>
-                                <th></th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>Cliente ID</th>
                                 <th>Nombre</th>
                                 <th>Dirección</th>
-                                <th>Teléfono</th>
                                 <th>Correo</th>
-                                <th></th>
-                                <th></th>
+                                <th>Acciones</th>
                             </tr>
                         </tfoot>
                         <tbody>
@@ -42,13 +36,13 @@
                                 foreach ($datos as $key => $value) { ?>
                                     
                                     <tr>
-                                        <td><?= $value['cliente_id'] ?></td>
                                         <td><?= $value['cliente_nombre'] ?></td>
                                         <td><?= $value['cliente_direccion'] ?></td>
-                                        <td><?= $value['cliente_telefono'] ?></td>
                                         <td><?= $value['cliente_correo'] ?></td>
 
-                                        <td><a type='button' data-href="<?= base_url() ?>/clientes/reingresar/<?= $value['cliente_id'] ?>" class='btn btn-success' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Reingresar Registro'><i class="fas fa-undo-alt"></i></a></td>
+                                        <td class="text-center">
+                                            <a type='button' data-href="<?= base_url() ?>/clientes/reingresar/<?= $value['cliente_id'] ?>" class='btn btn-success   py-1 my-1 px-2' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Reingresar Registro'><i class="fas fa-undo-alt"></i></a>
+                                        </td>
 
                                     </tr>
                                 

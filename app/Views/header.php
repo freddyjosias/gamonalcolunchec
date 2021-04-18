@@ -138,9 +138,10 @@
 
                         <?php if (isset($permisos[1])) { ?>
                             <a class="collapse-item" href="<?= base_url() ?>/usuarios">Usuarios</a>
+                        <?php } 
+                        if (isset($permisos[4])) { ?>
+                            <a class="collapse-item" href="<?= base_url() ?>/cajas">Cajas</a>
                         <?php } ?>
-                        
-                        <a class="collapse-item" href="<?= base_url() ?>/cajas">Cajas</a>
                     </div>
                 </div>
 

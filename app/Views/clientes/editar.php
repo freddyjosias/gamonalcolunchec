@@ -25,8 +25,47 @@
 
                     <div class="col-12 col-sm-6">
 
-                        <label for="">Dirección</label>
-                        <input type="text" class='form-control' id='direccion' name='direccion' value="<?= $cliente['cliente_direccion'] ?>">
+                        <label for="">Apellidos</label>
+                        <input type="text" class='form-control' id='apellido' name='apellido' value="<?= $cliente['cliente_apellido'] ?>">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-12 col-sm-4">
+
+                        <label for="">DNI/RUC</label>
+                        <input type="tel" class='form-control' id='dni' name='dni' value="<?= $cliente['cliente_dni'] ?>" maxlength="8">
+
+                    </div>
+
+                    <div class="col-12 col-sm-4">
+
+                        <label for="">Tipo de Documento</label>
+                        <select name="documento" id="documento" class='form-control'>
+                            <?php if ($cliente['cliente_documento'] == 'DNI') { ?>
+                                <option value="">Selecionar</option>
+                                <option value="DNI" selected>DNI</option>
+                                <option value="RUC">RUC</option>
+                            <?php } else if($cliente['cliente_documento'] == 'RUC') { ?>
+                                <option value="">Selecionar</option>
+                                <option value="DNI">DNI</option>
+                                <option value="RUC" selected>RUC</option>
+                            <?php } else { ?>
+                                <option value="" selected>Selecionar</option>
+                                <option value="DNI">DNI</option>
+                                <option value="RUC">RUC</option>
+                            <?php } ?>
+                        </select>
+
+                    </div>
+
+                    <div class="col-12 col-sm-4">
+
+                        <label for="">Correo</label>
+                        <input type="email" class='form-control' id='correo' name='correo' value="<?= $cliente['cliente_correo'] ?>">
 
                     </div>
                 </div>
@@ -36,20 +75,19 @@
                 <div class="row">
                     <div class="col-12 col-sm-6">
 
-                        <label for="">Teléfono</label>
-                        <input type="tel" class='form-control' id='telefono' name='telefono' value="<?= $cliente['cliente_telefono'] ?>">
+                        <label for="">Dirección</label>
+                        <input type="text" class='form-control' id='direccion' name='direccion' value="<?= $cliente['cliente_direccion'] ?>">
 
                     </div>
 
                     <div class="col-12 col-sm-6">
 
-                        <label for="">Correo</label>
-                        <input type="email" class='form-control' id='correo' name='correo' value="<?= $cliente['cliente_correo'] ?>">
+                        <label for="">Teléfono</label>
+                        <input type="tel" class='form-control' id='telefono' name='telefono' value="<?= $cliente['cliente_telefono'] ?>">
 
                     </div>
                 </div>
             </div>
-
 
             <div class=''>
                 <a href="<?= base_url() ?>/clientes" class='btn btn-light'>Regresar</a>

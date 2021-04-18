@@ -119,7 +119,11 @@
                 <div id="admin_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="<?= base_url() ?>/configuracion">Configuración</a>
-                        <a class="collapse-item" href="<?= base_url() ?>/usuarios">Usuarios</a>
+
+                        <?php if (isset($permisos[1])) { ?>
+                            <a class="collapse-item" href="<?= base_url() ?>/usuarios">Usuarios</a>
+                        <?php } ?>
+                        
                         <a class="collapse-item" href="<?= base_url() ?>/cajas">Cajas</a>
                     </div>
                 </div>

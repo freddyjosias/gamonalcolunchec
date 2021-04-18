@@ -17,14 +17,14 @@
                     <div class="col-12 col-sm-6">
 
                         <label for="">Código</label>
-                        <input type="text" class='form-control' id='codigo' name='codigo' autofocus required value="<?= set_value('codigo') ?>">
+                        <input type="text" class='form-control' id='codigo' name='codigo' autofocus required value="<?= set_value('codigo') ?>" maxlength="20">
 
                     </div>
 
                     <div class="col-12 col-sm-6">
 
                         <label for="">Nombre</label>
-                        <input type="text" class='form-control' id='nombre' name='nombre' required value="<?= set_value('nombre') ?>">
+                        <input type="text" class='form-control' id='nombre' name='nombre' required value="<?= set_value('nombre') ?>" maxlength="200">
 
                     </div>
                 </div>
@@ -66,29 +66,26 @@
                 <div class="row">
                     <div class="col-12 col-sm-6">
 
-                        <label for="">Precio Venta</label>
-                        <input type="text" class='form-control' id='precio_venta' name='precio_venta' required value="<?= set_value('precio_venta') ?>">
-
-                    </div>
-
-                    <div class="col-12 col-sm-6">
-
-                        <label for="">Precio Compra</label>
-                        <input type="text" class='form-control' id='pracio_compra' name='pracio_compra' required value="<?= set_value('pracio_compra') ?>">
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-12 col-sm-6">
-
                         <label for="">Stock Minimo</label>
-                        <input type="text" class='form-control' id='stock_minimo' name='stock_minimo' required value="<?= set_value('stock_minimo') ?>">
+                        <input type="number" class='form-control' id='stock_minimo' name='stock_minimo' required value="<?= set_value('stock_minimo') ?>" max="10000" min="0" step="1">
 
                     </div>
 
+                    <div class="col-12 col-sm-6">
+
+                        <label for="">Marca</label>
+                        <select name="id_marca" id="id_marca" class='form-control' required>
+                            <option value="">Selecionar marca</option>
+
+                            <?php foreach ($marcas as $key => $value) { ?>
+                                <option value="<?= $value['marca_id'] ?>"><?= $value['marca_nombre'] ?></option>
+                            <?php } ?>
+
+                        </select>
+
+                    </div>
+                    
+                    <?php if(false) { ?>
                     <div class="col-12 col-sm-6">
 
                         <label for="">Es inventariable</label>
@@ -96,6 +93,25 @@
                             <option value="1">Si</option>
                             <option value="0">No</option>
                         </select>
+
+                    </div>
+                    <?php } ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+
+                        <label for="">Precio Venta</label>
+                        <input type="number" class='form-control' id='precio_venta' name='precio_venta' required value="<?= set_value('precio_venta') ?>" max="100000" min="0" step="0.01">
+
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+
+                        <label for="">Precio Compra</label>
+                        <input type="number" class='form-control' id='pracio_compra' name='pracio_compra' required value="<?= set_value('pracio_compra') ?>" max="100000" min="0" step="0.01">
 
                     </div>
                 </div>

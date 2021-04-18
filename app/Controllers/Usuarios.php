@@ -6,20 +6,21 @@
     use App\Models\CajasModel;
     use App\Models\RolesModel;
     use App\Models\ConfiguracionModel;
+    use App\Models\DetallePermisosModel;
 
     class Usuarios extends BaseController
     {
         protected $usuarios;
         protected $cajas;
         protected $roles;
-        protected $reglas, $reglasLogin, $reglasCambian;
-        protected $isLogin = true;
+        protected $reglas, $reglasLogin, $reglasCambian, $configModel;
+        protected $isLogin = true, $session, $permisos;
 
         public function __construct()
         {
-            $session = session();
+            $this -> session = session();
             
-            if (is_null($session -> id_usuario)) 
+            if (is_null($this -> session -> id_usuario)) 
             {
                 $this -> isLogin = false;
             }
@@ -27,6 +28,9 @@
             $this -> usuarios = new UsuariosModel();
             $this -> cajas = new CajasModel();
             $this -> roles = new RolesModel();
+            $this -> configModel = new ConfiguracionModel();
+            $this -> permisos = new DetallePermisosModel();
+
             helper(['form']);
 
             $this -> reglas = [
@@ -104,10 +108,30 @@
 
         public function index($state = 1)
         {
-            $usuarios = $this -> usuarios -> where('usuario_state', $state) -> findAll();
-            $data = ['title' => 'Usuarios', 'datos' => $usuarios];
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                $permisosUser = $this -> permisos -> getPermisosPorUsuario($this -> session -> id_usuario);
 
-            echo view('header');
+                if (!isset($permisosUser[1])) 
+                {
+                    return redirect() -> to(base_url() . '/productos');
+                }
+            }
+
+            $usuarios = $this -> usuarios -> where('usuario_state', $state) -> findAll();
+
+            $dataHeader = ['permisos' => $permisosUser];
+
+            $data = [
+                'title' => 'Usuarios', 
+                'datos' => $usuarios
+            ];
+
+            echo view('header', $dataHeader);
             echo view('usuarios/usuarios', $data);
             echo view('footer');
         }
@@ -220,11 +244,10 @@
         {
             if ($this -> isLogin) 
             {
-                return redirect() -> to(base_url() . '/configuracion');
+                return redirect() -> to(base_url() . '/productos');
             }
 
-            $configModel = new ConfiguracionModel();
-            $datosTienda = $configModel -> getDatosTienda();
+            $datosTienda = $this -> configModel -> getDatosTienda();
 
             $js = ['login'];
             $css = ['usuarios'];
@@ -241,6 +264,19 @@
 
         public function valida()
         {
+            
+            $datosTienda = $this -> configModel -> getDatosTienda();
+
+            $js = ['login'];
+            $css = ['usuarios'];
+
+            $data = [
+                'nombreTienda' => $datosTienda['nombreTienda'], 
+                'logoTienda' => $datosTienda['logoTienda'],
+                'js' => $js,
+                'css' => $css
+            ];
+
             if ($this -> request -> getMethod() == 'post' && $this -> validate($this -> reglasLogin)) 
             {    
                 $usuario = $this -> request -> getPost('usuario');
@@ -261,7 +297,7 @@
 
                         $session = session();
                         $session -> set($datosSesion);
-                        return redirect() -> to(base_url() . '/configuracion');
+                        return redirect() -> to(base_url() . '/productos');
                     }
                     else
                     {
@@ -277,7 +313,7 @@
             }
             else
             {
-                $data = ['validation' => $this -> validator];
+                $data['validation'] = $this -> validator;
                 echo view('login', $data);
             }
         }

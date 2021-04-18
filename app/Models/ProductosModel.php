@@ -23,7 +23,8 @@
             'producto_inventariable', 
             'unidad_id', 
             'categoria_id', 
-            'producto_state'
+            'producto_state',
+            'marca_id'
         ];
 
         protected $useTimestamps = true;

@@ -68,13 +68,13 @@
                                             </div>
 
                                             <?php if (isset($validation)) { ?>
-                                                <div class="alert alert-danger">
+                                                <div class="alert alert-danger mt-3">
                                                 <?= $validation -> listErrors() ?>
                                                 </div>
                                             <?php } ?>
 
                                             <?php if (isset($error)) { ?>
-                                                <div class="alert alert-danger">
+                                                <div class="alert alert-danger mt-3">
                                                 <?= $error ?>
                                                 </div>
                                             <?php } ?>

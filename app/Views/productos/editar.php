@@ -4,6 +4,12 @@
         <!-- Page Heading -->
         <h1 class="h1 mb-2 text-gray-800"><?= $title ?></h1>
 
+        <?php if (isset($validation)) { ?>
+            <div class="alert alert-danger">
+            <?= $validation -> listErrors() ?>
+            </div>
+        <?php } ?>
+
         <form method='POST' action='<?= base_url() ?>/productos/actualizar' autocomplete='off'>
         
             <input type="text" class='form-control d-none' id='id' name='id' autofocus required value='<?= $producto['producto_id'] ?>'>
@@ -32,7 +38,6 @@
 
                         <label for="">Unidad</label>
                         <select name="id_unidad" id="id_unidad" class='form-control' required>
-                            <option value="">Selecionar unidad</option>
 
                             <?php foreach ($unidades as $key => $value) { 
                                     if ($value['unidad_id'] == $producto['unidad_id']) { ?>
@@ -50,7 +55,6 @@
 
                         <label for="">Categoría</label>
                         <select name="id_categoria" id="id_categoria" class='form-control' required>
-                            <option value="">Selecionar categoría</option>
 
                             <?php foreach ($categorias as $key => $value) {
                                     if ($value['categoria_id'] == $producto['categoria_id']) { ?>
@@ -70,29 +74,25 @@
                 <div class="row">
                     <div class="col-12 col-sm-6">
 
-                        <label for="">Precio Venta</label>
-                        <input type="text" class='form-control' id='precio_venta' name='precio_venta' autofocus required value='<?= $producto['producto_precioventa'] ?>'>
-
-                    </div>
-
-                    <div class="col-12 col-sm-6">
-
-                        <label for="">Precio Compra</label>
-                        <input type="text" class='form-control' id='pracio_compra' name='pracio_compra' required value='<?= $producto['producto_preciocompra'] ?>'>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-12 col-sm-6">
-
                         <label for="">Stock Minimo</label>
                         <input type="text" class='form-control' id='stock_minimo' name='stock_minimo' autofocus required value='<?= $producto['producto_stockminimo'] ?>'>
 
                     </div>
 
+                    <div class="col-12 col-sm-6">
+
+                        <label for="">Marca</label>
+                        <select name="id_marca" id="id_marca" class='form-control' required>
+
+                            <?php foreach ($marcas as $key => $value) { ?>
+                                <option value="<?= $value['marca_id'] ?>"><?= $value['marca_nombre'] ?></option>
+                            <?php } ?>
+
+                        </select>
+
+                    </div>
+
+                    <?php if(false) { ?>
                     <div class="col-12 col-sm-6">
 
                         <label for="">Es inventariable</label>
@@ -107,6 +107,25 @@
                             <?php } ?>
 
                         </select>
+
+                    </div>
+                    <?php } ?>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+
+                        <label for="">Precio Venta</label>
+                        <input type="text" class='form-control' id='precio_venta' name='precio_venta' autofocus required value='<?= $producto['producto_precioventa'] ?>'>
+
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+
+                        <label for="">Precio Compra</label>
+                        <input type="text" class='form-control' id='pracio_compra' name='pracio_compra' required value='<?= $producto['producto_preciocompra'] ?>'>
 
                     </div>
                 </div>

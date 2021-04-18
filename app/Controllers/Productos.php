@@ -34,11 +34,9 @@
             }
 
             helper(['form']);
-
-            
         }
 
-        public function index($state = 1)
+        public function index()
         {
             if (!$this -> isLogin) 
             {
@@ -52,7 +50,7 @@
                 }
             }
             
-            $productos = $this -> productos -> where('producto_state', $state) -> findAll();
+            $productos = $this -> productos -> where('producto_state', 1) -> findAll();
 
             $dataHeader = ['permisos' => $this -> permisosUser];
 
@@ -92,7 +90,9 @@
                 'marcas' => $marcas
             ];
 
-            echo view('header');
+            $dataHeader = ['permisos' => $this -> permisosUser];
+            
+            echo view('header', $dataHeader);
             echo view('productos/nuevo', $data);
             echo view('footer');
         }
@@ -168,7 +168,9 @@
                     'validation' => $this -> validator
                 ];
 
-                echo view('header');
+                $dataHeader = ['permisos' => $this -> permisosUser];
+            
+                echo view('header', $dataHeader);
                 echo view('productos/nuevo', $data);
                 echo view('footer');
             }
@@ -191,8 +193,13 @@
             
             $unidades = $this -> unidades -> where('unidad_state', 1) -> findAll();
             $categorias = $this -> categorias -> where('categoria_state', 1) -> findAll();
-            $producto = $this -> productos -> where('producto_id', $id) -> first();
+            $producto = $this -> productos -> where('producto_id', $id) -> where('producto_state', 1) -> first();
             $marcas = $this -> marcas -> where('marca_state', 1) -> findAll();
+            
+            if (is_null($producto)) 
+            {
+                return redirect() -> to(base_url() . '/productos');
+            }
 
             $data = [
                 'title' => 'Editar Producto', 
@@ -202,7 +209,9 @@
                 'marcas' => $marcas
             ];
 
-            echo view('header');
+            $dataHeader = ['permisos' => $this -> permisosUser];
+            
+            echo view('header', $dataHeader);
             echo view('productos/editar', $data);
             echo view('footer');
         }
@@ -247,56 +256,60 @@
                     return redirect() -> to(base_url() . '/dashboard');
                 }
             }
-
+            
             $id = $this -> request -> getPost('id');
+
+            if (is_null($id)) 
+            {
+                return redirect() -> to(base_url() . '/productos');
+            }
+
+            $producto = $this -> productos -> where('producto_id', $id) -> where('producto_state', 1) -> first();
+            
+            if (is_null($producto)) 
+            {
+                return redirect() -> to(base_url() . '/productos');
+            }
 
             if ($this -> request -> getMethod() == 'post' && $this -> validate($reglas)) 
             {
-                if (!is_null($id)) 
-                {
-                    $this -> productos -> update(
-                        $this -> request -> getPost('id'), 
-                        [
-                            'producto_codigo' => $this -> request -> getPost('codigo'), 
-                            'producto_nombre' => $this -> request -> getPost('nombre'), 
-                            'producto_precioventa' => $this -> request -> getPost('precio_venta'), 
-                            'producto_preciocompra' => $this -> request -> getPost('pracio_compra'), 
-                            'producto_stockminimo' => $this -> request -> getPost('stock_minimo'), 
-                            'unidad_id' => $this -> request -> getPost('id_unidad'), 
-                            'categoria_id' => $this -> request -> getPost('id_categoria'), 
-                            'marca_id' => $this -> request -> getPost('id_marca')
-                        ]
-                    );
-                }
+                $this -> productos -> update(
+                    $this -> request -> getPost('id'), 
+                    [
+                        'producto_codigo' => $this -> request -> getPost('codigo'), 
+                        'producto_nombre' => $this -> request -> getPost('nombre'), 
+                        'producto_precioventa' => $this -> request -> getPost('precio_venta'), 
+                        'producto_preciocompra' => $this -> request -> getPost('pracio_compra'), 
+                        'producto_stockminimo' => $this -> request -> getPost('stock_minimo'), 
+                        'unidad_id' => $this -> request -> getPost('id_unidad'), 
+                        'categoria_id' => $this -> request -> getPost('id_categoria'), 
+                        'marca_id' => $this -> request -> getPost('id_marca')
+                    ]
+                );
                 
                 return redirect() -> to(base_url() . '/productos');
             }
             else
             {
-                if (is_null($id)) 
-                {
-                    return redirect() -> to(base_url() . '/productos');
-                }
-                else
-                {
-                    $unidades = $this -> unidades -> where('unidad_state', 1) -> findAll();
-                    $categorias = $this -> categorias -> where('categoria_state', 1) -> findAll();
-                    $producto = $this -> productos -> where('producto_id', $id) -> first();
-                    $marcas = $this -> marcas -> where('marca_state', 1) -> findAll();
+                $unidades = $this -> unidades -> where('unidad_state', 1) -> findAll();
+                $categorias = $this -> categorias -> where('categoria_state', 1) -> findAll();
+                $producto = $this -> productos -> where('producto_id', $id) -> first();
+                $marcas = $this -> marcas -> where('marca_state', 1) -> findAll();
 
-                    $data = [
-                        'title' => 'Editar Producto', 
-                        'unidades' => $unidades, 
-                        'categorias' => $categorias, 
-                        'producto' => $producto,
-                        'marcas' => $marcas,
-                        'validation' => $this -> validator
-                    ];
+                $data = [
+                    'title' => 'Editar Producto', 
+                    'unidades' => $unidades, 
+                    'categorias' => $categorias, 
+                    'producto' => $producto,
+                    'marcas' => $marcas,
+                    'validation' => $this -> validator
+                ];
 
-                    echo view('header');
-                    echo view('productos/editar', $data);
-                    echo view('footer');
-                }
+                $dataHeader = ['permisos' => $this -> permisosUser];
+            
+                echo view('header', $dataHeader);
+                echo view('productos/editar', $data);
+                echo view('footer');
             }
         }
 
@@ -314,12 +327,19 @@
                 }
             }
 
+            $producto = $this -> productos -> where('producto_id', $id) -> where('producto_state', 1) -> first();
+            
+            if (is_null($producto)) 
+            {
+                return redirect() -> to(base_url() . '/productos');
+            }
+            
             $this -> productos -> update($id, ['producto_state' => 0]);
 
             return redirect() -> to(base_url() . '/productos');
         }
 
-        public function eliminados($state = 0)
+        public function eliminados()
         {
             if (!$this -> isLogin) 
             {
@@ -333,10 +353,12 @@
                 }
             }
 
-            $productos = $this -> productos -> where('producto_state', $state) -> findAll();
+            $productos = $this -> productos -> where('producto_state', 0) -> findAll();
             $data = ['title' => 'Productos Eliminadas', 'datos' => $productos];
 
-            echo view('header');
+            $dataHeader = ['permisos' => $this -> permisosUser];
+            
+            echo view('header', $dataHeader);
             echo view('productos/eliminados', $data);
             echo view('footer');
         }
@@ -355,6 +377,13 @@
                 }
             }
 
+            $producto = $this -> productos -> where('producto_id', $id) -> where('producto_state', 0) -> first();
+            
+            if (is_null($producto)) 
+            {
+                return redirect() -> to(base_url() . '/productos');
+            }
+            
             $this -> productos -> update($id, ['producto_state' => 1]);
 
             return redirect() -> to(base_url() . '/productos');

@@ -65,9 +65,15 @@
 
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="<?= base_url() ?>/productos">Productos</a>
-                        <a class="collapse-item" href="<?= base_url() ?>/unidades">Unidades</a>
+                        <?php if (isset($permisos[1])) { ?>
+                            <a class="collapse-item" href="<?= base_url() ?>/productos">Productos</a>
+                        <?php } 
+                        if (isset($permisos[10])) { ?>
+                            <a class="collapse-item" href="<?= base_url() ?>/unidades">Unidades</a>
+                        <?php }  
+                        if (isset($permisos[11])) { ?>
                         <a class="collapse-item" href="<?= base_url() ?>/categorias">Categorías</a>
+                        <?php } ?>
                         <a class="collapse-item" href="<?= base_url() ?>/marcas">Marcas</a>
                     </div>
                 </div>

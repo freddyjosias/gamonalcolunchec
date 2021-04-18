@@ -40,8 +40,8 @@
 
                                         <td class='text-center'>
                                             <a href="<?= base_url() ?>/marcas/editar/<?= $value['marca_id'] ?>" class='btn btn-warning py-1 my-1 px-2'><i class="fas fa-edit"></i></a>
-                                            
-                                            <a href="<?= base_url() ?>/marcas/eliminar/<?= $value['marca_id'] ?>" class='btn btn-danger py-1 my-1 px-2 ml-2'><i class="fas fa-trash-alt"></i></a>
+
+                                            <a type='button' data-href="<?= base_url() ?>/marcas/eliminar/<?= $value['marca_id'] ?>" class='btn btn-danger py-1 my-1 px-2 ml-2' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Eliminar Registro'><i class="fas fa-trash-alt"></i></a>
                                         </td>
                                     </tr>
                                 
@@ -58,3 +58,28 @@
 
 </div>
 <!-- End of Main Content -->
+
+<!-- Logout Modal-->
+<div class="modal fade" id="modal-confirma" tabindex="-1" role="dialog" aria-labelledby=""
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Eliminar Registro</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                ¿Desea eliminar este registro?
+            </div>
+                                    
+            <div class="modal-footer">
+                <button class="btn btn-light" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-light" type="button" data-dismiss="modal">No</button>
+                <a class="btn btn-danger btn-ok" type="button">Si</a>
+            </div>
+        </div>
+    </div>
+</div>

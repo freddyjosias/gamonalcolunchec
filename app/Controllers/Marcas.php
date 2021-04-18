@@ -25,9 +25,20 @@
             {
                 $this -> permisosUser = $this -> detPermisos -> getPermisosPorUsuario($this -> session -> id_usuario);
             }
+
+            helper(['form']);
+
+            $this -> reglas = [
+                'nombre' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'El campo Nombre es obligatorio.'
+                    ]
+                ]
+            ];
         }
 
-        public function index($state = 1)
+        public function index()
         {
             if (!$this -> isLogin) 
             {
@@ -41,7 +52,7 @@
                 }
             }
             
-            $marcas = $this -> marcas -> where('marca_state', $state) -> findAll();
+            $marcas = $this -> marcas -> where('marca_state', 1) -> findAll();
             $data = ['title' => 'Marcas', 'datos' => $marcas];
 
             $dataHeader = ['permisos' => $this -> permisosUser];
@@ -51,7 +62,7 @@
             echo view('footer');
         }
 
-        public function nuevo()
+        public function nuevo($valid = null)
         {
             if (!$this -> isLogin) 
             {
@@ -65,7 +76,14 @@
                 }
             }
 
-            $data = ['title' => 'Agregar Marca'];
+            if ($valid != null && method_exists($valid,'listErrors')) 
+            {
+                $data = ['title' => 'Agregar Marca', 'validation' => $valid];
+            }
+            else
+            {
+                $data = ['title' => 'Agregar Marca'];
+            }
 
             $dataHeader = ['permisos' => $this -> permisosUser];
             
@@ -87,13 +105,20 @@
                     return redirect() -> to(base_url() . '/dashboard');
                 }
             }
-            
-            $this -> marcas -> save(['marca_nombre' => $this -> request -> getPost('nombre')]);
 
-            return redirect() -> to(base_url() . '/marcas');
+            if ($this -> request -> getMethod() == 'post' && $this -> validate($this -> reglas)) 
+            {
+                $this -> marcas -> save(['marca_nombre' => $this -> request -> getPost('nombre')]);
+
+                return redirect() -> to(base_url() . '/marcas');
+            }
+            else
+            {
+                return $this -> nuevo($this -> validator);
+            }
         }
 
-        public function editar($id)
+        public function editar($id = 0, $valid = null)
         {
             if (!$this -> isLogin) 
             {
@@ -107,8 +132,21 @@
                 }
             }
 
-            $marca = $this -> marcas -> where('marca_id', $id) -> first();
-            $data = ['title' => 'Editar Marca', 'datos' => $marca];
+            $marca = $this -> marcas -> where('marca_id', $id) -> where('marca_state', 1) -> first();
+
+            if (is_null($marca)) 
+            {
+                return redirect() -> to(base_url() . '/marcas');
+            }
+
+            if ($valid != null && method_exists($valid,'listErrors')) 
+            {
+                $data = ['title' => 'Editar Marca', 'datos' => $marca, 'validation' => $valid];
+            }
+            else
+            {
+                $data = ['title' => 'Editar Marca', 'datos' => $marca];
+            }
 
             $dataHeader = ['permisos' => $this -> permisosUser];
             
@@ -130,18 +168,39 @@
                     return redirect() -> to(base_url() . '/dashboard');
                 }
             }
-            
-            $this -> marcas -> update(
-                $this -> request -> getPost('id'), 
-                [
-                    'marca_nombre' => $this -> request -> getPost('nombre')
-                ]
-            );
 
-            return redirect() -> to(base_url() . '/marcas');
+            $id = $this -> request -> getPost('id');
+
+            if (is_null($id)) 
+            {
+                return redirect() -> to(base_url() . '/marcas');
+            }
+
+            $marca = $this -> marcas -> where('marca_id', $id) -> where('marca_state', 1) -> first();
+
+            if (is_null($marca)) 
+            {
+                return redirect() -> to(base_url() . '/marcas');
+            }
+
+            if ($this -> request -> getMethod() == 'post' && $this -> validate($this -> reglas)) 
+            {
+                $this -> marcas -> update(
+                    $this -> request -> getPost('id'), 
+                    [
+                        'marca_nombre' => $this -> request -> getPost('nombre')
+                    ]
+                );
+
+                return redirect() -> to(base_url() . '/marcas');
+            }
+            else
+            {
+                return $this -> editar($id, $this -> validator);
+            }
         }
 
-        public function eliminar($id)
+        public function eliminar($id = 0)
         {
             if (!$this -> isLogin) 
             {
@@ -155,12 +214,19 @@
                 }
             }
 
+            $marca = $this -> marcas -> where('marca_id', $id) -> where('marca_state', 1) -> first();
+
+            if (is_null($marca)) 
+            {
+                return redirect() -> to(base_url() . '/marcas');
+            }
+            
             $this -> marcas -> update($id, ['marca_state' => 0]);
 
             return redirect() -> to(base_url() . '/marcas');
         }
 
-        public function eliminados($state = 0)
+        public function eliminados()
         {
             if (!$this -> isLogin) 
             {
@@ -174,7 +240,7 @@
                 }
             }
 
-            $marcas = $this -> marcas -> where('marca_state', $state) -> findAll();
+            $marcas = $this -> marcas -> where('marca_state', 0) -> findAll();
             $data = ['title' => 'Marcas Eliminadas', 'datos' => $marcas];
 
             $dataHeader = ['permisos' => $this -> permisosUser];
@@ -184,7 +250,7 @@
             echo view('footer');
         }
 
-        public function reingresar($id)
+        public function reingresar($id = 0)
         {
             if (!$this -> isLogin) 
             {
@@ -196,6 +262,13 @@
                 {
                     return redirect() -> to(base_url() . '/dashboard');
                 }
+            }
+
+            $marca = $this -> marcas -> where('marca_id', $id) -> where('marca_state', 0) -> first();
+
+            if (is_null($marca)) 
+            {
+                return redirect() -> to(base_url() . '/marcas');
             }
             
             $this -> marcas -> update($id, ['marca_state' => 1]);

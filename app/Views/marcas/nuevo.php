@@ -4,7 +4,13 @@
         <!-- Page Heading -->
         <h1 class="h1 mb-2 text-gray-800"><?= $title ?></h1>
 
-        <form method='POST' action='<?= base_url() ?>/categorias/insertar' autocomplete='off'>
+        <?php if (isset($validation)) { ?>
+            <div class="alert alert-danger">
+            <?= $validation -> listErrors() ?>
+            </div>
+        <?php } ?>
+
+        <form method='POST' action='<?= base_url() ?>/marcas/insertar' autocomplete='off'>
 
             <div class="form-group">
                 <div class="row">
@@ -19,7 +25,7 @@
             </div>
 
             <div class=''>
-                <a href="<?= base_url() ?>/categorias" class='btn btn-light'>Regresar</a>
+                <a href="<?= base_url() ?>/marcas" class='btn btn-light'>Regresar</a>
                 <button type="submit" class="btn btn-success">Guardar</button>
             </div>
             

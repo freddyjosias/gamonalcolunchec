@@ -116,7 +116,6 @@
             {
                 return $this -> nuevo($this -> validator);
             }
-            
         }
 
         public function editar($id = 0, $valid = null)
@@ -139,8 +138,6 @@
             {
                 return redirect() -> to(base_url() . '/categorias');
             }
-
-            $categoria = $this -> categorias -> where('categoria_id', $id) -> first();
 
             if ($valid != null && method_exists($valid,'listErrors')) 
             {
@@ -201,7 +198,6 @@
             {
                 return $this -> editar($id, $this -> validator);
             }
-
         }
 
         public function eliminar($id = 0)

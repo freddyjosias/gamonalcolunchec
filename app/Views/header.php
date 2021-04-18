@@ -44,7 +44,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= base_url() . '/dashboard' ?>">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -57,38 +57,48 @@
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
 
-                <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages" type='button'>
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Productos</span>
-                </a>
+                <?php if(isset($permisos[1]) || isset($permisos[10]) || isset($permisos[11]) || isset($permisos[12])) { ?>
+                    <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsePages"
+                        aria-expanded="true" aria-controls="collapsePages" type='button'>
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Productos</span>
+                    </a>
 
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <?php if (isset($permisos[1])) { ?>
-                            <a class="collapse-item" href="<?= base_url() ?>/productos">Productos</a>
-                        <?php } 
-                        if (isset($permisos[10])) { ?>
-                            <a class="collapse-item" href="<?= base_url() ?>/unidades">Unidades</a>
-                        <?php }  
-                        if (isset($permisos[11])) { ?>
-                        <a class="collapse-item" href="<?= base_url() ?>/categorias">Categorías</a>
-                        <?php } ?>
-                        <a class="collapse-item" href="<?= base_url() ?>/marcas">Marcas</a>
+                    <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+
+                            <?php if (isset($permisos[1])) { ?>
+                                <a class="collapse-item" href="<?= base_url() ?>/productos">Productos</a>
+                            <?php } 
+                            if (isset($permisos[10])) { ?>
+                                <a class="collapse-item" href="<?= base_url() ?>/unidades">Unidades</a>
+                            <?php }  
+                            if (isset($permisos[11])) { ?>
+                            <a class="collapse-item" href="<?= base_url() ?>/categorias">Categorías</a>
+                            <?php }  
+                            if (isset($permisos[12])) { ?>
+                            <a class="collapse-item" href="<?= base_url() ?>/marcas">Marcas</a>
+                            <?php } ?>
+
+                        </div>
                     </div>
-                </div>
+                <?php } 
+                
+                if (isset($permisos[9])) { ?>
 
-                <a class="nav-link collapsed" data-toggle="collapse" data-target="#clientes_menu"
-                    aria-expanded="true" aria-controls="clientes_menu" type='button'>
-                    <i class="fas fa-users"></i>
-                    <span>Clientes</span>
-                </a>
+                    <a class="nav-link collapsed" data-toggle="collapse" data-target="#clientes_menu"
+                        aria-expanded="true" aria-controls="clientes_menu" type='button'>
+                        <i class="fas fa-users"></i>
+                        <span>Clientes</span>
+                    </a>
 
-                <div id="clientes_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="<?= base_url() ?>/clientes">Clientes</a>
+                    <div id="clientes_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="<?= base_url() ?>/clientes">Clientes</a>
+                        </div>
                     </div>
-                </div>
+
+                <?php } ?>
 
                 <a class="nav-link collapsed" data-toggle="collapse" data-target="#caja_menu"
                     aria-expanded="true" aria-controls="caja_menu" type='button'>

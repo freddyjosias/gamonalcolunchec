@@ -2,15 +2,20 @@
 
     namespace App\Controllers;
     use App\Controllers\BaseController;
+    use App\Models\ConfiguracionModel;
     use App\Models\DetallePermisosModel;
 
     class Dashboard extends BaseController
     {
         protected $isLogin = true, $detPermisos, $session, $permisosUser;
+        protected $configModel, $datosTienda;
 
         public function __construct()
         {
             $this -> detPermisos = new DetallePermisosModel();
+            $this -> configModel = new ConfiguracionModel();
+
+            $this -> datosTienda = $this -> configModel -> getDatosTienda();
 
             $this -> session = session();
             
@@ -26,7 +31,11 @@
 
         public function index($state = 1)
         {
-            $dataHeader = ['permisos' => $this -> permisosUser];
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Dashboard'
+            ];
 
             echo view('header', $dataHeader);
             //echo view('marcas/marcas', $data);

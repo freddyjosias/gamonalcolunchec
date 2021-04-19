@@ -4,24 +4,36 @@
         <!-- Page Heading -->
         <h1 class="h1 mb-2 text-gray-800"><?= $title ?></h1>
 
-        <form method='POST' action='<?= base_url() ?>/categorias/actualizar' autocomplete='off'>
+        <?php if (isset($validation)) { ?>
+            <div class="alert alert-danger">
+            <?= $validation -> listErrors() ?>
+            </div>
+        <?php } ?>
+
+        <form method='POST' action='<?= base_url() ?>/cajas/actualizar' autocomplete='off'>
+
+            <input type="hidden" class='form-control' id='id' name='id' required value="<?= $datos['caja_id'] ?>">
 
             <div class="form-group">
                 <div class="row">
                     <div class="col-12 col-sm-6">
 
                         <label for="">Nombre</label>
-                        <input type="text" class='form-control' value='<?= $datos['categoria_nombre'] ?>' id='nombre' name='nombre' autofocus require>
+                        <input type="text" class='form-control' id='nombre' name='nombre' autofocus required value="<?= $datos['caja_nombre'] ?>">
 
                     </div>
 
+                    <div class="col-12 col-sm-6">
+
+                        <label for="">Número</label>
+                        <input type="number" class='form-control' id='numero' name='numero' required step="1" min="1" value="<?= $datos['caja_numero'] ?>">
+
+                    </div>
                 </div>
             </div>
 
-            <input type="hidden" value='<?= $datos['categoria_id'] ?>' name='id'>
-
             <div class=''>
-                <a href="<?= base_url() ?>/categorias" class='btn btn-light'>Regresar</a>
+                <a href="<?= base_url() ?>/cajas" class='btn btn-light'>Regresar</a>
                 <button type="submit" class="btn btn-success">Guardar</button>
             </div>
             

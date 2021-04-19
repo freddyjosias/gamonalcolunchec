@@ -6,12 +6,14 @@
     use App\Models\UnidadesModel;
     use App\Models\CategoriasModel;
     use App\Models\MarcasModel;
+    use App\Models\ConfiguracionModel;
     use App\Models\DetallePermisosModel;
 
     class Productos extends BaseController
     {
         protected $productos, $categorias, $marcas;
         protected $reglas;
+        protected $configModel, $datosTienda;
         protected $isLogin = true, $detPermisos, $session, $permisosUser;
 
         public function __construct()
@@ -21,6 +23,9 @@
             $this -> categorias = new CategoriasModel();
             $this -> marcas = new MarcasModel();
             $this -> detPermisos = new DetallePermisosModel();
+            $this -> configModel = new ConfiguracionModel();
+
+            $this -> datosTienda = $this -> configModel -> getDatosTienda();
 
             $this -> session = session();
             
@@ -52,16 +57,15 @@
             
             $productos = $this -> productos -> where('producto_state', 1) -> findAll();
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-
-            $data = [
-                'title' => 
-                'Productos', 
-                'datos' => $productos
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'title' => 'Productos', 
+                'datos' => $productos,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
             ];
 
             echo view('header', $dataHeader);
-            echo view('productos/productos', $data);
+            echo view('productos/productos');
             echo view('footer');
         }
 
@@ -83,17 +87,17 @@
             $categorias = $this -> categorias -> where('categoria_state', 1) -> findAll();
             $marcas = $this -> marcas -> where('marca_state', 1) -> findAll();
 
-            $data = [
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
                 'title' => 'Agregar Producto', 
                 'unidades' => $unidades, 
                 'categorias' => $categorias,
-                'marcas' => $marcas
+                'marcas' => $marcas,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
             ];
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
             echo view('header', $dataHeader);
-            echo view('productos/nuevo', $data);
+            echo view('productos/nuevo');
             echo view('footer');
         }
 
@@ -160,18 +164,18 @@
                 $categorias = $this -> categorias -> where('categoria_state', 1) -> findAll();
                 $marcas = $this -> marcas -> where('marca_state', 1) -> findAll();
 
-                $data = [
-                    'title' =>'Agregar Producto', 
+                $dataHeader = [
+                    'permisos' => $this -> permisosUser,
+                    'title' => 'Agregar Producto', 
                     'unidades' => $unidades, 
                     'categorias' => $categorias,
                     'marcas' => $marcas,
-                    'validation' => $this -> validator
+                    'validation' => $this -> validator,
+                    'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 ];
-
-                $dataHeader = ['permisos' => $this -> permisosUser];
-            
+    
                 echo view('header', $dataHeader);
-                echo view('productos/nuevo', $data);
+                echo view('productos/nuevo');
                 echo view('footer');
             }
 
@@ -201,18 +205,18 @@
                 return redirect() -> to(base_url() . '/productos');
             }
 
-            $data = [
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
                 'title' => 'Editar Producto', 
                 'unidades' => $unidades, 
                 'categorias' => $categorias, 
                 'producto' => $producto,
-                'marcas' => $marcas
+                'marcas' => $marcas,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
             ];
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
             echo view('header', $dataHeader);
-            echo view('productos/editar', $data);
+            echo view('productos/editar');
             echo view('footer');
         }
 
@@ -296,19 +300,19 @@
                 $producto = $this -> productos -> where('producto_id', $id) -> first();
                 $marcas = $this -> marcas -> where('marca_state', 1) -> findAll();
 
-                $data = [
+                $dataHeader = [
+                    'permisos' => $this -> permisosUser,
                     'title' => 'Editar Producto', 
                     'unidades' => $unidades, 
                     'categorias' => $categorias, 
                     'producto' => $producto,
                     'marcas' => $marcas,
-                    'validation' => $this -> validator
+                    'validation' => $this -> validator,
+                    'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 ];
-
-                $dataHeader = ['permisos' => $this -> permisosUser];
-            
+    
                 echo view('header', $dataHeader);
-                echo view('productos/editar', $data);
+                echo view('productos/editar');
                 echo view('footer');
             }
         }
@@ -354,12 +358,16 @@
             }
 
             $productos = $this -> productos -> where('producto_state', 0) -> findAll();
-            $data = ['title' => 'Productos Eliminadas', 'datos' => $productos];
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Productos Eliminadas', 
+                'datos' => $productos
+            ];
+
             echo view('header', $dataHeader);
-            echo view('productos/eliminados', $data);
+            echo view('productos/eliminados');
             echo view('footer');
         }
 

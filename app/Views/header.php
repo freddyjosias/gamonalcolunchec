@@ -15,7 +15,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Gamonal Colunche</title>
+    <title><?= $title . ' - ' . $nombreTienda ?></title>
 
     <!-- Custom fonts for this template -->
     <link href="<?= base_url() ?>/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -48,7 +48,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">Gamonal Colunche</div>
+                <div class="sidebar-brand-text mx-3"><?= $nombreTienda ?></div>
             </a>
 
             <!-- Divider -->
@@ -126,25 +126,27 @@
                     </div>
                 </div>
 
-                <a class="nav-link collapsed" data-toggle="collapse" data-target="#admin_menu"
-                    aria-expanded="true" aria-controls="admin_menu" type='button'>
-                    <i class="fas fa-tools"></i>
-                    <span>Administración</span>
-                </a>
+                <?php if(isset($permisos[3]) || isset($permisos[1]) || isset($permisos[4])) { ?>
+                    <a class="nav-link collapsed" data-toggle="collapse" data-target="#admin_menu"
+                        aria-expanded="true" aria-controls="admin_menu" type='button'>
+                        <i class="fas fa-tools"></i>
+                        <span>Administración</span>
+                    </a>
 
-                <div id="admin_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="<?= base_url() ?>/configuracion">Configuración</a>
-
-                        <?php if (isset($permisos[1])) { ?>
-                            <a class="collapse-item" href="<?= base_url() ?>/usuarios">Usuarios</a>
-                        <?php } 
-                        if (isset($permisos[4])) { ?>
-                            <a class="collapse-item" href="<?= base_url() ?>/cajas">Cajas</a>
-                        <?php } ?>
+                    <div id="admin_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <?php if (isset($permisos[3])) { ?>
+                                <a class="collapse-item" href="<?= base_url() ?>/configuracion">Configuración</a>
+                            <?php } 
+                            if (isset($permisos[1])) { ?>
+                                <a class="collapse-item" href="<?= base_url() ?>/usuarios">Usuarios</a>
+                            <?php } 
+                            if (isset($permisos[4])) { ?>
+                                <a class="collapse-item" href="<?= base_url() ?>/cajas">Cajas</a>
+                            <?php } ?>
+                        </div>
                     </div>
-                </div>
-
+                <?php } ?>
             </li>
 
             <?php if(false) { ?>

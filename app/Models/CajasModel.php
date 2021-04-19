@@ -18,7 +18,7 @@
         protected $useTimestamps = true;
         protected $createdField  = 'caja_creation';
         protected $updatedField  = 'caja_update';
-        protected $deletedField  = 'deleted_at';
+        protected $deletedField  = '';
 
         protected $validationRules    = [];
         protected $validationMessages = [];

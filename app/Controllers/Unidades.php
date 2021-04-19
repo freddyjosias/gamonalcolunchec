@@ -4,17 +4,22 @@
     use App\Controllers\BaseController;
     use App\Models\UnidadesModel;
     use App\Models\DetallePermisosModel;
+    use App\Models\ConfiguracionModel;
 
     class Unidades extends BaseController
     {
         protected $unidades;
         protected $reglas;
+        protected $configModel, $datosTienda;
         protected $isLogin = true, $detPermisos, $session, $permisosUser;
 
         public function __construct()
         {
             $this -> unidades = new UnidadesModel();
             $this -> detPermisos = new DetallePermisosModel();
+            $this -> configModel = new ConfiguracionModel();
+
+            $this -> datosTienda = $this -> configModel -> getDatosTienda();
 
             $this -> session = session();
             
@@ -60,12 +65,16 @@
             }
 
             $unidades = $this -> unidades -> where('unidad_state', 1) -> findAll();
-            $data = ['title' => 'Unidades', 'datos' => $unidades];
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Unidades', 
+                'datos' => $unidades
+            ];
+
             echo view('header', $dataHeader);
-            echo view('unidades/unidades', $data);
+            echo view('unidades/unidades');
             echo view('footer');
         }
 
@@ -83,12 +92,14 @@
                 }
             }
 
-            $data = ['title' => 'Agregar Unidad'];
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Agregar Unidad'
+            ];
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
             echo view('header', $dataHeader);
-            echo view('unidades/nuevo', $data);
+            echo view('unidades/nuevo');
             echo view('footer');
         }
 
@@ -116,12 +127,15 @@
             }
             else
             {
-                $data = ['title' => 'Agregar Unidad', 'validation' => $this -> validator];
+                $dataHeader = [
+                    'permisos' => $this -> permisosUser,
+                    'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                    'title' => 'Agregar Unidad', 
+                    'validation' => $this -> validator
+                ];
 
-                $dataHeader = ['permisos' => $this -> permisosUser];
-            
                 echo view('header', $dataHeader);
-                echo view('unidades/nuevo', $data);
+                echo view('unidades/nuevo');
                 echo view('footer');
             }
         }
@@ -147,19 +161,20 @@
                 return redirect() -> to(base_url() . '/unidades');
             }
 
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'datos' => $unidad, 
+                'title' => 'Dashboard'
+            ];
+
             if ($valid != null && method_exists($valid,'listErrors')) 
             {
-                $data = ['title' => 'Editar Unidad', 'datos' => $unidad, 'validation' => $valid];
+                $dataHeader['validation'] = $valid;
             }
-            else
-            {
-                $data = ['title' => 'Editar Unidad', 'datos' => $unidad];
-            }
-            
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
+
             echo view('header', $dataHeader);
-            echo view('unidades/editar', $data);
+            echo view('unidades/editar');
             echo view('footer');
         }
 
@@ -250,12 +265,16 @@
             }
 
             $unidades = $this -> unidades -> where('unidad_state', 0) -> findAll();
-            $data = ['title' => 'Unidades Eliminadas', 'datos' => $unidades];
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Unidades Eliminadas', 
+                'datos' => $unidades
+            ];
+
             echo view('header', $dataHeader);
-            echo view('unidades/eliminados', $data);
+            echo view('unidades/eliminados');
             echo view('footer');
         }
 

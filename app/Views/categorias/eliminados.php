@@ -37,7 +37,9 @@
                                         <td><?= $value['categoria_id'] ?></td>
                                         <td><?= $value['categoria_nombre'] ?></td>
 
-                                        <td class='text-center'><a type='button' data-href="<?= base_url() ?>/categorias/reingresar/<?= $value['categoria_id'] ?>" class='btn btn-success py-1 my-1 px-2' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Reingresar Registro'><i class="fas fa-undo-alt"></i></a></td>
+                                        <td class='text-center'>
+                                            <a type='button' data-href="<?= base_url() ?>/categorias/reingresar/<?= $value['categoria_id'] ?>" class='btn btn-success py-1 my-1 px-2' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Reingresar Registro'><i class="fas fa-undo-alt"></i></a>
+                                        </td>
 
                                     </tr>
                                 

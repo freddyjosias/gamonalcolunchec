@@ -2,17 +2,33 @@
 
     namespace App\Controllers;
     use App\Controllers\BaseController;
-    //use App\Models\ClientesModel;
+    use App\Models\DetallePermisosModel;
     use App\Models\ConfiguracionModel;
 
     class Configuracion extends BaseController
     {
-        protected $configuracion;
         protected $reglas;
+        protected $configModel, $datosTienda;
+        protected $isLogin = true, $detPermisos, $session, $permisosUser;
 
         public function __construct()
         {
-            $this -> configuracion = new ConfiguracionModel();
+            $this -> detPermisos = new DetallePermisosModel();
+            $this -> configModel = new ConfiguracionModel();
+
+            $this -> datosTienda = $this -> configModel -> getDatosTienda();
+
+            $this -> session = session();
+            
+            if (is_null($this -> session -> id_usuario)) 
+            {
+                $this -> isLogin = false;
+            }
+            else
+            {
+                $this -> permisosUser = $this -> detPermisos -> getPermisosPorUsuario($this -> session -> id_usuario);
+            }
+
             helper(['form', 'upload']);
 
             $this -> reglas = [
@@ -31,15 +47,27 @@
             ];
         }
 
-        public function index($state = 1)
+        public function index()
         {
-            $data = $this -> configuracion -> getDatosTienda();
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[3])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
 
-            $data['title'] = 'Configuración';
-            
-            //var_dump($nombre); die;
-            echo view('header');
-            echo view('configuracion/configuracion', $data);
+            $dataHeader = $this -> configModel -> getDatosTienda();
+
+            $dataHeader['permisos'] = $this -> permisosUser;
+            $dataHeader['title'] = 'Configuración';
+
+            echo view('header', $dataHeader);
+            echo view('configuracion/configuracion');
             echo view('footer');
         }
 
@@ -49,11 +77,18 @@
 
             if ($valid != null) 
             {
-                $data = ['title' => 'Editar Unidad', 'datos' => $unidad, 'validation' => $valid];
+                $data = [
+                    'title' => 'Editar Unidad', 
+                    'datos' => $unidad, 
+                    'validation' => $valid
+                ];
             }
             else
             {
-                $data = ['title' => 'Editar Unidad', 'datos' => $unidad];
+                $data = [
+                    'title' => 'Editar Unidad', 
+                    'datos' => $unidad
+                ];
             }
             
             echo view('header');

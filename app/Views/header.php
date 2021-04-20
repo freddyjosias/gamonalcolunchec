@@ -33,6 +33,12 @@
     <script src="<?= base_url() ?>/js/jquery-ui/external/jquery/jquery.js"></script>
     <script src="<?= base_url() ?>/js/jquery-ui/jquery-ui.min.js"></script>
 
+    <?php if (isset($css)) {
+        foreach ($css as $key => $value) { ?>
+            <link href="<?= base_url() ?>/css/<?= $value ?>.css" rel="stylesheet">
+    <?php } 
+    } ?>
+
 </head>
 
 <body id="page-top">

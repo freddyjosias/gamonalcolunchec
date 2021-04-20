@@ -4,16 +4,21 @@
     use App\Controllers\BaseController;
     use App\Models\CajasModel;
     use App\Models\DetallePermisosModel;
+    use App\Models\ConfiguracionModel;
 
     class Cajas extends BaseController
     {
         protected $cajas;
         protected $isLogin = true, $detPermisos, $session, $permisosUser;
+        protected $configModel, $datosTienda;
 
         public function __construct()
         {
             $this -> cajas = new CajasModel();
             $this -> detPermisos = new DetallePermisosModel();
+            $this -> configModel = new ConfiguracionModel();
+
+            $this -> datosTienda = $this -> configModel -> getDatosTienda();
 
             $this -> session = session();
 
@@ -44,12 +49,16 @@
             }
 
             $cajas = $this -> cajas -> where('caja_state', 1) -> findAll();
-            $data = ['title' => 'Cajas', 'datos' => $cajas];
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Cajas', 
+                'datos' => $cajas
+            ];
+
             echo view('header', $dataHeader);
-            echo view('cajas/cajas', $data);
+            echo view('cajas/cajas');
             echo view('footer');
         }
 
@@ -67,19 +76,19 @@
                 }
             }
 
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Agregar Caja'
+            ];
+
             if ($valid != null && method_exists($valid,'listErrors')) 
             {
-                $data = ['title' => 'Agregar Caja', 'validation' => $valid];
-            }
-            else
-            {
-                $data = ['title' => 'Agregar Caja'];
+                $dataHeader['validation'] = $valid;
             }
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
             echo view('header', $dataHeader);
-            echo view('cajas/nuevo', $data);
+            echo view('cajas/nuevo');
             echo view('footer');
         }
 
@@ -149,19 +158,20 @@
                 return redirect() -> to(base_url() . '/cajas');
             }
 
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Editar Caja', 
+                'datos' => $caja
+            ];
+
             if ($valid != null && method_exists($valid,'listErrors')) 
             {
-                $data = ['title' => 'Editar Caja', 'datos' => $caja, 'validation' => $valid];
-            }
-            else
-            {
-                $data = ['title' => 'Editar Caja', 'datos' => $caja];
+                $dataHeader['validation'] = $valid;
             }
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
             echo view('header', $dataHeader);
-            echo view('cajas/editar', $data);
+            echo view('cajas/editar');
             echo view('footer');
         }
 
@@ -268,12 +278,16 @@
             }
 
             $cajas = $this -> cajas -> where('caja_state', 0) -> findAll();
-            $data = ['title' => 'Cajas Eliminadas', 'datos' => $cajas];
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Cajas Eliminadas', 
+                'datos' => $cajas
+            ];
+
             echo view('header', $dataHeader);
-            echo view('cajas/eliminados', $data);
+            echo view('cajas/eliminados');
             echo view('footer');
         }
 

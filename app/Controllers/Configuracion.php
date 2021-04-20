@@ -65,6 +65,9 @@
 
             $dataHeader['permisos'] = $this -> permisosUser;
             $dataHeader['title'] = 'Configuración';
+            $dataHeader['css'] = [
+                'configuracion'
+            ];
 
             echo view('header', $dataHeader);
             echo view('configuracion/configuracion');

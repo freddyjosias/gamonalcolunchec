@@ -4,17 +4,22 @@
     use App\Controllers\BaseController;
     use App\Models\ClientesModel;
     use App\Models\DetallePermisosModel;
+    use App\Models\ConfiguracionModel;
 
     class Clientes extends BaseController
     {
         protected $clientes;
         protected $reglas, $reglasDni;
         protected $isLogin = true, $detPermisos, $session, $permisosUser;
+        protected $configModel, $datosTienda;
 
         public function __construct()
         {
             $this -> clientes = new ClientesModel();
             $this -> detPermisos = new DetallePermisosModel();
+            $this -> configModel = new ConfiguracionModel();
+
+            $this -> datosTienda = $this -> configModel -> getDatosTienda();
 
             $this -> session = session();
             
@@ -71,12 +76,15 @@
 
             $clientes = $this -> clientes -> where('cliente_state', 1) -> findAll();
 
-            $data = ['title' => 'Clientes', 'datos' => $clientes];
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Clientes', 
+                'datos' => $clientes
+            ];
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
             echo view('header', $dataHeader);
-            echo view('clientes/clientes', $data);
+            echo view('clientes/clientes');
             echo view('footer');
         }
 
@@ -94,19 +102,19 @@
                 }
             }
 
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Agregar Cliente'
+            ];
+
             if ($valid != null && method_exists($valid,'listErrors')) 
             {
-                $data = ['title' => 'Agregar Cliente', 'validation' => $valid];
-            }
-            else
-            {
-                $data = ['title' => 'Agregar Cliente'];
+                $dataHeader['validation'] = $valid;
             }
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
             echo view('header', $dataHeader);
-            echo view('clientes/nuevo', $data);
+            echo view('clientes/nuevo');
             echo view('footer');
         }
 
@@ -179,19 +187,20 @@
                 return redirect() -> to(base_url() . '/clientes');
             }
 
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Editar Cliente', 
+                'cliente' => $cliente
+            ];
+
             if ($valid != null && method_exists($valid,'listErrors')) 
             {
-                $data = ['title' => 'Editar Cliente', 'cliente' => $cliente, 'validation' => $valid];
-            }
-            else
-            {
-                $data = ['title' => 'Editar Cliente', 'cliente' => $cliente];
+                $dataHeader['validation'] = $valid;
             }
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
             echo view('header', $dataHeader);
-            echo view('clientes/editar', $data);
+            echo view('clientes/editar');
             echo view('footer');
         }
 
@@ -301,12 +310,16 @@
             }
 
             $clientes = $this -> clientes -> where('cliente_state', 0) -> findAll();
-            $data = ['title' => 'Clientes Eliminadas', 'datos' => $clientes];
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Clientes Eliminadas', 
+                'datos' => $clientes
+            ];
+
             echo view('header', $dataHeader);
-            echo view('clientes/eliminados', $data);
+            echo view('clientes/eliminados');
             echo view('footer');
         }
 

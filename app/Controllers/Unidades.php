@@ -165,7 +165,7 @@
                 'permisos' => $this -> permisosUser,
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 'datos' => $unidad, 
-                'title' => 'Dashboard'
+                'title' => 'Editar Unidad'
             ];
 
             if ($valid != null && method_exists($valid,'listErrors')) 

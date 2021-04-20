@@ -4,16 +4,21 @@
     use App\Controllers\BaseController;
     use App\Models\CategoriasModel;
     use App\Models\DetallePermisosModel;
+    use App\Models\ConfiguracionModel;
 
     class Categorias extends BaseController
     {
         protected $categorias;
         protected $isLogin = true, $detPermisos, $session, $permisosUser;
+        protected $configModel, $datosTienda;
 
         public function __construct()
         {
             $this -> categorias = new CategoriasModel();
             $this -> detPermisos = new DetallePermisosModel();
+            $this -> configModel = new ConfiguracionModel();
+
+            $this -> datosTienda = $this -> configModel -> getDatosTienda();
 
             $this -> session = session();
 
@@ -53,12 +58,16 @@
             }
 
             $categorias = $this -> categorias -> where('categoria_state', 1) -> findAll();
-            $data = ['title' => 'Categorías', 'datos' => $categorias];
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Categorías',
+                'datos' => $categorias
+            ];
+
             echo view('header', $dataHeader);
-            echo view('categorias/categorias', $data);
+            echo view('categorias/categorias');
             echo view('footer');
         }
 
@@ -76,19 +85,19 @@
                 }
             }
 
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Agregar Categoría'
+            ];
+
             if ($valid != null && method_exists($valid,'listErrors')) 
             {
-                $data = ['title' => 'Agregar Categoría', 'validation' => $valid];
-            }
-            else
-            {
-                $data = ['title' => 'Agregar Categoría'];
+                $dataHeader['validation'] = $valid;
             }
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
             echo view('header', $dataHeader);
-            echo view('categorias/nuevo', $data);
+            echo view('categorias/nuevo');
             echo view('footer');
         }
 
@@ -139,19 +148,20 @@
                 return redirect() -> to(base_url() . '/categorias');
             }
 
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Editar Categoría', 
+                'datos' => $categoria
+            ];
+
             if ($valid != null && method_exists($valid,'listErrors')) 
             {
-                $data = ['title' => 'Editar Categoría', 'datos' => $categoria, 'validation' => $valid];
-            }
-            else
-            {
-                $data = ['title' => 'Editar Categoría', 'datos' => $categoria];
+                $dataHeader['validation'] = $valid;
             }
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
             echo view('header', $dataHeader);
-            echo view('categorias/editar', $data);
+            echo view('categorias/editar');
             echo view('footer');
         }
 
@@ -241,12 +251,16 @@
             }
 
             $categorias = $this -> categorias -> where('categoria_state', 0) -> findAll();
-            $data = ['title' => 'Categorías Eliminadas', 'datos' => $categorias];
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Categorías Eliminadas', 
+                'datos' => $categorias
+            ];
+
             echo view('header', $dataHeader);
-            echo view('categorias/eliminados', $data);
+            echo view('categorias/eliminados');
             echo view('footer');
         }
 

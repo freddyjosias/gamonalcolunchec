@@ -47,7 +47,7 @@
                             <div class="col-12 col-sm-6">
 
                                 <label for="">Correo de la Tienda</label>
-                                <input type="text" class='form-control' id='tienda_correo' name='tienda_correo'  value='<?= $emailTienda ?>' required>
+                                <input type="email" class='form-control' id='tienda_correo' name='tienda_correo'  value='<?= $emailTienda ?>' required>
 
                             </div>
                         </div>
@@ -79,6 +79,11 @@
                                 <img src="<?= base_url() . '/img/logotienda.jpg' ?>" class='w-50' alt=""> <br>
                                 <input type="file" id='tienda_logo' name='tienda_logo' accept="image/png,image/jpeg">
                             </div>                        
+                        </div>
+                        
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input">
+                            <label class="custom-file-label">Seleccionar Archivo...</label>
                         </div>
                     </div>
 

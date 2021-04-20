@@ -4,16 +4,21 @@
     use App\Controllers\BaseController;
     use App\Models\MarcasModel;
     use App\Models\DetallePermisosModel;
+    use App\Models\ConfiguracionModel;
 
     class Marcas extends BaseController
     {
         protected $marcas;
         protected $isLogin = true, $detPermisos, $session, $permisosUser;
+        protected $configModel, $datosTienda;
 
         public function __construct()
         {
             $this -> marcas = new MarcasModel();
             $this -> detPermisos = new DetallePermisosModel();
+            $this -> configModel = new ConfiguracionModel();
+
+            $this -> datosTienda = $this -> configModel -> getDatosTienda();
 
             $this -> session = session();
             
@@ -53,12 +58,16 @@
             }
             
             $marcas = $this -> marcas -> where('marca_state', 1) -> findAll();
-            $data = ['title' => 'Marcas', 'datos' => $marcas];
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Marcas', 
+                'datos' => $marcas
+            ];
+
             echo view('header', $dataHeader);
-            echo view('marcas/marcas', $data);
+            echo view('marcas/marcas');
             echo view('footer');
         }
 
@@ -76,19 +85,19 @@
                 }
             }
 
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Agregar Marca'
+            ];
+
             if ($valid != null && method_exists($valid,'listErrors')) 
             {
-                $data = ['title' => 'Agregar Marca', 'validation' => $valid];
-            }
-            else
-            {
-                $data = ['title' => 'Agregar Marca'];
+                $dataHeader['validation'] = $valid;
             }
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
             echo view('header', $dataHeader);
-            echo view('marcas/nuevo', $data);
+            echo view('marcas/nuevo');
             echo view('footer');
         }
 
@@ -139,19 +148,20 @@
                 return redirect() -> to(base_url() . '/marcas');
             }
 
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Editar Marca', 
+                'datos' => $marca
+            ];
+
             if ($valid != null && method_exists($valid,'listErrors')) 
             {
-                $data = ['title' => 'Editar Marca', 'datos' => $marca, 'validation' => $valid];
-            }
-            else
-            {
-                $data = ['title' => 'Editar Marca', 'datos' => $marca];
+                $dataHeader['validation'] = $valid;
             }
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
             echo view('header', $dataHeader);
-            echo view('marcas/editar', $data);
+            echo view('marcas/editar');
             echo view('footer');
         }
 
@@ -241,12 +251,16 @@
             }
 
             $marcas = $this -> marcas -> where('marca_state', 0) -> findAll();
-            $data = ['title' => 'Marcas Eliminadas', 'datos' => $marcas];
 
-            $dataHeader = ['permisos' => $this -> permisosUser];
-            
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Marcas Eliminadas', 
+                'datos' => $marcas
+            ];
+
             echo view('header', $dataHeader);
-            echo view('marcas/eliminados', $data);
+            echo view('marcas/eliminados');
             echo view('footer');
         }
 

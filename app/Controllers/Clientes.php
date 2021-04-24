@@ -78,6 +78,7 @@
 
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 'title' => 'Clientes', 
                 'datos' => $clientes
@@ -104,6 +105,7 @@
 
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 'title' => 'Agregar Cliente'
             ];
@@ -189,6 +191,7 @@
 
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 'title' => 'Editar Cliente', 
                 'cliente' => $cliente
@@ -313,6 +316,7 @@
 
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 'title' => 'Clientes Eliminadas', 
                 'datos' => $clientes

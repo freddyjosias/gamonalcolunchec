@@ -68,6 +68,7 @@
 
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 'title' => 'Unidades', 
                 'datos' => $unidades
@@ -94,6 +95,7 @@
 
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 'title' => 'Agregar Unidad'
             ];
@@ -129,6 +131,7 @@
             {
                 $dataHeader = [
                     'permisos' => $this -> permisosUser,
+                    'logoTienda' => $this -> datosTienda['logoTienda'],
                     'nombreTienda' => $this -> datosTienda['nombreTienda'],
                     'title' => 'Agregar Unidad', 
                     'validation' => $this -> validator
@@ -163,6 +166,7 @@
 
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 'datos' => $unidad, 
                 'title' => 'Editar Unidad'
@@ -268,6 +272,7 @@
 
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 'title' => 'Unidades Eliminadas', 
                 'datos' => $unidades

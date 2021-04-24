@@ -1,3 +1,9 @@
 .custom-file-label::after {
     content: "Elegir";
 }
+
+.configuracion_logo {
+    width: 13rem;
+    max-height: 13rem;
+    margin-bottom: 1rem;
+}

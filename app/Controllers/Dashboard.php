@@ -31,8 +31,14 @@
 
         public function index($state = 1)
         {
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 'title' => 'Dashboard'
             ];

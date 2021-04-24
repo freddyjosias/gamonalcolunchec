@@ -41,6 +41,12 @@
         });
     </script>
 
+    	<?php if (isset($css)) {
+        foreach ($js as $key => $value) { ?>
+            <script src="<?= base_url() ?>/js/<?= $value ?>.js"></script>
+    <?php } 
+    } ?>
+
 </body>
 
 </html>

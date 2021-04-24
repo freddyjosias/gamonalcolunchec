@@ -75,20 +75,24 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-12 col-sm-6">
+
                                 <label for="">Logotipo</label> <br>
-                                <img src="<?= base_url() . '/img/logotienda.jpg' ?>" class='w-50' alt=""> <br>
-                                <input type="file" id='tienda_logo' name='tienda_logo' accept="image/png,image/jpeg">
+                                <img src="<?= base_url() . '/img/' . $logoTienda ?>" class='configuracion_logo' alt=""> <br>
+
+                                <div class="custom-file">
+                                    <input type="file" id='tienda_logo' name='tienda_logo' class="custom-file-input" accept="image/png,image/jpeg">
+                                    <label class="custom-file-label">Seleccionar Archivo...</label>
+                                </div>
+
+                                <div class="configuracion_filename">
+                                    
+                                </div>
+
                             </div>                        
-                        </div>
-                        
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input">
-                            <label class="custom-file-label">Seleccionar Archivo...</label>
                         </div>
                     </div>
 
-                    <div class=''>
-                        <a href="<?= base_url() ?>/unidades" class='btn btn-primary'>Regresar</a>
+                    <div class='text-right'>
                         <button type="submit" class="btn btn-success">Guardar</button>
                     </div>
                     

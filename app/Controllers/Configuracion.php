@@ -29,25 +29,49 @@
                 $this -> permisosUser = $this -> detPermisos -> getPermisosPorUsuario($this -> session -> id_usuario);
             }
 
-            helper(['form', 'upload']);
+            //helper(['form', 'upload']);
 
             $this -> reglas = [
                 'tienda_nombre' => [
                     'rules' => 'required',
                     'errors' => [
-                        'required' => 'El campo {field} es obligatorio.'
+                        'required' => 'El campo Nombre de la tienda es obligatorio.'
                     ]
                 ], 
                 'tienda_rfc' => [
                     'rules' => 'required',
                     'errors' => [
-                        'required' => 'El campo {field} es obligatorio.'
+                        'required' => 'El campo RUC es obligatorio.'
+                    ]
+                ], 
+                'tienda_telefono' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'El campo Teléfono de la Tienda es obligatorio.'
+                    ]
+                ], 
+                'tienda_correo' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'El campo Correo de la Tienda es obligatorio.'
+                    ]
+                ], 
+                'leyenda_ticket' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'El campo Leyenda del Ticket es obligatorio.'
+                    ]
+                ], 
+                'tienda_direccion' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'El campo Dirección de la tienda es obligatorio.'
                     ]
                 ]
             ];
         }
 
-        public function index()
+        public function index($valid = null)
         {
             if (!$this -> isLogin) 
             {
@@ -68,75 +92,79 @@
             $dataHeader['css'] = [
                 'configuracion'
             ];
+            $dataHeader['js'] = [
+                'configuracion'
+            ];
+
+            if ($valid != null && method_exists($valid,'listErrors')) 
+            {
+                $dataHeader['validation'] = $valid;
+            }
 
             echo view('header', $dataHeader);
             echo view('configuracion/configuracion');
             echo view('footer');
         }
 
-        public function editar($id, $valid = null)
+        public function actualizar()
         {
-            $unidad = $this -> configuracion -> where('unidad_id', $id) -> first();
-
-            if ($valid != null) 
+            if (!$this -> isLogin) 
             {
-                $data = [
-                    'title' => 'Editar Unidad', 
-                    'datos' => $unidad, 
-                    'validation' => $valid
-                ];
+                return redirect() -> to(base_url());
             }
             else
             {
-                $data = [
-                    'title' => 'Editar Unidad', 
-                    'datos' => $unidad
-                ];
+                if (!isset($this -> permisosUser[3])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
             }
             
-            echo view('header');
-            echo view('configuracion/editar', $data);
-            echo view('footer');
-        }
+            $imgLogo = $this -> request -> getFile('tienda_logo');
 
-        public function actualizar()
-        {
-            if ($this -> request -> getMethod() == 'post' && $this -> validate($this -> reglas)) 
-            {    
-                $this -> configuracion -> whereIn('configuracion_nombre', ['nombre_tienda']) -> set(['configuracion_valor' => $this -> request -> getPost('tienda_nombre')]) -> update();
-
-                $this -> configuracion -> whereIn('configuracion_nombre', ['tienda_rfc']) -> set(['configuracion_valor' => $this -> request -> getPost('tienda_rfc')]) -> update();
-
-                $this -> configuracion -> whereIn('configuracion_nombre', ['tienda_telefono']) -> set(['configuracion_valor' => $this -> request -> getPost('tienda_telefono')]) -> update();
-
-                $this -> configuracion -> whereIn('configuracion_nombre', ['tienda_email']) -> set(['configuracion_valor' => $this -> request -> getPost('tienda_correo')]) -> update();
-
-                $this -> configuracion -> whereIn('configuracion_nombre', ['tienda_direccion']) -> set(['configuracion_valor' => $this -> request -> getPost('tienda_direccion')]) -> update();
-
-                $this -> configuracion -> whereIn('configuracion_nombre', ['ticket_leyenda']) -> set(['configuracion_valor' => $this -> request -> getPost('leyenda_ticket')]) -> update();
-
-                $validacion = $this -> validate([
-                    'tienda_logo' => [
-                        'uploaded[tienda_logo]'
+            if ($imgLogo -> isValid()) 
+            {
+                $this -> reglas['tienda_logo'] = [
+                    'rules' => 'uploaded[tienda_logo]|ext_in[tienda_logo,png,jpg,jpeg]',
+                    'errors' => [
+                        'uploaded' => 'Ocurrió un problema en la subida de la imagen.',
+                        'ext_in' => 'La imagen solo puede tener extensión png, jpg o jpeg.'
                     ]
-                ]);
+                ];
+            }
 
-                if ($validacion) 
+            if ($this -> request -> getMethod() == 'post' && $this -> validate($this -> reglas)) 
+            { 
+                $this -> configModel -> whereIn('configuracion_nombre', ['nombre_tienda']) -> set(['configuracion_valor' => $this -> request -> getPost('tienda_nombre')]) -> update();
+
+                $this -> configModel -> whereIn('configuracion_nombre', ['tienda_ruc']) -> set(['configuracion_valor' => $this -> request -> getPost('tienda_rfc')]) -> update();
+
+                $this -> configModel -> whereIn('configuracion_nombre', ['tienda_telefono']) -> set(['configuracion_valor' => $this -> request -> getPost('tienda_telefono')]) -> update();
+
+                $this -> configModel -> whereIn('configuracion_nombre', ['tienda_email']) -> set(['configuracion_valor' => $this -> request -> getPost('tienda_correo')]) -> update();
+
+                $this -> configModel -> whereIn('configuracion_nombre', ['tienda_direccion']) -> set(['configuracion_valor' => $this -> request -> getPost('tienda_direccion')]) -> update();
+
+                $this -> configModel -> whereIn('configuracion_nombre', ['ticket_leyenda']) -> set(['configuracion_valor' => $this -> request -> getPost('leyenda_ticket')]) -> update();
+
+                if ($imgLogo -> isValid()) 
                 {
+                    $dataLogo = $this -> configModel -> getDatosTienda();
+                    
+                    unlink(__DIR__ .  '/../../public/img/' . $dataLogo['logoTienda']);
+
                     $imgLogo = $this -> request -> getFile('tienda_logo');
-                    $imgLogo -> move('./img', 'logotienda.' . $imgLogo -> getExtension());
-                }
-                else
-                {
-                    echo 'ERROR en la validación';
-                    die;
+                    $imgName = date('Ymd_His_') . 'logotienda.' . $imgLogo -> getExtension();
+                    $imgLogo -> move('./img', $imgName);
+
+                    $this -> configModel -> whereIn('configuracion_nombre', ['tienda_logo']) -> set(['configuracion_valor' => $imgName]) -> update();
                 }
 
                 return redirect() -> to(base_url() . '/configuracion');
             }
             else
             {
-                return $this -> editar($this -> request -> getPost('id'), $this -> validator);
+                return $this -> index($this -> validator);
             }
             
         }

@@ -59,9 +59,10 @@
 
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
                 'title' => 'Productos', 
                 'datos' => $productos,
-                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'nombreTienda' => $this -> datosTienda['nombreTienda']
             ];
 
             echo view('header', $dataHeader);
@@ -89,6 +90,7 @@
 
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
                 'title' => 'Agregar Producto', 
                 'unidades' => $unidades, 
                 'categorias' => $categorias,
@@ -166,6 +168,7 @@
 
                 $dataHeader = [
                     'permisos' => $this -> permisosUser,
+                    'logoTienda' => $this -> datosTienda['logoTienda'],
                     'title' => 'Agregar Producto', 
                     'unidades' => $unidades, 
                     'categorias' => $categorias,
@@ -207,6 +210,7 @@
 
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
                 'title' => 'Editar Producto', 
                 'unidades' => $unidades, 
                 'categorias' => $categorias, 
@@ -302,6 +306,7 @@
 
                 $dataHeader = [
                     'permisos' => $this -> permisosUser,
+                    'logoTienda' => $this -> datosTienda['logoTienda'],
                     'title' => 'Editar Producto', 
                     'unidades' => $unidades, 
                     'categorias' => $categorias, 
@@ -361,6 +366,7 @@
 
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 'title' => 'Productos Eliminadas', 
                 'datos' => $productos

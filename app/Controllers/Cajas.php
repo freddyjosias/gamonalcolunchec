@@ -48,7 +48,7 @@
                 }
             }
 
-            $cajas = $this -> cajas -> where('caja_state', 1) -> findAll();
+            $cajas = $this -> cajas -> where('caja_state', 1) -> whereNotIn('caja_id', array(0)) -> findAll();
 
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
@@ -153,7 +153,7 @@
                 }
             }
 
-            $caja = $this -> cajas -> where('caja_id', $id) -> where('caja_state', 1) -> first();
+            $caja = $this -> cajas -> where('caja_id', $id) -> where('caja_state', 1) -> whereNotIn('caja_id', array(0)) -> first();
 
             if (is_null($caja)) 
             {
@@ -215,7 +215,7 @@
                 return redirect() -> to(base_url() . '/cajas');
             }
 
-            $caja = $this -> cajas -> where('caja_id', $id) -> where('caja_state', 1) -> first();
+            $caja = $this -> cajas -> where('caja_id', $id) -> where('caja_state', 1) -> whereNotIn('caja_id', array(0)) -> first();
 
             if (is_null($caja)) 
             {
@@ -254,7 +254,7 @@
                 }
             }
 
-            $caja = $this -> cajas -> where('caja_id', $id) -> where('caja_state', 1) -> first();
+            $caja = $this -> cajas -> where('caja_id', $id) -> where('caja_state', 1) -> whereNotIn('caja_id', array(0)) -> first();
 
             if (is_null($caja)) 
             {
@@ -280,7 +280,7 @@
                 }
             }
 
-            $cajas = $this -> cajas -> where('caja_state', 0) -> findAll();
+            $cajas = $this -> cajas -> where('caja_state', 0) -> whereNotIn('caja_id', array(0)) -> findAll();
 
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
@@ -309,7 +309,7 @@
                 }
             }
 
-            $caja = $this -> cajas -> where('caja_id', $id) -> where('caja_state', 0) -> first();
+            $caja = $this -> cajas -> where('caja_id', $id) -> where('caja_state', 0) -> whereNotIn('caja_id', array(0)) -> first();
 
             if (is_null($caja)) 
             {

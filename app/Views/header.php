@@ -65,7 +65,7 @@
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
 
-                <?php if(isset($permisos[1]) || isset($permisos[10]) || isset($permisos[11]) || isset($permisos[12])) { ?>
+                <?php if(isset($permisos[2]) || isset($permisos[10]) || isset($permisos[11]) || isset($permisos[12])) { ?>
                     <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsePages"
                         aria-expanded="true" aria-controls="collapsePages" type='button'>
                         <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -75,7 +75,7 @@
                     <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
 
-                            <?php if (isset($permisos[1])) { ?>
+                            <?php if (isset($permisos[2])) { ?>
                                 <a class="collapse-item" href="<?= base_url() ?>/productos">Productos</a>
                             <?php } 
                             if (isset($permisos[10])) { ?>

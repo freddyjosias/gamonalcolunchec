@@ -327,7 +327,7 @@
             echo view('footer');
         }
 
-        public function reingresar($id)
+        public function reingresar($id = 0)
         {
             if (!$this -> isLogin) 
             {
@@ -341,6 +341,13 @@
                 }
             }
 
+            $cliente = $this -> clientes -> where('cliente_id', $id) -> where('cliente_state', 0) -> first();
+
+            if (is_null($cliente)) 
+            {
+                return redirect() -> to(base_url() . '/clientes');
+            }
+            
             $this -> clientes -> update($id, ['cliente_state' => 1]);
 
             return redirect() -> to(base_url() . '/clientes');

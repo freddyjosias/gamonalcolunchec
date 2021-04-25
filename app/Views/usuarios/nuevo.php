@@ -80,6 +80,23 @@
                 </div>
             </div>
 
+            <div class="">
+                <p class='text-dark mb-1'>Permisos</p>
+                
+                <div class="mb-3 row">
+
+                    <?php foreach ($permisos as $key => $value) { ?>
+                        <div class="mb-2 col-12 col-sm-6">
+                            <div class='bg-white d-flex'>
+                                <input type="checkbox" name="permiso_<?= $value['permiso_id'] ?>" id="permiso_<?= $value['permiso_id'] ?>" class='mt-2 ml-2' <?= (set_value('permiso_' . $value['permiso_id']) == 'on') ? 'checked' : '' ?> >
+                                <label class='px-2 mb-0 py-1' for="permiso_<?= $value['permiso_id'] ?>"><?= $value['permiso_nombre'] ?></label>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+                
+            </div>
+
             <div class=''>
                 <a href="<?= base_url() ?>/usuarios" class='btn btn-light'>Regresar</a>
                 <button type="submit" class="btn btn-success">Guardar</button>

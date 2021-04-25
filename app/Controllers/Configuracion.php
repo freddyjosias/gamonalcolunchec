@@ -29,7 +29,7 @@
                 $this -> permisosUser = $this -> detPermisos -> getPermisosPorUsuario($this -> session -> id_usuario);
             }
 
-            //helper(['form', 'upload']);
+            helper(['form', 'upload']);
 
             $this -> reglas = [
                 'tienda_nombre' => [

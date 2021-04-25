@@ -2,3 +2,13 @@
 {
     width: 7rem;
 }
+
+.cajasnuevo_check {
+    flex-flow: wrap row;
+}
+
+.cajasnuevo_check > div {
+    box-sizing: content-box;
+    width: 50%;
+    user-select: none;
+}

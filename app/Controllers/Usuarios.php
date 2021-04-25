@@ -7,29 +7,38 @@
     use App\Models\RolesModel;
     use App\Models\ConfiguracionModel;
     use App\Models\DetallePermisosModel;
+    use App\Models\PermisosModel;
 
     class Usuarios extends BaseController
     {
-        protected $usuarios;
+        protected $usuarios, $permisos;
         protected $cajas;
         protected $roles;
-        protected $reglas, $reglasLogin, $reglasCambian, $configModel;
-        protected $isLogin = true, $session, $permisos;
+        protected $reglas, $reglasLogin, $reglasCambian;
+        protected $isLogin = true, $detPermisos, $session, $permisosUser;
+        protected $configModel, $datosTienda;
 
         public function __construct()
         {
+            $this -> usuarios = new UsuariosModel();
+            $this -> cajas = new CajasModel();
+            $this -> roles = new RolesModel();
+            $this -> configModel = new ConfiguracionModel();
+            $this -> detPermisos = new DetallePermisosModel();
+            $this -> permisos = new PermisosModel();
+
             $this -> session = session();
             
             if (is_null($this -> session -> id_usuario)) 
             {
                 $this -> isLogin = false;
             }
-
-            $this -> usuarios = new UsuariosModel();
-            $this -> cajas = new CajasModel();
-            $this -> roles = new RolesModel();
-            $this -> configModel = new ConfiguracionModel();
-            $this -> permisos = new DetallePermisosModel();
+            else
+            {
+                $this -> permisosUser = $this -> detPermisos -> getPermisosPorUsuario($this -> session -> id_usuario);
+            }
+            
+            $this -> datosTienda = $this -> configModel -> getDatosTienda();
 
             helper(['form']);
 
@@ -37,39 +46,39 @@
                 'usuario' => [
                     'rules' => 'required|is_unique[usuario.usuario_user]',
                     'errors' => [
-                        'required' => 'El campo {field} es obligatorio.',
-                        'is_unique' => 'El campo {field} debe ser unico.'
+                        'required' => 'El campo Usuario es obligatorio.',
+                        'is_unique' => 'El campo Usuario debe ser unico.'
                     ]
                 ],
                 'password' => [
                     'rules' => 'required',
                     'errors' => [
-                        'required' => 'El campo {field} es obligatorio.'
+                        'required' => 'El campo Contraseña es obligatorio.'
                     ]
                 ],
                 'repassword' => [
                     'rules' => 'required|matches[password]',
                     'errors' => [
-                        'required' => 'El campo {field} es obligatorio.',
+                        'required' => 'El campo Confirmar Contraseña es obligatorio.',
                         'matches' => 'Las contraseñas no coinciden'
                     ]
                 ],
                 'nombre' => [
                     'rules' => 'required',
                     'errors' => [
-                        'required' => 'El campo {field} es obligatorio.'
+                        'required' => 'El campo Nombre es obligatorio.'
                     ]
                 ],
                 'id_caja' => [
                     'rules' => 'required',
                     'errors' => [
-                        'required' => 'El campo {field} es obligatorio.'
+                        'required' => 'El campo Caja es obligatorio.'
                     ]
                 ],
                 'id_rol' => [
                     'rules' => 'required',
                     'errors' => [
-                        'required' => 'El campo {field} es obligatorio.'
+                        'required' => 'El campo Roles es obligatorio.'
                     ]
                 ]
             ];
@@ -106,7 +115,7 @@
             ];
         }
 
-        public function index($state = 1)
+        public function index()
         {
             if (!$this -> isLogin) 
             {
@@ -114,42 +123,80 @@
             }
             else
             {
-                $permisosUser = $this -> permisos -> getPermisosPorUsuario($this -> session -> id_usuario);
-
-                if (!isset($permisosUser[1])) 
+                if (!isset($this -> permisosUser[1])) 
                 {
-                    return redirect() -> to(base_url() . '/productos');
+                    return redirect() -> to(base_url() . '/dashboard');
                 }
             }
 
-            $usuarios = $this -> usuarios -> where('usuario_state', $state) -> findAll();
+            $usuarios = $this -> usuarios -> where('usuario_state', 1) -> findAll();
 
-            $dataHeader = ['permisos' => $permisosUser];
-
-            $data = [
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 'title' => 'Usuarios', 
                 'datos' => $usuarios
             ];
 
             echo view('header', $dataHeader);
-            echo view('usuarios/usuarios', $data);
+            echo view('usuarios/usuarios');
             echo view('footer');
         }
 
-        public function nuevo()
+        public function nuevo($valid = null)
         {
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[1])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
+
             $cajas = $this -> cajas -> where('caja_state', 1) -> findAll();
             $roles = $this -> roles -> where('rol_state', 1) -> findAll();
+            $permisos = $this -> permisos -> orderBy('permiso_orden ASC') -> findAll();
+            
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Agregar Usuario', 
+                'cajas' => $cajas, 
+                'roles' => $roles,
+                'css' => ['usuarios'],
+                'permisos' => $permisos
+            ];
 
-            $data = ['title' => 'Agregar Usuario', 'cajas' => $cajas, 'roles' => $roles];
+            if ($valid != null && method_exists($valid,'listErrors')) 
+            {
+                $dataHeader['validation'] = $valid;
+            }
 
-            echo view('header');
-            echo view('usuarios/nuevo', $data);
+            echo view('header', $dataHeader);
+            echo view('usuarios/nuevo');
             echo view('footer');
         }
 
         public function insertar()
         {
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[1])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
+
             if ($this -> request -> getMethod() == 'post' && $this -> validate($this -> reglas)) 
             {
                 $hash = password_hash($this -> request -> getPost('password'), PASSWORD_DEFAULT);
@@ -161,18 +208,29 @@
                     'caja_id' => $this -> request -> getPost('id_caja'),
                     'rol_id' => $this -> request -> getPost('id_rol')
                 ]);
+
+                $lastIdUser = $this -> usuarios -> insertID();
+
+                $permisos = $this -> permisos -> orderBy('permiso_orden ASC') -> findAll();
+                
+                foreach ($permisos as $key => $value) 
+                {
+                    $auxPermiso = $this -> request -> getPost('permiso_' . $value['permiso_id']);
+
+                    if (!is_null($auxPermiso)) 
+                    {
+                        $this -> detPermisos -> save([
+                            'permiso_id' => $value['permiso_id'], 
+                            'usuario_id' => $lastIdUser
+                        ]);
+                    }
+                }
+                
                 return redirect() -> to(base_url() . '/usuarios');
             }
             else
             {
-                $cajas = $this -> cajas -> where('caja_state', 1) -> findAll();
-                $roles = $this -> roles -> where('rol_state', 1) -> findAll();
-
-                $data = ['title' => 'Agregar Usuario', 'validation' => $this -> validator, 'cajas' => $cajas, 'roles' => $roles];
-
-                echo view('header');
-                echo view('usuarios/nuevo', $data);
-                echo view('footer');
+                return $this -> nuevo($this -> validator);
             }
 
             
@@ -180,6 +238,18 @@
 
         public function editar($id, $valid = null)
         {
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[1])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
+
             $usuario = $this -> usuarios -> where('usuario_id', $id) -> first();
 
             if ($valid != null) 
@@ -198,6 +268,18 @@
 
         public function actualizar()
         {
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[1])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
+
             if ($this -> request -> getMethod() == 'post' && $this -> validate($this -> reglas)) 
             {    
                 $this -> usuarios -> update(
@@ -218,6 +300,18 @@
 
         public function eliminar($id)
         {
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[1])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
+
             $this -> usuarios -> update($id, ['usuario_state' => 0]);
 
             return redirect() -> to(base_url() . '/usuarios');
@@ -225,6 +319,18 @@
 
         public function eliminados($state = 0)
         {
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[1])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
+
             $usuarios = $this -> usuarios -> where('usuario_state', $state) -> findAll();
             $data = ['title' => 'Usuarios Eliminados', 'datos' => $usuarios];
 
@@ -235,6 +341,18 @@
 
         public function reingresar($id)
         {
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[1])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
+
             $this -> usuarios -> update($id, ['usuario_state' => 1]);
 
             return redirect() -> to(base_url() . '/usuarios');
@@ -264,7 +382,6 @@
 
         public function valida()
         {
-            
             $datosTienda = $this -> configModel -> getDatosTienda();
 
             $js = ['login'];
@@ -320,6 +437,11 @@
 
         public function logout()
         {
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+
             $session = session();
             $session -> destroy();
             return redirect() -> to(base_url());
@@ -327,6 +449,18 @@
 
         public function cambiarpassword()
         {
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[1])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
+
             $session = session();
 
             $usuario = $this -> usuarios -> where('usuario_id', $session -> id_usuario) -> first();
@@ -340,6 +474,18 @@
 
         public function actualizarpassword()
         {
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[1])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
+
             $session = session();
 
             if ($this -> request -> getMethod() == 'post' && $this -> validate($this -> reglasCambian)) 

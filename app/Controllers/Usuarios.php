@@ -161,7 +161,7 @@
             $cajas = $this -> cajas -> where('caja_state', 1) -> findAll();
             $roles = $this -> roles -> where('rol_state', 1) -> findAll();
             $permisos = $this -> permisos -> orderBy('permiso_orden ASC') -> findAll();
-            
+
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
                 'logoTienda' => $this -> datosTienda['logoTienda'],
@@ -250,19 +250,38 @@
                 }
             }
 
-            $usuario = $this -> usuarios -> where('usuario_id', $id) -> first();
+            $usuario = $this -> usuarios -> where('usuario_id', $id) -> where('usuario_state', 1) -> first();
 
-            if ($valid != null) 
+            if (is_null($usuario)) 
             {
-                $data = ['title' => 'Editar Usuario', 'datos' => $usuario, 'validation' => $valid];
+                return redirect() -> to(base_url() . '/usuarios');
             }
-            else
-            {
-                $data = ['title' => 'Editar Usuario', 'datos' => $usuario];
-            }
+
+            $cajas = $this -> cajas -> where('caja_state', 1) -> findAll();
+            $roles = $this -> roles -> where('rol_state', 1) -> findAll();
+            $permisos = $this -> permisos -> orderBy('permiso_orden ASC') -> findAll();
+            $userEditPermisos = $this -> detPermisos -> getPermisosPorUsuario($id);
             
-            echo view('header');
-            echo view('usuarios/editar', $data);
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Editar Usuario', 
+                'datos' => $usuario,
+                'cajas' => $cajas, 
+                'roles' => $roles,
+                'css' => ['usuarios'],
+                'permisos' => $permisos,
+                'userEditPermisos' => $userEditPermisos
+            ];
+
+            if ($valid != null && method_exists($valid,'listErrors')) 
+            {
+                $dataHeader['validation'] = $valid;
+            }
+
+            echo view('header', $dataHeader);
+            echo view('usuarios/editar');
             echo view('footer');
         }
 
@@ -280,22 +299,91 @@
                 }
             }
 
+            $id = $this -> request -> getPost('id');
+
+            if (is_null($id)) 
+            {
+                return redirect() -> to(base_url() . '/usuarios');
+            }
+
+            $usuario = $this -> usuarios -> where('usuario_id', $id) -> where('usuario_state', 1) -> first();
+
+            if (is_null($usuario)) 
+            {
+                return redirect() -> to(base_url() . '/usuarios');
+            }
+
+            $password = $this -> request -> getPost('password');
+
+            if ($password == '') 
+            {
+                unset($this -> reglas['password']);
+                unset($this -> reglas['repassword']);
+            }
+            
+            $this -> reglas['usuario'] = [
+                'rules' => 'required|is_unique[usuario.usuario_user,usuario.usuario_id,{id}]',
+                'errors' => [
+                    'required' => 'El campo Usuario es obligatorio.',
+                    'is_unique' => 'El campo Usuario debe ser unico.'
+                ]
+            ];
+
             if ($this -> request -> getMethod() == 'post' && $this -> validate($this -> reglas)) 
-            {    
+            {
+                if ($password == '') 
+                {
+                    $hash = $usuario['usuario_password'];
+                }
+                else
+                {
+                    $hash = password_hash($password, PASSWORD_DEFAULT);
+                }
+                    
                 $this -> usuarios -> update(
-                    $this -> request -> getPost('id'), 
+                    $id, 
                     [
+                        'usuario_user' => $this -> request -> getPost('usuario'), 
                         'usuario_nombre' => $this -> request -> getPost('nombre'), 
-                        'usuario_corto' => $this -> request -> getPost('nombre_corto')
+                        'usuario_password' => $hash,
+                        'caja_id' => $this -> request -> getPost('id_caja'),
+                        'rol_id' => $this -> request -> getPost('id_rol')
                     ]
                 );
+
+                $userEditPermisos = $this -> detPermisos -> getPermisosPorUsuario($id, 3);
+                $permisos = $this -> permisos -> orderBy('permiso_orden ASC') -> findAll();
+                
+                foreach ($permisos as $key => $value) 
+                {
+                    $auxPermiso = $this -> request -> getPost('permiso_' . $value['permiso_id']);
+                    
+                    if (isset($userEditPermisos[$value['permiso_id']])) 
+                    {
+                        if ($userEditPermisos[$value['permiso_id']]['det_permiso_state'] == 0 && !is_null($auxPermiso))
+                        {
+                            $this -> detPermisos -> where('usuario_id', $id) -> where('permiso_id', $value['permiso_id']) -> set(['det_permiso_state' => 1]) -> update();
+                        }
+                        else if($userEditPermisos[$value['permiso_id']]['det_permiso_state'] == 1 && is_null($auxPermiso))
+                        {
+                            $this -> detPermisos -> where('usuario_id', $id) -> where('permiso_id', $value['permiso_id']) -> set(['det_permiso_state' => 0]) -> update();
+                        }
+                    }
+                    else if (!is_null($auxPermiso)) 
+                    {
+                        $this -> detPermisos -> save([
+                            'permiso_id' => $value['permiso_id'], 
+                            'usuario_id' => $id
+                        ]);
+                    }
+                }
+                
                 return redirect() -> to(base_url() . '/usuarios');
             }
             else
             {
-                return $this -> editar($this -> request -> getPost('id'), $this -> validator);
+                return $this -> editar($id, $this -> validator);
             }
-            
         }
 
         public function eliminar($id)

@@ -134,7 +134,7 @@
                     </div>
                 </div>
 
-                <?php if(isset($permisos[3]) || isset($permisos[1]) || isset($permisos[4])) { ?>
+                <?php if(isset($permisos[3]) || isset($permisos[1]) || isset($permisos[13]) || isset($permisos[4])) { ?>
                     <a class="nav-link collapsed" data-toggle="collapse" data-target="#admin_menu"
                         aria-expanded="true" aria-controls="admin_menu" type='button'>
                         <i class="fas fa-tools"></i>
@@ -149,6 +149,9 @@
                             if (isset($permisos[1])) { ?>
                                 <a class="collapse-item" href="<?= base_url() ?>/usuarios">Usuarios</a>
                             <?php } 
+                            if (isset($permisos[13])) { ?>
+                                <a class="collapse-item" href="<?= base_url() ?>/roles">Roles</a>
+                            <?php }
                             if (isset($permisos[4])) { ?>
                                 <a class="collapse-item" href="<?= base_url() ?>/cajas">Cajas</a>
                             <?php } ?>

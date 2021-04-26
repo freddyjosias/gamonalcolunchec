@@ -23,12 +23,17 @@
         protected $validationRules    = [];
         protected $validationMessages = [];
 
-        public function getPermisosPorUsuario($idUser)
+        public function getPermisosPorUsuario($idUser, $state = 1)
         {
             $this -> select('det_permiso.*, permiso_nombre');
             $this -> join('permiso', 'det_permiso.permiso_id = permiso.permiso_id');
             $this -> where('usuario_id', $idUser);
-            $this -> where('det_permiso_state', 1);
+
+            if ($state != 3) 
+            {
+                $this -> where('det_permiso_state', $state);
+            }
+            
             $this -> orderBy('permiso_orden', 'ASC');
             $datos = $this -> findAll();
             $newDatos = array();

@@ -7,36 +7,80 @@
     use App\Models\DetalleVentasModel;
     use App\Models\ProductosModel;
     use App\Models\ConfiguracionModel;
+    use App\Models\DetallePermisosModel;
 
     class Ventas extends BaseController
     {
         protected $ventas, $temCompra, $detVenta, $productos;
+        protected $isLogin = true, $detPermisos, $session, $permisosUser;
+        protected $configModel, $datosTienda;
 
         public function __construct()
         {
             $this -> ventas = new VentasModel();
             $this -> detVenta = new DetalleVentasModel();
-            $this -> configuracion = new ConfiguracionModel();
+            $this -> configModel = new ConfiguracionModel();
+            $this -> detPermisos = new DetallePermisosModel();
+            
+            $this -> datosTienda = $this -> configModel -> getDatosTienda();
+
+            $this -> session = session();
+
+            if (is_null($this -> session -> id_usuario)) 
+            {
+                $this -> isLogin = false;
+            }
+            else
+            {
+                $this -> permisosUser = $this -> detPermisos -> getPermisosPorUsuario($this -> session -> id_usuario);
+            }
+
             helper(['form']);
         }
 
         public function index()
         {
-            $datos = $this -> ventas -> obtener(1);
-            $data = ['title' => 'Ventas', 'datos' => $datos];
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[7])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
 
-            echo view('header');
-            echo view('ventas/ventas', $data);
+            $datos = $this -> ventas -> obtener(1);
+
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Ventas', 
+                'datos' => $datos
+            ];
+
+            echo view('header', $dataHeader);
+            echo view('ventas/ventas');
             echo view('footer');
         }
 
         public function eliminados()
         {
             $datos = $this -> ventas -> obtener(0);
-            $data = ['title' => 'Ventas Eliminados', 'datos' => $datos];
 
-            echo view('header');
-            echo view('ventas/eliminados', $data);
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Ventas Eliminados', 
+                'datos' => $datos
+            ];
+
+            echo view('header', $dataHeader);
+            echo view('ventas/eliminados');
             echo view('footer');
         }
 

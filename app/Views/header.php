@@ -106,35 +106,48 @@
                         </div>
                     </div>
 
-                <?php } ?>
+                <?php } 
+                
+                if(isset($permisos[7]) || isset($permisos[8])) { ?>
+                    <a class="nav-link collapsed" data-toggle="collapse" data-target="#caja_menu"
+                        aria-expanded="true" aria-controls="caja_menu" type='button'>
+                        <i class="fas fa-cash-register"></i>
+                        <span>Ventas</span>
+                    </a>
 
-                <a class="nav-link collapsed" data-toggle="collapse" data-target="#caja_menu"
-                    aria-expanded="true" aria-controls="caja_menu" type='button'>
-                    <i class="fas fa-cash-register"></i>
-                    <span>Ventas</span>
-                </a>
-
-                <div id="caja_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="<?= base_url() ?>/ventas/ventas">Nueva Venta</a>
-                        <a class="collapse-item" href="<?= base_url() ?>/ventas">Ventas</a>
+                    <div id="caja_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <?php if (isset($permisos[8])) { ?>
+                                <a class="collapse-item" href="<?= base_url() ?>/ventas/ventas">Nueva Venta</a>
+                            <?php }
+                            if (isset($permisos[7])) { ?>
+                                <a class="collapse-item" href="<?= base_url() ?>/ventas">Ventas</a>
+                            <?php } ?>
+                        </div>
                     </div>
-                </div>
+                    
+                <?php } 
+                
+                if(isset($permisos[5]) || isset($permisos[6])) { ?>
+                    <a class="nav-link collapsed" data-toggle="collapse" data-target="#compras_menu"
+                        aria-expanded="true" aria-controls="compras_menu" type='button'>
+                        <i class="fas fa-cash-register"></i>
+                        <span>Compras</span>
+                    </a>
 
-                <a class="nav-link collapsed" data-toggle="collapse" data-target="#compras_menu"
-                    aria-expanded="true" aria-controls="compras_menu" type='button'>
-                    <i class="fas fa-cash-register"></i>
-                    <span>Compras</span>
-                </a>
-
-                <div id="compras_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="<?= base_url() ?>/compras/nuevo">Nueva Compra</a>
-                        <a class="collapse-item" href="<?= base_url() ?>/compras">Compras</a>
+                    <div id="compras_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <?php if (isset($permisos[6])) { ?>
+                                <a class="collapse-item" href="<?= base_url() ?>/compras/nuevo">Nueva Compra</a>
+                            <?php }
+                            if (isset($permisos[5])) { ?>
+                                <a class="collapse-item" href="<?= base_url() ?>/compras">Compras</a>
+                            <?php } ?>
+                        </div>
                     </div>
-                </div>
+                <?php } 
 
-                <?php if(isset($permisos[3]) || isset($permisos[1]) || isset($permisos[13]) || isset($permisos[4])) { ?>
+                if(isset($permisos[3]) || isset($permisos[1]) || isset($permisos[13]) || isset($permisos[4])) { ?>
                     <a class="nav-link collapsed" data-toggle="collapse" data-target="#admin_menu"
                         aria-expanded="true" aria-controls="admin_menu" type='button'>
                         <i class="fas fa-tools"></i>

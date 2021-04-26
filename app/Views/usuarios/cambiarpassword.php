@@ -49,12 +49,12 @@
             </div>
 
             <div class=''>
-                <a href="<?= base_url() ?>" class='btn btn-primary'>Regresar</a>
+                <a href="<?= base_url() ?>" class='btn btn-light'>Regresar</a>
                 <button type="submit" class="btn btn-success">Guardar</button>
             </div>
 
             <?php if (isset($mensaje)) { ?>
-                <div class="alert alert-success">
+                <div class="alert alert-success mt-3">
                 <?= $mensaje ?>
                 </div>
             <?php } ?>

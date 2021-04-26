@@ -102,13 +102,13 @@
                 'password' => [
                     'rules' => 'required',
                     'errors' => [
-                        'required' => 'El campo {field} es obligatorio.'
+                        'required' => 'El campo Contraseña es obligatorio.'
                     ]
                 ],
                 'repassword' => [
                     'rules' => 'required|matches[password]',
                     'errors' => [
-                        'required' => 'El campo {field} es obligatorio.',
+                        'required' => 'El campo Confirma contraseña es obligatorio.',
                         'matches' => 'Las contraseñas no coinciden'
                     ]
                 ]
@@ -386,7 +386,7 @@
             }
         }
 
-        public function eliminar($id)
+        public function eliminar($id = 0)
         {
             if (!$this -> isLogin) 
             {
@@ -398,6 +398,13 @@
                 {
                     return redirect() -> to(base_url() . '/dashboard');
                 }
+            }
+
+            $usuario = $this -> usuarios -> where('usuario_id', $id) -> where('usuario_state', 1) -> first();
+
+            if (is_null($usuario)) 
+            {
+                return redirect() -> to(base_url() . '/usuarios');
             }
 
             $this -> usuarios -> update($id, ['usuario_state' => 0]);
@@ -405,7 +412,7 @@
             return redirect() -> to(base_url() . '/usuarios');
         }
 
-        public function eliminados($state = 0)
+        public function eliminados()
         {
             if (!$this -> isLogin) 
             {
@@ -419,15 +426,22 @@
                 }
             }
 
-            $usuarios = $this -> usuarios -> where('usuario_state', $state) -> findAll();
-            $data = ['title' => 'Usuarios Eliminados', 'datos' => $usuarios];
+            $usuarios = $this -> usuarios -> where('usuario_state', 0) -> findAll();
 
-            echo view('header');
-            echo view('usuarios/eliminados', $data);
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Usuarios Eliminados', 
+                'datos' => $usuarios
+            ];
+
+            echo view('header', $dataHeader);
+            echo view('usuarios/eliminados');
             echo view('footer');
         }
 
-        public function reingresar($id)
+        public function reingresar($id = 0)
         {
             if (!$this -> isLogin) 
             {
@@ -439,6 +453,13 @@
                 {
                     return redirect() -> to(base_url() . '/dashboard');
                 }
+            }
+
+            $usuario = $this -> usuarios -> where('usuario_id', $id) -> where('usuario_state', 0) -> first();
+
+            if (is_null($usuario)) 
+            {
+                return redirect() -> to(base_url() . '/usuarios');
             }
 
             $this -> usuarios -> update($id, ['usuario_state' => 1]);
@@ -470,6 +491,11 @@
 
         public function valida()
         {
+            if ($this -> isLogin) 
+            {
+                return redirect() -> to(base_url() . '/productos');
+            }
+
             $datosTienda = $this -> configModel -> getDatosTienda();
 
             $js = ['login'];
@@ -535,28 +561,37 @@
             return redirect() -> to(base_url());
         }
 
-        public function cambiarpassword()
+        public function cambiarpassword($valid = null, $mensaje = null)
         {
             if (!$this -> isLogin) 
             {
                 return redirect() -> to(base_url());
-            }
-            else
-            {
-                if (!isset($this -> permisosUser[1])) 
-                {
-                    return redirect() -> to(base_url() . '/dashboard');
-                }
             }
 
             $session = session();
 
             $usuario = $this -> usuarios -> where('usuario_id', $session -> id_usuario) -> first();
 
-            $data = ['title' => 'Cambiar contraseña', 'usuario' => $usuario];
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Cambiar contraseña', 
+                'usuario' => $usuario
+            ];
 
-            echo view('header');
-            echo view('usuarios/cambiarpassword', $data);
+            if ($valid != null && method_exists($valid,'listErrors')) 
+            {
+                $dataHeader['validation'] = $valid;
+            }
+
+            if ($mensaje === 'OK') 
+            {
+                $dataHeader['mensaje'] = 'Contraseña actualizada';
+            }
+
+            echo view('header', $dataHeader);
+            echo view('usuarios/cambiarpassword');
             echo view('footer');
         }
 
@@ -565,13 +600,6 @@
             if (!$this -> isLogin) 
             {
                 return redirect() -> to(base_url());
-            }
-            else
-            {
-                if (!isset($this -> permisosUser[1])) 
-                {
-                    return redirect() -> to(base_url() . '/dashboard');
-                }
             }
 
             $session = session();
@@ -586,21 +614,11 @@
 
                 $usuario = $this -> usuarios -> where('usuario_id', $session -> id_usuario) -> first();
 
-                $data = ['title' => 'Cambiar contraseña', 'usuario' => $usuario, 'mensaje' => 'Contraseña actualizada'];
-
-                echo view('header');
-                echo view('usuarios/cambiarpassword', $data);
-                echo view('footer');
+                return $this -> cambiarpassword(null, 'OK');
             }
             else
             {
-                $usuario = $this -> usuarios -> where('usuario_id', $session -> id_usuario) -> first();
-
-                $data = ['title' => 'Cambiar contraseña', 'usuario' => $usuario, 'validation' => $this -> validator];
-
-                echo view('header');
-                echo view('usuarios/cambiarpassword', $data);
-                echo view('footer');
+                return $this -> cambiarpassword($this -> validator);
             }
         }
 

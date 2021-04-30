@@ -3,6 +3,8 @@
     namespace App\Controllers;
     use App\Controllers\BaseController;
     use App\Models\VentasModel;
+    use App\Models\CajasModel;
+    use App\Models\UsuariosModel;
     use App\Models\TemporalCompraModel;
     use App\Models\DetalleVentasModel;
     use App\Models\ProductosModel;
@@ -11,13 +13,15 @@
 
     class Ventas extends BaseController
     {
-        protected $ventas, $temCompra, $detVenta, $productos;
+        protected $ventas, $temCompra, $detVenta, $productos, $cajas, $usuarios;
         protected $isLogin = true, $detPermisos, $session, $permisosUser;
         protected $configModel, $datosTienda;
 
         public function __construct()
         {
             $this -> ventas = new VentasModel();
+            $this -> cajas = new CajasModel();
+            $this -> usuarios = new UsuariosModel();
             $this -> detVenta = new DetalleVentasModel();
             $this -> configModel = new ConfiguracionModel();
             $this -> detPermisos = new DetallePermisosModel();
@@ -69,6 +73,18 @@
 
         public function eliminados()
         {
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[7])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
+
             $datos = $this -> ventas -> obtener(0);
 
             $dataHeader = [
@@ -86,7 +102,45 @@
 
         public function ventas()
         {
-            echo view('header');
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[8])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
+
+            $infoUsuario = $this -> usuarios -> where('usuario_id', $this -> session -> id_usuario) -> first();
+            
+            $caja = $this -> cajas -> where('caja_id', $infoUsuario["caja_id"]) -> whereNotIn('caja_id', array(0)) -> where('caja_state', 1) -> first();
+            
+            if (!is_null($caja)) 
+            {
+                $dataHeader = [
+                    'permisos' => $this -> permisosUser,
+                    'logoTienda' => $this -> datosTienda['logoTienda'],
+                    'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                    'caja' => $caja,
+                    'title' => 'Nueva Venta', 
+                ];
+            }
+            else
+            {
+                $dataHeader = [
+                    'permisos' => $this -> permisosUser,
+                    'logoTienda' => $this -> datosTienda['logoTienda'],
+                    'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                    'caja' => $caja,
+                    'title' => 'Usted no está asignado a una caja'
+                ];
+            }
+            
+
+            echo view('header', $dataHeader);
             echo view('ventas/caja');
             echo view('footer');
         }

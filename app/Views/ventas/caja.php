@@ -6,6 +6,16 @@
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
+        
+        
+        <?php if (is_null($caja)) {  ?>
+
+            <h1 class="h2 mb-2 text-gray-800"><?= $title ?></h1>
+
+        <?php } else { ?>
+
+            <h1 class="h2 mb-2 text-gray-800"><?= $title . ' - ' . $caja["caja_nombre"] ?></h1>
+
         <form method='POST' action='<?= base_url() ?>/ventas/guarda' autocomplete='off' id='form_venta' name='form_venta'>
             
             <div class="form-group">
@@ -15,7 +25,7 @@
                             <input type="hidden" class='form-control' id='id_cliente' name='id_cliente' value='1'>
                             <input type="hidden" class='form-control' id='id_venta' name='id_venta' value='<?= $idUnico ?>'>
                             <label for="">Cliente: </label>
-                            <input type="text" class='form-control' id='cliente' name='cliente' autofocus placeholder='Escribe el nombre del cliente' value='Público en general' required>
+                            <input type="text" class='form-control' id='cliente' name='cliente' autofocus placeholder='Escribe el nombre del cliente' value='VARIOS' required>
                         </div>
                     </div>
 
@@ -82,6 +92,8 @@
             </div>       
 
         </form>
+
+        <?php } ?>
 
     </div>
     <!-- /.container-fluid -->

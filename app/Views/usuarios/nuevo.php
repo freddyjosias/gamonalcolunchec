@@ -85,7 +85,7 @@
                 
                 <div class="mb-3 row">
 
-                    <?php foreach ($permisos as $key => $value) { ?>
+                    <?php foreach ($permisosEdit as $key => $value) { ?>
                         <div class="mb-2 col-12 col-sm-6">
                             <div class='bg-white d-flex'>
                                 <input type="checkbox" name="permiso_<?= $value['permiso_id'] ?>" id="permiso_<?= $value['permiso_id'] ?>" class='mt-2 ml-2' <?= (set_value('permiso_' . $value['permiso_id']) == 'on') ? 'checked' : '' ?> >

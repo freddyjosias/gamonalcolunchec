@@ -170,7 +170,7 @@
                 'cajas' => $cajas, 
                 'roles' => $roles,
                 'css' => ['usuarios'],
-                'permisos' => $permisos
+                'permisosEdit' => $permisos
             ];
 
             if ($valid != null && method_exists($valid,'listErrors')) 
@@ -271,7 +271,7 @@
                 'cajas' => $cajas, 
                 'roles' => $roles,
                 'css' => ['usuarios'],
-                'permisos' => $permisos,
+                'permisosEdit' => $permisos,
                 'userEditPermisos' => $userEditPermisos
             ];
 
@@ -513,7 +513,7 @@
                 $usuario = $this -> request -> getPost('usuario');
                 $password = $this -> request -> getPost('password');
 
-                $datosUsuario = $this -> usuarios -> where('usuario_user', $usuario) -> first();
+                $datosUsuario = $this -> usuarios -> where('usuario_user', $usuario) -> where('usuario_state', 1) -> first();
 
                 if ($datosUsuario != null) 
                 {
@@ -522,7 +522,6 @@
                         $datosSesion = [
                             'id_usuario' => $datosUsuario['usuario_id'],
                             'nombre' => $datosUsuario['usuario_nombre'],
-                            'id_caja' => $datosUsuario['caja_id'],
                             'id_rol' => $datosUsuario['rol_id']
                         ];
 

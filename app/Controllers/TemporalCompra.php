@@ -61,6 +61,18 @@
 
         }
 
+        public function actualizarTabla($idCompra = null)
+        {
+            $error = '';
+
+            $res['error'] = $error;
+            $res['datos'] = $this -> cargaProductos($idCompra);
+            $res['totalinput'] = number_format($this -> totalProductos($idCompra), 2, '.', '');
+            $res['total'] = number_format($this -> totalProductos($idCompra), 2, '.', "'");
+
+            print_r(json_encode($res));
+        }
+
         public function cargaProductos($idCompra)
         {
             $resultado = $this -> temCompra -> porCompra($idCompra);

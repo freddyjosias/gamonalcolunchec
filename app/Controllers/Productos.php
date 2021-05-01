@@ -70,7 +70,7 @@
             echo view('footer');
         }
 
-        public function nuevo()
+        public function nuevo($idCompra = null)
         {
             if (!$this -> isLogin) 
             {
@@ -96,6 +96,7 @@
                 'categorias' => $categorias,
                 'marcas' => $marcas,
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'idCompra' => $idCompra
             ];
 
             echo view('header', $dataHeader);
@@ -103,7 +104,7 @@
             echo view('footer');
         }
 
-        public function insertar()
+        public function insertar($idCompra = null)
         {
             $reglas = [
                 'codigo' => [
@@ -158,7 +159,12 @@
                     'marca_id' => $this -> request -> getPost('id_marca')
                 ]);
                 
-                return redirect() -> to(base_url() . '/productos');
+                if (is_null($idCompra)) {
+                    return redirect() -> to(base_url() . '/productos');
+                } else {
+                    return redirect() -> to(base_url() . '/compras/nuevo/' . $idCompra . '/' . $this -> request -> getPost('codigo'));
+                }
+                
             }
             else
             {
@@ -175,6 +181,7 @@
                     'marcas' => $marcas,
                     'validation' => $this -> validator,
                     'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                    'idCompra' => $idCompra
                 ];
     
                 echo view('header', $dataHeader);
@@ -403,7 +410,7 @@
             return redirect() -> to(base_url() . '/productos');
         }
 
-        public function buscarporcodigo($codigo = 0)
+        public function buscarporcodigo($codigo = 0, $idCompra = null)
         {
             if (!$this -> isLogin) 
             {
@@ -433,7 +440,7 @@
             }
             else
             {
-                $res['error'] = 'No existe el producto';
+                $res['error'] = 'No existe el producto <a href="' . base_url() . '/productos/nuevo/' . $idCompra . '" class="color-primary">Agregar</a>';
             }
 
             echo json_encode($res);

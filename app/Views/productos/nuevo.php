@@ -10,7 +10,7 @@
             </div>
         <?php } ?>
 
-        <form method='POST' action='<?= base_url() ?>/productos/insertar' autocomplete='off'>
+        <form method='POST' action='<?= base_url() ?>/productos/insertar<?= (!is_null($idCompra)) ? '/' . $idCompra : '' ?>' autocomplete='off'>
             
             <div class="form-group">
                 <div class="row">

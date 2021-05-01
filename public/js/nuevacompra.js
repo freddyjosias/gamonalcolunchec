@@ -1,15 +1,18 @@
 $(document).ready(function() {
 
+    let baseURL = 'http://localhost/gamonalcolunche/public';
+
     function buscarProducto(e, tagCodigo, codigo) 
     {
         let enterKey = 13;
+        let idCompra = $('#id_compra').val();
 
         if (codigo != '') 
         {
             if (e.which == enterKey) 
             {
                 $.ajax({
-                    url: '../productos/buscarporcodigo/' + codigo,
+                    url: baseURL + '/productos/buscarporcodigo/' + codigo + '/' + idCompra,
                     dataType: 'json',
                     success:function (resp) {
                         
@@ -29,6 +32,7 @@ $(document).ready(function() {
                                 $('#nombre').val(resp.datos.producto_nombre);
                                 $('#cantidad').val(1);
                                 $('#precio_compra').val(resp.datos.producto_preciocompra);
+                                $('#precio_venta').val(resp.datos.producto_precioventa);
                                 $('#subtotal').val(resp.datos.producto_preciocompra);
                                 $('#cantidad').focus();
                             }
@@ -53,36 +57,47 @@ $(document).ready(function() {
         if (idProducto != null && idProducto != 0  && cantidad > 0) 
         {
             $.ajax({
-                url: '../temporalcompra/insertar/' + idProducto + '/' + cantidad + '/' + idCompra,
+                url: baseURL + '/temporalcompra/insertar/' + idProducto + '/' + cantidad + '/' + idCompra,
                 dataType: 'json',
                 success:function (resp) {
+
+                    actualizarTabla(resp) 
                     
-                    if (resp != 0) 
-                    { 
-                        if (resp.error == '') 
-                        {
-                            $('#tableproducto tbody').empty();
-                            $('#tableproducto tbody').append(resp.datos);
-                            $('.label_total').html(resp.total);
-                            $('#total').val(resp.totalinput);
-                            
-                            $('#id_producto').val('');
-                            $('#nombre').val('');
-                            $('#cantidad').val('');
-                            $('#precio_compra').val('');
-                            $('#subtotal').val('');
-                            $('#codigo').focus();
-                        }
-                    }
                 }
             });
+        }
+    }
+
+    function actualizarTabla(resp, borrar = false) 
+    {
+        if (resp != 0) 
+        { 
+            if (resp.error == '') 
+            {
+                $('#tableproducto tbody').empty();
+                $('#tableproducto tbody').append(resp.datos);
+                $('.label_total').html(resp.total);
+                $('#total').val(resp.totalinput);
+                
+                if (!borrar) {
+                    $('#codigo').val('');
+                    $('#id_producto').val('');
+                    $('#nombre').val('');
+                    $('#cantidad').val('');
+                    $('#precio_compra').val('');
+                    $('#precio_venta').val('');
+                    $('#subtotal').val('');
+                    $('#codigo').focus();
+                }
+                
+            }
         }
     }
 
     function eliminarProducto(idProducto, idCompra) 
     {
         $.ajax({
-            url: '../temporalcompra/eliminar/' + idProducto + '/' + idCompra,
+            url: baseURL + '/temporalcompra/eliminar/' + idProducto + '/' + idCompra,
             dataType: 'json',
             success:function (resp) {
                 
@@ -146,5 +161,34 @@ $(document).ready(function() {
         }
 
     })
+
+    $('#cantidad').keyup(function () {
+        
+        let newCantidad = $('#cantidad').val();
+        newCantidad = parseInt(newCantidad);
+        $('#subtotal').val(newCantidad * $('#precio_compra').val());
+
+    })
+    
+    let actualizarCompra = $('.actualizar_compra').html();
+    
+    if (actualizarCompra == 'SI') 
+    {
+        let idCompras = $('#id_compra').val();
+
+        e = jQuery.Event('keypress');
+        e.which = 13;
+
+        buscarProducto(e, $('#codigo'), $('#codigo').val());
+        
+        $.ajax({
+            url: baseURL + '/temporalcompra/actualizartabla/' + idCompras,
+            
+            dataType: 'json',
+            success: function (respa) {
+                actualizarTabla(respa, true) 
+            }
+        });
+    }
 
 });

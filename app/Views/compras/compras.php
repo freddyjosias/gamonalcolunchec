@@ -13,7 +13,14 @@
             date_default_timezone_set('America/Lima');
             $now = new DateTime('NOW');
             $interval = new DateInterval('PT1H');
-        ?>
+            
+            if (!is_null($msg)) { ?>
+
+                <div class="alert alert-danger">
+                <?= $msg ?>
+                </div>
+
+            <?php } ?>
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-body">

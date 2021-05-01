@@ -52,7 +52,17 @@
                     return redirect() -> to(base_url() . '/dashboard');
                 }
             }
-            
+
+            $msg = null;
+
+            if (!is_null($this -> session -> yavendido)) 
+            {
+                if ($this -> session -> yavendido == 'verdadero') 
+                {
+                    $msg = 'Uno de los productos de la compra ya se vendió, y debido a ello no se puede anular.';
+                }
+            }
+
             $compras = $this -> compras -> select('SUM(det_compra_precio * det_compra_cantidad) AS compratotal, compra.*') -> join('det_compra', 'det_compra.compra_id = compra.compra_id') -> where('compra_ustate', 1) -> groupBy("det_compra.compra_id") -> findAll();
             
             $dataHeader = [
@@ -60,7 +70,8 @@
                 'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 'title' => 'Compras', 
-                'datos' => $compras
+                'datos' => $compras,
+                'msg' => $msg
             ];
 
             echo view('header', $dataHeader);
@@ -198,7 +209,7 @@
             }
 
             if (!$cumple) {
-                return redirect() -> to(base_url() . '/compras');
+                return redirect()->back()->with('yavendido', 'verdadero');
             }
 
             echo json_encode($cumple); die;

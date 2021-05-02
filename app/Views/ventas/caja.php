@@ -5,8 +5,6 @@
 ?>
     <!-- Begin Page Content -->
     <div class="container-fluid">
-
-        
         
         <?php if (is_null($caja)) {  ?>
 
@@ -20,25 +18,79 @@
             
             <div class="form-group">
                 <div class="row">
-                    <div class="col-12 col-sm-6">
+                    <div class="col-12 col-sm-3">
                         <div class="ui-widget">
-                            <input type="hidden" class='form-control' id='id_cliente' name='id_cliente' value='1'>
+                            <input type="hidden" class='form-control' id='id_cliente' name='id_cliente' value='<?= $clienteDefecto['cliente_id'] ?>'>
                             <input type="hidden" class='form-control' id='id_venta' name='id_venta' value='<?= $idUnico ?>'>
-                            <label for="">Cliente: </label>
-                            <input type="text" class='form-control' id='cliente' name='cliente' autofocus placeholder='Escribe el nombre del cliente' value='VARIOS' required>
+                            <label for="">Nombre Cliente: </label>
+                            <input type="text" class='form-control' id='cliente' placeholder='Escribe el nombre del cliente' value='<?= $clienteDefecto['cliente_nombre'] ?>'>
                         </div>
                     </div>
 
-                    <div class="col-12 col-sm-6">
+                    <div class="col-12 col-sm-3">
+                        <div class="ui-widget">
+                            <label for="">Apellido Cliente: </label>
+                            <input type="text" class='form-control' id='apellido' placeholder='Escribe el apellido del cliente' value='<?= $clienteDefecto['cliente_apellido'] ?>'>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-3">
+                        <div class="ui-widget">
+                            <label for=""><span class="docu_cli"><?= $clienteDefecto['cliente_documento'] ?></span> Cliente: </label>
+                            <input type="text" class='form-control' id='dni'  placeholder='Escribe el DNI del cliente' value='<?= $clienteDefecto['cliente_dni'] ?>'>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-3">
+                        <div class="ui-widget">
+                            <label for="">Correo Cliente: </label>
+                            <input type="text" class='form-control' id='correo'  value='<?= $clienteDefecto['cliente_correo'] ?>' disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="row">
+
+                    <div class="col-12 col-sm-3">
+                        <div class="ui-widget">
+                            <label for="">Dirección Cliente: </label>
+                            <input type="text" class='form-control' id='direccion'  value='<?= $clienteDefecto['cliente_direccion'] ?>' disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-3">
+                        <div class="ui-widget">
+                            <label for="">Teléfono Cliente: </label>
+                            <input type="text" class='form-control' id='telefono'  value='<?= $clienteDefecto['cliente_telefono'] ?>' disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-1">
+
+                        <label for="">Id</label>
+                        <input type="text" class='form-control text-center' id='idcli' value='<?= $clienteDefecto['cliente_id'] ?>' disabled>
+
+                    </div>
+
+                    <div class="col-12 col-sm-2">
 
                         <label for="">Forma de Pago</label>
                         <select name="forma_pago" id="forma_pago" class='form-control' required>
-                            <option value="001">Efectivo</option>
-                            <option value="002">Tarjeta</option>
-                            <option value="003">Trasferencia</option>
+                            <option value="001" selected>Efectivo</option>
+                            <!-- <option value="002">Tarjeta</option>
+                            <option value="003">Trasferencia</option> -->
                         </select>
 
                     </div>
+
+                    <?php if (false) { ?>
+                        <div class="col-12 col-sm-3 pt-1">
+                            <a type="button" id='edit_user' class="btn btn-warning mt-4">Editar Usuario</a>
+                        </div>
+                    <?php } ?>
+                    
 
                 </div>
             </div>
@@ -49,26 +101,25 @@
 
                         <input type="hidden" class='form-control' id='id_producto' name='id_producto'>
                         <label for="">Código de barras</label>
-                        <input type="text" class='form-control' id='codigo' name='codigo' placeholder="Escribe el código y enter">
+                        <input type="text" class='form-control' id='codigo' name='codigo' autofocus placeholder="Escribe el código y enter">
 
                     </div>
 
-                    <div class="col-sm-2">
+                    <div class="col-12 col-sm-3">
 
-                        <label for="codigo" id='res_error' class=''>&nbsp;</label>
+                        <label for="">Cantidad</label>
+                        <input type="number" class='form-control' id='cantidad' name='cantidad' value="1">
+
+                    </div>
+
+                    <div class="col-sm-5">
+
+                        <label for="" id='res_error' class='font-weight-bold text-danger mt-4 pt-3'>&nbsp;</label>
                         <input type="text" class='form-control d-none input-codpro' id='subtotal' name='subtotal' data-idcompra='<?= $idUnico ?>'>
 
                     </div>
 
-                    <div class="col-12 col-sm-6 mt-2 row">
-
-                        <p for="" class='font-weight-bolder h2 text-dark mt-4 '>Total S/ <span class='label_total'>0.00</span></p>
-                        <input type="text" id='total' name='total' class='d-none' value='0.00'>
-                        <div class="ml-4 mt-4">
-                            <button type="button" id='completa_venta' class="btn btn-success">Completar Venta</button>
-                        </div>
-
-                    </div>
+                    
                 </div>
             </div>
 
@@ -89,7 +140,17 @@
                     
                     </tbody>
                 </table>
-            </div>       
+            </div>
+
+            <div class="text-right">
+
+                <p for="" class='font-weight-bolder h3 text-dark mt-4 '>Total S/ <span class='label_total'>0.00</span></p>
+                <input type="text" id='total' name='total' class='d-none' value='0.00'>
+                <div class="ml-4 mt-2">
+                    <button type="button" id='completa_venta' class="btn btn-success">Completar Venta</button>
+                </div>
+
+            </div>
 
         </form>
 

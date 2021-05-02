@@ -418,7 +418,7 @@
             }
             else
             {
-                if (!isset($this -> permisosUser[2])) 
+                if (!isset($this -> permisosUser[6])) 
                 {
                     return redirect() -> to(base_url() . '/dashboard');
                 }
@@ -440,7 +440,16 @@
             }
             else
             {
-                $res['error'] = 'No existe el producto <a href="' . base_url() . '/productos/nuevo/' . $idCompra . '" class="color-primary">Agregar</a>';
+                if (!isset($this -> permisosUser[2])) 
+                {
+                    $res['error'] = 'No existe el producto';
+                }
+                else 
+                {
+                    $res['error'] = 'No existe el producto';
+                    //$res['error'] = 'No existe el producto <a href="' . base_url() . '/productos/nuevo/' . $idCompra . '" class="color-primary">Agregar</a>';
+                }
+                
             }
 
             echo json_encode($res);

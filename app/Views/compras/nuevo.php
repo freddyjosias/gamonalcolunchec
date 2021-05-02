@@ -88,7 +88,7 @@
                             <th>Precio</th>
                             <th>Cantidad</th>
                             <th>Total</th>
-                            <th></th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>

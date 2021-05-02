@@ -3,6 +3,12 @@
 
         <h1 class="h2 mb-2 text-gray-800 mx-3"><?= $title ?></h1>
 
+        <div class="ml-3">
+            <p class="">
+                <a href="<?= base_url() ?>/compras" class='btn btn-warning'>Compras</a>
+            </p>
+        </div>
+
         <div class="col-12">
 
             <div class="panel">

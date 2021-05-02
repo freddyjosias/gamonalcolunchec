@@ -118,7 +118,7 @@
             </div>
 
             <div class=''>
-                <a href="<?= base_url() ?>/productos" class='btn btn-light'>Regresar</a>
+                <a href="<?= (is_null($idCompra)) ? base_url() . '/productos' : base_url() . '/compras/nuevo/' . $idCompra ?>" class='btn btn-light'>Regresar</a>
                 <button type="submit" class="btn btn-success">Guardar</button>
             </div>
             

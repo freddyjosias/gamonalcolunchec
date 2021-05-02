@@ -94,10 +94,18 @@ $(document).ready(function() {
         }
     }
 
-    function eliminarProducto(idProducto, idCompra) 
+    function eliminarProducto(idProducto, idCompra, explote = false) 
     {
+        let urlAjax;
+
+        if (explote == true) {
+            urlAjax = baseURL + '/temporalcompra/eliminar/' + idProducto + '/' + idCompra + '/true';
+        } else {
+            urlAjax = baseURL + '/temporalcompra/eliminar/' + idProducto + '/' + idCompra;
+        }
+
         $.ajax({
-            url: baseURL + '/temporalcompra/eliminar/' + idProducto + '/' + idCompra,
+            url: urlAjax,
             dataType: 'json',
             success:function (resp) {
                 
@@ -111,11 +119,6 @@ $(document).ready(function() {
                         $('#total').val(resp.totalinput);
                         $('#codigo').focus();
                         
-                        $('#id_producto').val('');
-                        $('#nombre').val('');
-                        $('#cantidad').val('');
-                        $('#precio_compra').val('');
-                        $('#subtotal').val('');
                     }
                 }
             }
@@ -144,6 +147,15 @@ $(document).ready(function() {
         let idCompra = $(this).attr('data-idcompra');
 
         eliminarProducto(idProducto, idCompra);
+
+    });
+
+    $(document).on("click", ".btn-exploteProducto", function(e) {
+        
+        let idProducto = $(this).attr('data-idproducto');
+        let idCompra = $(this).attr('data-idcompra');
+
+        eliminarProducto(idProducto, idCompra, true);
 
     });
 

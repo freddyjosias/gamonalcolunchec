@@ -22,6 +22,7 @@
             $this -> detCompra = new DetalleComprasModel();
             $this -> detPermisos = new DetallePermisosModel();
             $this -> configModel = new ConfiguracionModel();
+            $this -> productos = new ProductosModel();
 
             $this -> datosTienda = $this -> configModel -> getDatosTienda();
 
@@ -79,6 +80,35 @@
             echo view('footer');
         }
 
+        public function eliminados()
+        {
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[5])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
+
+            $compras = $this -> compras -> select('SUM(det_compra_precio * det_compra_cantidad) AS compratotal, compra.*') -> join('det_compra', 'det_compra.compra_id = compra.compra_id') -> where('compra_ustate', 0) -> groupBy("det_compra.compra_id") -> findAll();
+            
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Compras Anuladas', 
+                'datos' => $compras
+            ];
+
+            echo view('header', $dataHeader);
+            echo view('compras/eliminados');
+            echo view('footer');
+        }
+
         public function nuevo($idCompra = null, $lastPro = null)
         {
             if (!$this -> isLogin) 
@@ -131,7 +161,6 @@
             $resultadoId = $this -> compras -> insertaCompra($idCompra, $total, $idUsuario);
 
             $this -> temCompra = new TemporalCompraModel();
-            $this -> productos = new ProductosModel();
             
             if ($resultadoId) 
             {
@@ -212,7 +241,14 @@
                 return redirect()->back()->with('yavendido', 'verdadero');
             }
 
-            echo json_encode($cumple); die;
+            foreach ($detCompra as $key => $value) 
+            {
+                $this -> productos -> actualizaStock($value['producto_id'], $value['det_compra_cantidad'], '-');
+            }
+
+            $this -> compras -> set('compra_ustate', 0) -> where('compra_id', $idCompra) -> update();
+
+            return redirect() -> to(base_url() . '/compras');
         }
 
         public function muestraCompraPdf($idCompra = 0)
@@ -223,18 +259,32 @@
             }
             else
             {
-                if (!isset($this -> permisosUser[5])) 
+                if (!isset($this -> permisosUser[5]) && !isset($this -> permisosUser[6])) 
                 {
                     return redirect() -> to(base_url() . '/dashboard');
                 }
             }
+
+            $compra = $this -> compras -> where('compra_id', $idCompra) -> first();
+            
+            if (is_null($compra)) 
+            {
+                return redirect() -> to(base_url() . '/compras');
+            }
+
             $data['idcompra'] = $idCompra;
+            $comple = '';
+
+            if ($compra['compra_ustate'] == 0) 
+            {
+                $comple = ' - Compra Anulada';
+            }
 
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
                 'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
-                'title' => 'Compras ' . $idCompra, 
+                'title' => 'Compra ' . $idCompra . $comple, 
             ];
 
             echo view('header', $dataHeader);
@@ -266,7 +316,9 @@
 
             $direcionTienda = $this -> datosTienda['direccionTienda'];
 
-            $pdf = new \FPDF('P', 'mm', 'letter');
+            //require(APPPATH . 'ThirdParty/fpdf/fpdf_rotate.php');
+
+            $pdf = new \PDFRotate('P', 'mm', 'letter');
             $pdf -> AddPage();
             $pdf -> SetMargins(10, 10, 10);
             $pdf -> setTitle('Compra ' . $idCompra);
@@ -323,6 +375,15 @@
 
             $pdf -> SetFont('Arial', 'B', 8);
             $pdf -> Cell(195, 5, 'Total: ' . 'S/ ' . number_format($compraTotal["total"], 2, '.',"'"), 0, 1, 'R');
+
+            if ($datosCompra['compra_ustate'] == 0) 
+            {
+                $pdf -> SetFont('Arial', 'B', 120);
+                $pdf -> SetTextColor(220,50,50);
+
+                //$pdf -> Cell(195, 5, 'ANULADO', 0, 1, 'C');
+                $pdf->RotatedText(70,200,'ANULADO', 60);
+            }
 
             $this -> response -> setHeader('Content-Type', 'application/pdf');
 

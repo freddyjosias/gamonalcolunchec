@@ -1,19 +1,67 @@
 $(document).ready(function() {
 
+    let baseURL = 'http://localhost/gamonalcolunche/public';
+
     $('#cliente').keyup(function (e) {
 
         $('#cliente').autocomplete({
-            source: '../clientes/autocompletedata',
+            source: baseURL + '/clientes/autocompletedata',
             minLenght: 3,
             select: function (event, ui) {
                 
-                event.preventDefault();
-                $('#id_cliente').val(ui.item.id);
-                $('#cliente').val(ui.item.value);
+                autocomple(event, ui) 
             }
         });
 
     });
+
+    $('#apellido').keyup(function (e) {
+
+        $('#apellido').autocomplete({
+            source: baseURL + '/clientes/autocompletedata/apellido',
+            minLenght: 3,
+            select: function (event, ui) {
+
+                autocomple(event, ui) 
+                
+            }
+        });
+
+    });
+
+    $('#dni').keyup(function (e) {
+
+        $('#dni').autocomplete({
+            source: baseURL + '/clientes/autocompletedata/dni',
+            minLenght: 3,
+            select: function (event, ui) {
+
+                autocomple(event, ui) 
+                
+            }
+        });
+
+    });
+
+    function autocomple(event, ui) 
+    {
+        event.preventDefault();
+            $('#id_cliente').val(ui.item.id);
+            $('#idcli').val(ui.item.id);
+            $('#cliente').val(ui.item.nombre);
+            $('#apellido').val(ui.item.apellido);
+            $('#dni').val(ui.item.dni);
+            $('#documento').val(ui.item.documento);
+            $('#telefono').val(ui.item.telefono);
+            $('#direccion').val(ui.item.direccion);
+            $('#correo').val(ui.item.correo);
+    }
+
+    $('#edit_user').click(function () {
+        
+        location.href = baseURL + "/clientes/editar/" + $('#id_cliente').val() + '/null/' + $('#id_venta').val();
+
+    })
 
     $('#codigo').keyup(function (e) {
 
@@ -32,7 +80,14 @@ $(document).ready(function() {
                         e = jQuery.Event('keypress');
                         e.which = 13;
                         let idCompra = $('.input-codpro').attr('data-idcompra');
-                        agregarProducto(e, ui.item.id, 1, idCompra);
+                        let cantidad = parseInt($('#cantidad').val());
+
+                        if (!cantidad > 0) 
+                        {
+                            cantidad = 1;
+                        }
+
+                        agregarProducto(e, ui.item.id, cantidad, idCompra);
                     }
 
                 )
@@ -48,10 +103,10 @@ $(document).ready(function() {
         {
             if (e.which == enterkey) 
             { 
-                if (id_producto != null && id_producto != 0 && cantidad >0) 
+                if (id_producto != null && id_producto != 0 && cantidad > 0) 
                 {
                     $.ajax({
-                        url: '../temporalcompra/insertar/' + id_producto + '/' + cantidad + '/' + id_venta,
+                        url: baseURL + '/temporalcompra/insertar/' + id_producto + '/' + cantidad + '/' + id_venta + '/true',
                         
                         success:function (resp) {
                             
@@ -72,10 +127,11 @@ $(document).ready(function() {
                                     
                                     $('#id_producto').val('');
                                     $('#nombre').val('');
-                                    $('#cantidad').val('');
                                     $('#precio_compra').val('');
                                     $('#subtotal').val('');
                                 }
+                                    
+                                $('#res_error').html(resp.error);
                             }
                         }
                     });
@@ -93,10 +149,27 @@ $(document).ready(function() {
 
     });
 
-    function eliminarProducto(idProducto, id_venta) 
+    $(document).on("click", ".btn-exploteProducto", function(e) {
+        
+        let idProducto = $(this).attr('data-idproducto');
+        let idCompra = $(this).attr('data-idcompra');
+
+        eliminarProducto(idProducto, idCompra, true);
+
+    });
+
+    function eliminarProducto(idProducto, id_venta, explote = false) 
     {
+        let urlAjax;
+
+        if (explote == true) {
+            urlAjax = baseURL + '/temporalcompra/eliminar/' + idProducto + '/' + id_venta + '/true';
+        } else {
+            urlAjax = baseURL + '/temporalcompra/eliminar/' + idProducto + '/' + id_venta;
+        }
+
         $.ajax({
-            url: '../temporalcompra/eliminar/' + idProducto + '/' + id_venta,
+            url: urlAjax,
             dataType: 'json',
             success:function (resp) {
                 
@@ -106,8 +179,9 @@ $(document).ready(function() {
                     {
                         $('#tableproducto tbody').empty();
                         $('#tableproducto tbody').append(resp.datos);
-                        $('#total').val(resp.total);
-                        
+                        $('#total').val(resp.label_total);
+                        $('#total').val(resp.totalinput);
+                        $('#codigo').focus();
                     }
                 }
             }

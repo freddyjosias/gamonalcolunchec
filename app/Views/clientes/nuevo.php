@@ -35,7 +35,7 @@
                     <div class="col-12 col-sm-4">
 
                         <label for="">DNI/RUC</label>
-                        <input type="tel" class='form-control' id='dni' name='dni' value="<?= set_value('dni') ?>" maxlength="8">
+                        <input type="tel" class='form-control' id='dni' name='dni' value="<?= set_value('dni') ?>" maxlength="15">
 
                     </div>
 

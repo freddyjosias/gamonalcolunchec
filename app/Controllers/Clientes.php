@@ -168,7 +168,7 @@
 
         }
 
-        public function editar($id = 0, $valid = null)
+        public function editar($id = 0, $valid = null, $idVenta = null)
         {
             if (!$this -> isLogin) 
             {
@@ -182,6 +182,13 @@
                 }
             }
 
+            if (!is_null($idVenta)) 
+            {
+                return redirect() -> to(base_url() . '/clientes/editar/' . $id) -> with('ventaId', $idVenta);
+            }
+
+            $ventaId = $this -> session -> ventaId;
+
             $cliente = $this -> clientes -> where('cliente_id', $id) -> where('cliente_state', 1) -> first();
 
             if (is_null($cliente)) 
@@ -194,7 +201,8 @@
                 'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 'title' => 'Editar Cliente', 
-                'cliente' => $cliente
+                'cliente' => $cliente,
+                'ventaId' => $ventaId
             ];
 
             if ($valid != null && method_exists($valid,'listErrors')) 
@@ -353,7 +361,7 @@
             return redirect() -> to(base_url() . '/clientes');
         }
 
-        public function autocompleteData()
+        public function autocompleteData($deQue = null)
         {
             if (!$this -> isLogin) 
             {
@@ -361,24 +369,48 @@
             }
             else
             {
-                if (!isset($this -> permisosUser[9])) 
+                if (!isset($this -> permisosUser[8])) 
                 {
                     return redirect() -> to(base_url() . '/dashboard');
                 }
+            }
+
+            if ($deQue != 'dni' && $deQue != 'apellido') 
+            {
+                $deQue = null;
             }
 
             $returnData = array();
 
             $valor = $this->request->getGet('term');
             
-            $clientes = $this->clientes->like('cliente_nombre', $valor)->where('cliente_state', 1)->findAll();
+            if (is_null($deQue)) 
+            {
+                $clientes = $this->clientes->like('cliente_nombre', $valor)->where('cliente_state', 1)->findAll();
+            } 
+            else if ($deQue == 'dni') 
+            {
+                $clientes = $this->clientes->like('cliente_dni', $valor)->where('cliente_state', 1)->findAll();
+            }
+            else if ($deQue == 'apellido') 
+            {
+                $clientes = $this->clientes->like('cliente_apellido', $valor)->where('cliente_state', 1)->findAll();
+            }
+            
 
             if (!empty($clientes)) 
             {
                 foreach ($clientes as $key => $value) 
                 {
                     $data['id'] = $value['cliente_id'];
-                    $data['value'] = $value['cliente_nombre'];
+                    $data['value'] = $value['cliente_nombre'] . ' ' . $value['cliente_apellido'] . ' - ' . $value['cliente_dni'];
+                    $data['apellido'] = $value['cliente_apellido'];
+                    $data['nombre'] = $value['cliente_nombre'];
+                    $data['dni'] = $value['cliente_dni'];
+                    $data['documento'] = $value['cliente_documento'];
+                    $data['direccion'] = $value['cliente_direccion'];
+                    $data['telefono'] = $value['cliente_telefono'];
+                    $data['correo'] = $value['cliente_correo'];
                     array_push($returnData, $data);
                 }
             }

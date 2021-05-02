@@ -5,6 +5,7 @@
     use App\Models\VentasModel;
     use App\Models\CajasModel;
     use App\Models\UsuariosModel;
+    use App\Models\ClientesModel;
     use App\Models\TemporalCompraModel;
     use App\Models\DetalleVentasModel;
     use App\Models\ProductosModel;
@@ -20,6 +21,7 @@
         public function __construct()
         {
             $this -> ventas = new VentasModel();
+            $this -> clientes = new ClientesModel();
             $this -> cajas = new CajasModel();
             $this -> usuarios = new UsuariosModel();
             $this -> detVenta = new DetalleVentasModel();
@@ -117,6 +119,8 @@
             $infoUsuario = $this -> usuarios -> where('usuario_id', $this -> session -> id_usuario) -> first();
             
             $caja = $this -> cajas -> where('caja_id', $infoUsuario["caja_id"]) -> whereNotIn('caja_id', array(0)) -> where('caja_state', 1) -> first();
+
+            $clienteDefecto = $this -> clientes -> where('cliente_id', 1) -> first();
             
             if (!is_null($caja)) 
             {
@@ -126,6 +130,7 @@
                     'nombreTienda' => $this -> datosTienda['nombreTienda'],
                     'caja' => $caja,
                     'title' => 'Nueva Venta', 
+                    'clienteDefecto' => $clienteDefecto
                 ];
             }
             else
@@ -135,11 +140,11 @@
                     'logoTienda' => $this -> datosTienda['logoTienda'],
                     'nombreTienda' => $this -> datosTienda['nombreTienda'],
                     'caja' => $caja,
-                    'title' => 'Usted no está asignado a una caja'
+                    'title' => 'Usted no está asignado a una caja',
+                    'clienteDefecto' => $clienteDefecto
                 ];
             }
             
-
             echo view('header', $dataHeader);
             echo view('ventas/caja');
             echo view('footer');

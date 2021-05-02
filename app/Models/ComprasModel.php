@@ -13,12 +13,12 @@
         protected $returnType     = 'array';
         protected $useSoftDeletes = false;
 
-        protected $allowedFields = ['compra_folio', 'compra_total', 'usuario_id', 'compra_state'];
+        protected $allowedFields = ['compra_folio', 'compra_total', 'usuario_id', 'compra_ustate'];
 
         protected $useTimestamps = true;
         protected $createdField  = 'compra_creation';
         protected $updatedField  = null;
-        protected $deletedField  = 'deleted_at';
+        protected $deletedField  = '';
 
         protected $validationRules    = [];
         protected $validationMessages = [];

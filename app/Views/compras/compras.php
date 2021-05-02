@@ -6,7 +6,7 @@
         
         <div class="">
             <p class="">
-                <a href="<?= base_url() ?>/unidades/eliminados" class='btn btn-warning'>Compras Anuladas</a>
+                <a href="<?= base_url() ?>/compras/eliminados" class='btn btn-warning'>Compras Anuladas</a>
             </p>
         </div>
         <?php 
@@ -32,7 +32,7 @@
                                 <th>Folio</th>
                                 <th>Total</th>
                                 <th>Fecha</th>
-                                <th></th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tfoot>
@@ -41,7 +41,7 @@
                                 <th>Folio</th>
                                 <th>Total</th>
                                 <th>Fecha</th>
-                                <th></th>
+                                <th>Acciones</th>
                             </tr>
                         </tfoot>
                         <tbody>

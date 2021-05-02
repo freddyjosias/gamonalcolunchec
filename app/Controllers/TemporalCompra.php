@@ -16,40 +16,64 @@
             $this -> productos = new ProductosModel();
         }
 
-        public function insertar($idProducto, $cantidad, $idCompra)
+        public function insertar($idProducto, $cantidad, $idCompra, $venta = null)
         {
             $error = '';
             $producto = $this -> productos -> where('producto_id', $idProducto) -> first();
             
-            if ($producto) 
+            if (is_null($venta) || $producto['producto_stock'] >= $cantidad) 
             {
-                $datosExisten = $this -> temCompra -> porIdProductoCompra($idProducto, $idCompra);
-
-                if ($datosExisten) 
+                if ($producto) 
                 {
-                    $cantidad = $datosExisten -> tem_compra_cantidad + $cantidad;
-                    $subTotal = $cantidad * $datosExisten -> tem_compra_precio;
+                    $datosExisten = $this -> temCompra -> porIdProductoCompra($idProducto, $idCompra);
 
-                    $this -> temCompra -> actualizarProductoCompra($idProducto, $idCompra, $cantidad, $subTotal);
+                    if ($datosExisten) 
+                    {
+                        $cantidad = $datosExisten -> tem_compra_cantidad + $cantidad;
+                        $subTotal = $cantidad * $datosExisten -> tem_compra_precio;
+                        
+                        if (is_null($venta) || $producto['producto_stock'] >= $cantidad) 
+                        {
+                            $this -> temCompra -> actualizarProductoCompra($idProducto, $idCompra, $cantidad, $subTotal);
+                        }
+                        else
+                        {
+                            $error = 'Stock Insuficiente';
+                        }
+                    }
+                    else
+                    {
+                        if (is_null($venta)) 
+                        {
+                            $subTotal = $cantidad * $producto['producto_preciocompra'];
+                            $precio = $producto['producto_preciocompra'];
+                        }
+                        else
+                        {
+                            $subTotal = $cantidad * $producto['producto_precioventa'];
+                            $precio = $producto['producto_precioventa'];
+                        }
+                        
+
+                        $this -> temCompra -> save([
+                            'tem_compra_folio' => $idCompra, 
+                            'producto_id' => $idProducto,
+                            'tem_compra_codigo' => $producto['producto_codigo'],
+                            'tem_compra_nombre' => $producto['producto_nombre'],
+                            'tem_compra_precio' => $precio,
+                            'tem_compra_cantidad' => $cantidad,
+                            'tem_compra_subtotal' => $subTotal
+                        ]);
+                    }
                 }
                 else
                 {
-                    $subTotal = $cantidad * $producto['producto_preciocompra'];
-
-                    $this -> temCompra -> save([
-                        'tem_compra_folio' => $idCompra, 
-                        'producto_id' => $idProducto,
-                        'tem_compra_codigo' => $producto['producto_codigo'],
-                        'tem_compra_nombre' => $producto['producto_nombre'],
-                        'tem_compra_precio' => $producto['producto_preciocompra'],
-                        'tem_compra_cantidad' => $cantidad,
-                        'tem_compra_subtotal' => $subTotal
-                    ]);
+                    $error = 'No existe el producto';
                 }
-            }
-            else
+            } 
+            else 
             {
-                $error = 'No existe el producto';
+                $error = 'Stock Insuficiente';
             }
 
             $res['error'] = $error;
@@ -89,7 +113,13 @@
                 $fila = $fila . '<td>' . $value['tem_compra_precio'] . '</td>';
                 $fila = $fila . '<td>' . $value['tem_compra_cantidad'] . '</td>';
                 $fila = $fila . '<td>' . $value['tem_compra_subtotal'] . '</td>';
-                $fila = $fila . '<td><button class="btn btn-danger btn-deleteProducto" type="button" data-idproducto="' . $value['producto_id'] . '" data-idcompra="' . $idCompra . '"><i class="fas fa-trash-alt"></i></button></td>';
+                $fila = $fila . '
+                    <td>
+                        <button class="btn btn-warning btn-deleteProducto" type="button" data-idproducto="' . $value['producto_id'] . '" data-idcompra="' . $idCompra . '"><i class="fas fa-trash-alt"></i></button>
+
+                        <button class="btn btn-danger btn-exploteProducto ml-2" type="button" data-idproducto="' . $value['producto_id'] . '" data-idcompra="' . $idCompra . '"><i class="fas fa-unlink"></i></button>
+                    </td>';
+                    
                 $fila = $fila . '</tr>';
             }
 
@@ -109,13 +139,13 @@
             return $total;
         }
 
-        public function eliminar($idProducto, $idCompra)
+        public function eliminar($idProducto, $idCompra, $explote = null)
         {
             $datosExisten = $this -> temCompra -> porIdProductoCompra($idProducto, $idCompra);
 
             if ($datosExisten) 
             {
-                if ($datosExisten -> tem_compra_cantidad > 1) 
+                if ($datosExisten -> tem_compra_cantidad > 1 && is_null($explote)) 
                 {
                     $cantidad = $datosExisten -> tem_compra_cantidad - 1;
                     $subTotal = $cantidad * $datosExisten -> tem_compra_precio;

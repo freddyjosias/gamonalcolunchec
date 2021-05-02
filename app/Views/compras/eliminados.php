@@ -6,7 +6,7 @@
 
         <div class="">
             <p class="">
-                <a href="<?= base_url() ?>/unidades" class='btn btn-warning'>Unidades</a>
+                <a href="<?= base_url() ?>/compras" class='btn btn-warning'>Compras</a>
             </p>
         </div>
 
@@ -14,20 +14,22 @@
         <div class="card shadow mb-4">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Unidad ID</th>
-                                <th>Nombre</th>
-                                <th>Nombre Corto</th>
+                                <th>Id</th>
+                                <th>Folio</th>
+                                <th>Total</th>
+                                <th>Fecha</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>Unidad ID</th>
-                                <th>Nombre</th>
-                                <th>Nombre Corto</th>
+                                <th>Id</th>
+                                <th>Folio</th>
+                                <th>Total</th>
+                                <th>Fecha</th>
                                 <th></th>
                             </tr>
                         </tfoot>
@@ -36,12 +38,14 @@
                                 foreach ($datos as $key => $value) { ?>
                                     
                                     <tr>
-                                        <td><?= $value['unidad_id'] ?></td>
-                                        <td><?= $value['unidad_nombre'] ?></td>
-                                        <td><?= $value['unidad_corto'] ?></td>
+                                        <td><?= $value['compra_id'] ?></td>
+                                        <td><?= $value['compra_folio'] ?></td>
+                                        <td><?= $value['compratotal'] ?></td>
+                                        <td><?= $value['compra_creation'] ?></td>
 
-                                        <td><a type='button' data-href="<?= base_url() ?>/unidades/reingresar/<?= $value['unidad_id'] ?>" class='btn btn-success' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Reingresar Registro'><i class="fas fa-undo-alt"></i></a></td>
-
+                                        <td class='text-center'>
+                                            <a type='button' href="<?= base_url() ?>/compras/muestracomprapdf/<?= $value['compra_id'] ?>" class='btn btn-primary py-1 my-1 px-2'title=''><i class="fas fa-file-pdf"></i></a>
+                                        </td>
                                     </tr>
                                 
                             <?php }

@@ -9,7 +9,18 @@
                 <a href="<?= base_url() ?>/ventas/eliminados" class='btn btn-warning'>Eliminado</a>
             </p>
         </div>
+        <?php 
+            date_default_timezone_set('America/Lima');
+            $now = new DateTime('NOW');
+            $interval = new DateInterval('PT1H');
+            
+            if (!is_null($msg)) { ?>
 
+                <div class="alert alert-danger">
+                <?= $msg ?>
+                </div>
+
+            <?php } ?>
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-body">
@@ -22,8 +33,7 @@
                                 <th>Cliente</th>
                                 <th>Total</th>
                                 <th>Cajero</th>
-                                <th></th>
-                                <th></th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tfoot>
@@ -33,8 +43,7 @@
                                 <th>Cliente</th>
                                 <th>Total</th>
                                 <th>Cajero</th>
-                                <th></th>
-                                <th></th>
+                                <th>Acciones</th>
                             </tr>
                         </tfoot>
                         <tbody>
@@ -51,6 +60,20 @@
                                         <td><a href="<?= base_url() ?>/ventas/muestraTicket/<?= $value['venta_id'] ?>" class='btn btn-warning'><i class="fas fa-file-pdf"></i></a></td>
 
                                         <td><a type='button' data-href="<?= base_url() ?>/ventas/eliminar/<?= $value['venta_id'] ?>" class='btn btn-danger' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Eliminar Registro'><i class="fas fa-trash-alt"></i></a></td>
+
+                                        <td class='text-center'>
+                                            <a type='button' href="<?= base_url() ?>/ventas/muestraTicket/<?= $value['venta_id'] ?>" class='btn btn-primary py-1 my-1 px-2'title=''><i class="fas fa-file-pdf"></i></a>
+                                            <?php
+                                                
+                                                $dateVenta = new DateTime(str_replace(" ", "T", $value['venta_creation']) . 'America/Lima');
+                                                $dateVenta -> add($interval);
+                                                if ($dateVenta > $now) { ?>
+                                                
+                                                    <a type='button' data-href="<?= base_url() ?>/ventas/anular/<?= $value['venta_id'] ?>" class='btn btn-danger  py-1 my-1 px-2 ml-2' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Anular Registro'><i class="fas fa-times-circle"></i></a>
+                                                    
+                                                <?php } ?>
+                                        </td>
+
                                     </tr>
                                 
                             <?php }

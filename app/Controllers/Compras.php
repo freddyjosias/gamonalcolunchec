@@ -272,7 +272,6 @@
                 return redirect() -> to(base_url() . '/compras');
             }
 
-            $data['idcompra'] = $idCompra;
             $comple = '';
 
             if ($compra['compra_ustate'] == 0) 
@@ -285,10 +284,11 @@
                 'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
                 'title' => 'Compra ' . $idCompra . $comple, 
+                'idcompra' => $idCompra
             ];
 
             echo view('header', $dataHeader);
-            echo view('compras/vercomprapdf', $data);
+            echo view('compras/vercomprapdf');
             echo view('footer');
         }
 

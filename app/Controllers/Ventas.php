@@ -58,6 +58,8 @@
                 }
             }
 
+            $msg = null;
+
             $datos = $this -> ventas -> obtener(1);
 
             $dataHeader = [
@@ -152,6 +154,18 @@
 
         public function guarda()
         {
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[8])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
+
             $idVenta = $this -> request -> getPost('id_venta');
             $formaPago = $this -> request -> getPost('forma_pago');
             $idCliente = $this -> request -> getPost('id_cliente');
@@ -160,8 +174,15 @@
             $session = session();
             
             $idUsuario = $session -> id_usuario;
+
+            $usuarioAct = $this -> usuarios -> join('caja', 'caja.caja_id = usuario.caja_id') -> where('usuario_id', $idUsuario) -> where('usuario_state', 1) -> where('caja_state', 1) -> whereNotIn('caja.caja_id', array(0)) -> first();
             
-            $resultadoId = $this -> ventas -> insertaVenta($idVenta, $total, $idUsuario, $session -> id_caja, $idCliente, $formaPago);
+            if (is_null($usuarioAct)) 
+            {
+                return redirect() -> to(base_url() . '/dashboard');
+            }
+            
+            $resultadoId = $this -> ventas -> insertaVenta($idVenta, $total, $idUsuario, $usuarioAct['caja_id'], $idCliente, $formaPago);
 
             $this -> temCompra = new TemporalCompraModel();
             $this -> productos = new ProductosModel();
@@ -189,11 +210,44 @@
             return redirect() -> to(base_url() . '/ventas/muestraticket/' . $resultadoId);
         }
 
-        public function muestraTicket($idVenta)
+        public function muestraTicket($idVenta = null)
         {
-            $data['idcompra'] = $idVenta;
-            echo view('header');
-            echo view('ventas/verticket', $data);
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[7]) && !isset($this -> permisosUser[8])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
+
+            $venta = $this -> ventas -> where('venta_id', $idVenta) -> first();
+
+            if (is_null($venta)) 
+            {
+                return redirect() -> to(base_url() . '/ventas');
+            }
+
+            $comple = '';
+
+            if ($venta['venta_state'] == 0) 
+            {
+                $comple = ' - Venta Anulada';
+            }
+
+            $dataHeader = [
+                'permisos' => $this -> permisosUser,
+                'logoTienda' => $this -> datosTienda['logoTienda'],
+                'nombreTienda' => $this -> datosTienda['nombreTienda'],
+                'title' => 'Venta ' . $idVenta . $comple,  
+                'idventa' => $idVenta
+            ];
+
+            echo view('header', $dataHeader);
+            echo view('ventas/verticket');
             echo view('footer');
         }
 
@@ -203,11 +257,11 @@
 
             $detalleVenta = $this -> detVenta -> where('venta_id', $idVenta) -> findAll();
 
-            $nombreTienda = $this -> configuracion -> select('configuracion_valor') -> where('configuracion_nombre', 'nombre_tienda') -> get() -> getRow() -> configuracion_valor;
+            $nombreTienda = $this -> datosTienda['nombreTienda'];
+            
+            $direcionTienda = $this -> datosTienda['direccionTienda'];
 
-            $direcionTienda = $this -> configuracion -> select('configuracion_valor') -> where('configuracion_nombre', 'tienda_direccion') -> get() -> getRow() -> configuracion_valor;
-
-            $leyendaTiket = $this -> configuracion -> select('configuracion_valor') -> where('configuracion_nombre', 'ticket_leyenda') -> get() -> getRow() -> configuracion_valor;
+            $leyendaTiket = $this -> datosTienda['leyendaTicket'];
 
             $pdf = new \FPDF('P', 'mm', array(80, 200));
             $pdf -> AddPage();
@@ -215,14 +269,17 @@
             $pdf -> setTitle('Venta');
             $pdf -> SetFont('Arial', 'B', 10);
 
-            $pdf -> Cell(70, 5, $nombreTienda, 0, 1, 'C');
+            $pdf -> SetY(10);
+            $pdf -> SetX(0);
+
+            $pdf -> Cell(80, 5, utf8_decode($nombreTienda), 0, 1, 'C');
 
             $pdf -> SetFont('Arial', 'B', 9);
 
-            $pdf -> Image(base_url() . '/img/logopos.png', 10, 0, 20, 20, 'PNG');
+            $pdf -> Image(base_url() . '/img/logopos.png', 5, 4, 15, 15, 'PNG');
 
             $pdf -> SetFont('Arial', '', 9);
-            $pdf -> Cell(70, 5, $direcionTienda, 0, 1, 'C');
+            $pdf -> Cell(70, 5, utf8_decode($direcionTienda), 0, 1, 'C');
             
             $pdf -> SetFont('Arial', 'B', 9);
             $pdf -> Cell(25, 5, 'Fecha y hora: ', 0, 0, 'L');

@@ -179,7 +179,7 @@ $(document).ready(function() {
                     {
                         $('#tableproducto tbody').empty();
                         $('#tableproducto tbody').append(resp.datos);
-                        $('#total').val(resp.label_total);
+                        $('.label_total').html(resp.total);
                         $('#total').val(resp.totalinput);
                         $('#codigo').focus();
                     }

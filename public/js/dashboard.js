@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    let baseURL = 'http://localhost/licorlandsorftware/';
+    let baseURL = 'http://localhost/gamonalcolunchec/';
 
     $('#dataTableDash').DataTable();
     $('#dataTable_impr_minstock').DataTable({

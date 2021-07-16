@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    let baseURL = 'http://localhost/licorlandsorftware/';
+    let baseURL = 'http://localhost/gamonalcolunchec/';
 
     $('#cliente').keyup(function (e) {
 

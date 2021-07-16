@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    let baseURL = 'http://localhost/licorlandsorftware/';
+    let baseURL = 'http://localhost/gamonalcolunchec/';
 
     var peticion = true;
 

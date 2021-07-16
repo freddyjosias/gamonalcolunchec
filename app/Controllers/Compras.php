@@ -70,7 +70,7 @@
                 'permisos' => $this -> permisosUser,
                 'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
-                'title' => 'Compras', 
+                'title' => 'Compras Realizadas', 
                 'datos' => $compras,
                 'msg' => $msg
             ];
@@ -153,12 +153,17 @@
             
             $idCompra = $this -> request -> getPost('id_compra');
             $total = $this -> request -> getPost('total');
+            $proveedor = $this -> request -> getPost('proveedor');
+            $numerodoc = $this -> request -> getPost('numerodoc');
+            $fechadoc = $this -> request -> getPost('fechadoc');
+            $tipodoc = $this -> request -> getPost('tipodoc');
+            $igv = $this -> request -> getPost('igv');
             
             $session = session();
             
             $idUsuario = $session -> id_usuario;
 
-            $resultadoId = $this -> compras -> insertaCompra($idCompra, $total, $idUsuario);
+            $resultadoId = $this -> compras -> insertaCompra($idCompra, $total, $idUsuario, $proveedor, $numerodoc, $fechadoc, $tipodoc, $igv);
 
             $this -> temCompra = new TemporalCompraModel();
             
@@ -322,32 +327,75 @@
             $pdf -> AddPage();
             $pdf -> SetMargins(10, 10, 10);
             $pdf -> setTitle('Compra ' . $idCompra);
-            $pdf -> SetFont('Arial', 'B', 10);
+            $pdf -> SetFont('Arial', 'B', 12);
 
-            $pdf -> Cell(195, 5, 'Entrada de productos', 0, 1, 'C');
+            $pdf -> Cell(195, 5, 'Entrada de Productos', 0, 1, 'C');
 
             $pdf -> SetFont('Arial', 'B', 9);
 
-            $pdf -> Image(base_url() . '/img/logopos.png', 185, 10, 20, 20, 'PNG');
+            $pdf -> Image(base_url() . '/public/img/logopos.png', 185, 10, 20, 20, 'PNG');
 
+            $pdf -> SetFont('Arial', 'B', 11);
             $pdf -> Cell(50, 5, $nombreTienda, 0, 1, 'L');
-            $pdf -> Cell(20, 5, utf8_decode('Dirección: '), 0, 0, 'L');
 
-            $pdf -> SetFont('Arial', '', 9);
-            $pdf -> Cell(50, 5, utf8_decode($direcionTienda), 0, 1, 'L');
+            $pdf -> SetFont('Arial', 'B', 10);
+            $pdf -> Cell(29, 5, utf8_decode('Dirección: '), 0, 0, 'L');
+
+            $pdf -> SetFont('Arial', '', 10);
+            $pdf -> Cell(55, 5, utf8_decode($direcionTienda), 0, 0, 'L');
+
+            $pdf -> SetFont('Arial', 'B', 10);
+            $pdf -> Cell(45, 5, 'Tipo de Documento: ', 0, 0, 'L');
+
+            $pdf -> SetFont('Arial', '', 10);
+            $pdf -> Cell(55, 5, $datosCompra['compra_tipodoc'], 0, 1, 'L');
             
-            $pdf -> SetFont('Arial', 'B', 9);
-            $pdf -> Cell(25, 5, 'Fecha y hora: ', 0, 0, 'L');
+            $pdf -> SetFont('Arial', 'B', 10);
+            $pdf -> Cell(29, 5, 'Fecha y hora: ', 0, 0, 'L');
 
-            $pdf -> SetFont('Arial', '', 9);
-            $pdf -> Cell(50, 5, $datosCompra['compra_creation'], 0, 1, 'L');
+            $pdf -> SetFont('Arial', '', 10);
+            $pdf -> Cell(55, 5, $datosCompra['compra_creation'], 0, 0, 'L');
+
+            $pdf -> SetFont('Arial', 'B', 10);
+            $pdf -> Cell(45, 5, utf8_decode('Número de Documento: '), 0, 0, 'L');
+
+            $pdf -> SetFont('Arial', '', 10);
+            $pdf -> Cell(55, 5, $datosCompra['compra_numerodoc'], 0, 1, 'L');
+
+            $pdf -> SetFont('Arial', 'B', 10);
+            $pdf -> Cell(29, 5, 'Proveedor: ', 0, 0, 'L');
+
+            $pdf -> SetFont('Arial', '', 10);
+            $pdf -> Cell(55, 5, $datosCompra['compra_proveedor'], 0, 0, 'L');
+
+            $pdf -> SetFont('Arial', 'B', 10);
+            $pdf -> Cell(45, 5, 'Fecha de Documento: ', 0, 0, 'L');
+
+            $pdf -> SetFont('Arial', '', 10);
+            $pdf -> Cell(55, 5, $datosCompra['compra_fechadoc'], 0, 1, 'L');
+
+            $pdf -> SetFont('Arial', 'B', 10);
+            $pdf -> Cell(29, 5, utf8_decode('¿IGV incluido? '), 0, 0, 'L');
+
+            $pdf -> SetFont('Arial', '', 10);
+
+            if ($datosCompra['compra_igv'] == 1) 
+            {
+                $datosCompra['compra_igv'] = 'SI';
+            }
+            else
+            {
+                $datosCompra['compra_igv'] = 'NO';
+            }
+
+            $pdf -> Cell(50, 5, $datosCompra['compra_igv'], 0, 1, 'L');
 
             $pdf -> Ln();
             $pdf -> SetFont('Arial', 'B', 8);
             $pdf -> SetFillColor(0,0,0);
             $pdf -> SetTextColor(255,255,255);
 
-            $pdf -> Cell(196, 5, 'Detalle de productos', 1, 1, 'C', 1);
+            $pdf -> Cell(196, 5, 'Detalle de Productos', 1, 1, 'C', 1);
 
             $pdf -> SetTextColor(0,0,0);
 
@@ -373,7 +421,7 @@
             
             $pdf -> Ln();
 
-            $pdf -> SetFont('Arial', 'B', 8);
+            $pdf -> SetFont('Arial', 'B', 13);
             $pdf -> Cell(195, 5, 'Total: ' . 'S/ ' . number_format($compraTotal["total"], 2, '.',"'"), 0, 1, 'R');
 
             if ($datosCompra['compra_ustate'] == 0) 

@@ -6,8 +6,8 @@
 
         <div class="">
             <p class="">
-                <a href="<?= base_url() ?>/roles/nuevo" class='btn btn-info'>Agregar</a>
-                <a href="<?= base_url() ?>/roles/eliminados" class='btn btn-warning'>Eliminados</a>
+                <a href="<?= base_url() ?>/perfiles/nuevo" class='btn btn-info'>Agregar</a>
+                <a href="<?= base_url() ?>/perfiles/eliminados" class='btn btn-warning'>Eliminados</a>
             </p>
         </div>
 
@@ -39,9 +39,9 @@
                                         <td><?= $value['rol_nombre'] ?></td>
 
                                         <td class='text-center'>
-                                            <a href="<?= base_url() ?>/roles/editar/<?= $value['rol_id'] ?>" class='btn btn-warning py-1 my-1 px-2'><i class="fas fa-edit"></i></a>
+                                            <a href="<?= base_url() ?>/perfiles/editar/<?= $value['rol_id'] ?>" class='btn btn-warning py-1 my-1 px-2'><i class="fas fa-edit"></i></a>
 
-                                            <a type='button' data-href="<?= base_url() ?>/roles/eliminar/<?= $value['rol_id'] ?>" class='btn btn-danger py-1 my-1 px-2 ml-2' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Eliminar Registro'><i class="fas fa-trash-alt"></i></a>
+                                            <a type='button' data-href="<?= base_url() ?>/perfiles/eliminar/<?= $value['rol_id'] ?>" class='btn btn-danger py-1 my-1 px-2 ml-2' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Eliminar Registro'><i class="fas fa-trash-alt"></i></a>
                                         </td>
                                     </tr>
                                 
@@ -76,8 +76,7 @@
             </div>
                                     
             <div class="modal-footer">
-                <button class="btn btn-light" type="button" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-light" type="button" data-dismiss="modal">No</button>
+                <button class="btn btn-light" type="button" data-dismiss="modal">Cancelar</button>
                 <a class="btn btn-danger btn-ok" type="button">Si</a>
             </div>
         </div>

@@ -18,8 +18,8 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Nombre</th>
-                                <th>DNI</th>
+                                <th>Nombres/Razón Social</th>
+                                <th>DNI/RUC</th>
                                 <th>Dirección</th>
                                 <th>Correo</th>
                                 <th>Acciones</th>
@@ -27,8 +27,8 @@
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>Nombre</th>
-                                <th>DNI</th>
+                                <th>Nombres/Razón Social</th>
+                                <th>DNI/RUC</th>
                                 <th>Dirección</th>
                                 <th>Correo</th>
                                 <th>Acciones</th>
@@ -39,7 +39,7 @@
                                 foreach ($datos as $key => $value) { ?>
                                     
                                     <tr>
-                                        <td><?= $value['cliente_nombre'] . ' ' . $value['cliente_apellido'] ?></td>
+                                        <td><?= $value['cliente_nombre']?></td>
                                         <td><?= ($value['cliente_dni'] != '') ? $value['cliente_dni'] : '---' ?></td>
                                         <td><?= ($value['cliente_direccion'] != '') ? $value['cliente_direccion'] : '---' ?></td>
                                         <td><?= ($value['cliente_correo'] != '') ? $value['cliente_correo'] : '---' ?></td>
@@ -82,8 +82,7 @@
             </div>
                                     
             <div class="modal-footer">
-                <button class="btn btn-light" type="button" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-light" type="button" data-dismiss="modal">No</button>
+                <button class="btn btn-light" type="button" data-dismiss="modal">Cancelar</button>
                 <a class="btn btn-danger btn-ok" type="button">Si</a>
             </div>
         </div>

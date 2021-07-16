@@ -7,6 +7,7 @@
     use App\Models\RolesModel;
     use App\Models\ConfiguracionModel;
     use App\Models\DetallePermisosModel;
+    //borrar
     use App\Models\PermisosModel;
 
     class Usuarios extends BaseController
@@ -25,6 +26,7 @@
             $this -> roles = new RolesModel();
             $this -> configModel = new ConfiguracionModel();
             $this -> detPermisos = new DetallePermisosModel();
+            //Borrar
             $this -> permisos = new PermisosModel();
 
             $this -> session = session();
@@ -160,7 +162,8 @@
 
             $cajas = $this -> cajas -> where('caja_state', 1) -> findAll();
             $roles = $this -> roles -> where('rol_state', 1) -> findAll();
-            $permisos = $this -> permisos -> orderBy('permiso_orden ASC') -> findAll();
+            //borrar
+            //$permisos = $this -> permisos -> orderBy('permiso_orden ASC') -> findAll();
 
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
@@ -169,8 +172,7 @@
                 'title' => 'Agregar Usuario', 
                 'cajas' => $cajas, 
                 'roles' => $roles,
-                'css' => ['usuarios'],
-                'permisosEdit' => $permisos
+                'css' => ['usuarios']
             ];
 
             if ($valid != null && method_exists($valid,'listErrors')) 
@@ -208,7 +210,7 @@
                     'caja_id' => $this -> request -> getPost('id_caja'),
                     'rol_id' => $this -> request -> getPost('id_rol')
                 ]);
-
+                /*
                 $lastIdUser = $this -> usuarios -> insertID();
 
                 $permisos = $this -> permisos -> orderBy('permiso_orden ASC') -> findAll();
@@ -225,7 +227,7 @@
                         ]);
                     }
                 }
-                
+                */
                 return redirect() -> to(base_url() . '/usuarios');
             }
             else
@@ -259,8 +261,8 @@
 
             $cajas = $this -> cajas -> where('caja_state', 1) -> findAll();
             $roles = $this -> roles -> where('rol_state', 1) -> findAll();
-            $permisos = $this -> permisos -> orderBy('permiso_orden ASC') -> findAll();
-            $userEditPermisos = $this -> detPermisos -> getPermisosPorUsuario($id);
+            //$permisos = $this -> permisos -> orderBy('permiso_orden ASC') -> findAll();
+            //$userEditPermisos = $this -> detPermisos -> getPermisosPorUsuario($id);
             
             $dataHeader = [
                 'permisos' => $this -> permisosUser,
@@ -270,9 +272,7 @@
                 'datos' => $usuario,
                 'cajas' => $cajas, 
                 'roles' => $roles,
-                'css' => ['usuarios'],
-                'permisosEdit' => $permisos,
-                'userEditPermisos' => $userEditPermisos
+                'css' => ['usuarios']
             ];
 
             if ($valid != null && method_exists($valid,'listErrors')) 
@@ -350,7 +350,7 @@
                         'rol_id' => $this -> request -> getPost('id_rol')
                     ]
                 );
-
+                /*
                 $userEditPermisos = $this -> detPermisos -> getPermisosPorUsuario($id, 3);
                 $permisos = $this -> permisos -> orderBy('permiso_orden ASC') -> findAll();
                 
@@ -377,7 +377,7 @@
                         ]);
                     }
                 }
-                
+                */
                 return redirect() -> to(base_url() . '/usuarios');
             }
             else
@@ -513,7 +513,7 @@
                 $usuario = $this -> request -> getPost('usuario');
                 $password = $this -> request -> getPost('password');
 
-                $datosUsuario = $this -> usuarios -> where('usuario_user', $usuario) -> where('usuario_state', 1) -> first();
+                $datosUsuario = $this -> usuarios -> join('rol', 'rol.rol_id = usuario.rol_id') -> where('usuario_user', $usuario) -> where('usuario_state', 1) -> first();
 
                 if ($datosUsuario != null) 
                 {
@@ -521,13 +521,13 @@
                     {
                         $datosSesion = [
                             'id_usuario' => $datosUsuario['usuario_id'],
-                            'nombre' => $datosUsuario['usuario_nombre'],
-                            'id_rol' => $datosUsuario['rol_id']
+                            'perfil' => $datosUsuario['rol_nombre'],
+                            'nombre' => $datosUsuario['usuario_nombre']
                         ];
 
                         $session = session();
                         $session -> set($datosSesion);
-                        return redirect() -> to(base_url() . '/productos');
+                        return redirect() -> to(base_url() . '/dashboard');
                     }
                     else
                     {

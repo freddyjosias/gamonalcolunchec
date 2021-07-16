@@ -66,9 +66,9 @@
 
                     <div class="col-12 col-sm-6">
 
-                        <label for="">Roles</label>
+                        <label for="">Perfiles</label>
                         <select name="id_rol" id="id_rol" class='form-control' required>
-                            <option value="">Selecionar rol</option>
+                            <option value="">Selecionar perfil</option>
 
                             <?php foreach ($roles as $key => $value) { ?>
                                 <option value="<?= $value['rol_id'] ?>"><?= $value['rol_nombre'] ?></option>
@@ -79,7 +79,7 @@
                     </div>
                 </div>
             </div>
-
+            <?php /*
             <div class="">
                 <p class='text-dark mb-1'>Permisos</p>
                 
@@ -96,8 +96,8 @@
                 </div>
                 
             </div>
-
-            <div class=''>
+            */ ?>
+            <div class='mt-5'>
                 <a href="<?= base_url() ?>/usuarios" class='btn btn-light'>Regresar</a>
                 <button type="submit" class="btn btn-success">Guardar</button>
             </div>

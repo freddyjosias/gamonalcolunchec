@@ -6,7 +6,7 @@
 
         <div class="">
             <p class="">
-                <a href="<?= base_url() ?>/roles" class='btn btn-warning'>Marcas</a>
+                <a href="<?= base_url() ?>/perfiles" class='btn btn-warning'>Perfiles</a>
             </p>
         </div>
 
@@ -37,7 +37,7 @@
                                         <td><?= $value['rol_id'] ?></td>
                                         <td><?= $value['rol_nombre'] ?></td>
 
-                                        <td class='text-center'><a type='button' data-href="<?= base_url() ?>/roles/reingresar/<?= $value['rol_id'] ?>" class='btn btn-success py-1 my-1 px-2' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Reingresar Registro'><i class="fas fa-undo-alt"></i></a></td>
+                                        <td class='text-center'><a type='button' data-href="<?= base_url() ?>/perfiles/reingresar/<?= $value['rol_id'] ?>" class='btn btn-success py-1 my-1 px-2' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Reingresar Registro'><i class="fas fa-undo-alt"></i></a></td>
 
                                     </tr>
                                 
@@ -72,8 +72,7 @@
             </div>
                                     
             <div class="modal-footer">
-                <button class="btn btn-light" type="button" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-light" type="button" data-dismiss="modal">No</button>
+                <button class="btn btn-light" type="button" data-dismiss="modal">Cancelar</button>
                 <a class="btn btn-danger btn-ok" type="button">Si</a>
             </div>
         </div>

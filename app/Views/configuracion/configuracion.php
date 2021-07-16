@@ -77,7 +77,7 @@
                             <div class="col-12 col-sm-6">
 
                                 <label for="">Logotipo</label> <br>
-                                <img src="<?= base_url() . '/img/' . $logoTienda ?>" class='configuracion_logo' alt=""> <br>
+                                <img src="<?= base_url() . '/public/img/' . $logoTienda ?>" class='configuracion_logo' alt=""> <br>
 
                                 <div class="custom-file">
                                     <input type="file" id='tienda_logo' name='tienda_logo' class="custom-file-input" accept="image/png,image/jpeg">
@@ -124,8 +124,7 @@
             </div>
                                     
             <div class="modal-footer">
-                <button class="btn btn-light" type="button" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-light" type="button" data-dismiss="modal">No</button>
+                <button class="btn btn-light" type="button" data-dismiss="modal">Cancelar</button>
                 <a class="btn btn-danger btn-ok" type="button">Si</a>
             </div>
         </div>

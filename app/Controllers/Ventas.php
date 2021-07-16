@@ -11,6 +11,7 @@
     use App\Models\ProductosModel;
     use App\Models\ConfiguracionModel;
     use App\Models\DetallePermisosModel;
+    use CodeIgniter\I18n\Time;
 
     class Ventas extends BaseController
     {
@@ -27,6 +28,7 @@
             $this -> detVenta = new DetalleVentasModel();
             $this -> configModel = new ConfiguracionModel();
             $this -> detPermisos = new DetallePermisosModel();
+            $this -> productos = new ProductosModel();
             
             $this -> datosTienda = $this -> configModel -> getDatosTienda();
 
@@ -66,8 +68,9 @@
                 'permisos' => $this -> permisosUser,
                 'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
-                'title' => 'Ventas', 
-                'datos' => $datos
+                'title' => 'Ventas Realizadas', 
+                'datos' => $datos,
+                'msg' => $msg
             ];
 
             echo view('header', $dataHeader);
@@ -95,7 +98,7 @@
                 'permisos' => $this -> permisosUser,
                 'logoTienda' => $this -> datosTienda['logoTienda'],
                 'nombreTienda' => $this -> datosTienda['nombreTienda'],
-                'title' => 'Ventas Eliminados', 
+                'title' => 'Ventas Anuladas', 
                 'datos' => $datos
             ];
 
@@ -185,7 +188,6 @@
             $resultadoId = $this -> ventas -> insertaVenta($idVenta, $total, $idUsuario, $usuarioAct['caja_id'], $idCliente, $formaPago);
 
             $this -> temCompra = new TemporalCompraModel();
-            $this -> productos = new ProductosModel();
             
             if ($resultadoId) 
             {
@@ -263,80 +265,184 @@
 
             $leyendaTiket = $this -> datosTienda['leyendaTicket'];
 
-            $pdf = new \FPDF('P', 'mm', array(80, 200));
+            $cliente = $this -> clientes -> where('cliente_id', $datosVenta['cliente_id']) -> first();
+            
+            $pdf = new \PDFRotate('P', 'mm', array(150, 250));
             $pdf -> AddPage();
             $pdf -> SetMargins(5, 5, 5);
             $pdf -> setTitle('Venta');
-            $pdf -> SetFont('Arial', 'B', 10);
+            $pdf -> SetFont('Arial', 'B', 20);
 
             $pdf -> SetY(10);
-            $pdf -> SetX(0);
+            $pdf -> SetX(5);
 
             $pdf -> Cell(80, 5, utf8_decode($nombreTienda), 0, 1, 'C');
 
             $pdf -> SetFont('Arial', 'B', 9);
 
-            $pdf -> Image(base_url() . '/img/logopos.png', 5, 4, 15, 15, 'PNG');
+            $pdf -> Image(base_url() . '/public/img/logopos.png', 7, 8, 15, 15, 'PNG');
 
             $pdf -> SetFont('Arial', '', 9);
-            $pdf -> Cell(70, 5, utf8_decode($direcionTienda), 0, 1, 'C');
+            $pdf -> Cell(80, 5, utf8_decode($direcionTienda), 0, 0, 'C');
+            $pdf -> Cell(10, 5, '', 0, 0, 'C');
+            $pdf -> Cell(40, 5, 'R.U.C. ' . $this -> datosTienda['rucTienda'], 1, 1, 'C');
+
+            $pdf -> SetFont('Arial', '', 9);
+            $pdf -> Cell(80, 5, utf8_decode('Cel.: ' . $this -> datosTienda['telefonoTienda']), 0, 0, 'C');
+            $pdf -> Cell(10, 5, '', 0, 0, 'C');
+            $pdf -> SetFillColor(227, 230, 233);
+            $pdf -> Cell(40, 5, 'BOLETA DE VENTA', 1, 1, 'C', 1);
+
+            $pdf -> SetFont('Arial', '', 9);
+            $pdf -> Cell(80, 5, utf8_decode('E-Mail: ' . $this -> datosTienda['emailTienda']), 0, 0, 'C');
+            $pdf -> Cell(10, 5, '', 0, 0, 'C');
+
+            $auxNumero = $idVenta;
+            $auxNumero = strval($auxNumero);
+            $count = strlen($auxNumero);
+
+            switch ($count) {
+                case 1:
+                    $auxNumero = '0000' . $auxNumero;
+                    break;
+                case 2:
+                    $auxNumero = '000' . $auxNumero;
+                    break;
+                case 3:
+                    $auxNumero = '00' . $auxNumero;
+                    break;
+                case 4:
+                    $auxNumero = '0' . $auxNumero;
+                    break;
+                default:
+                    break;
+            }
+
+            $pdf -> Cell(40, 5, utf8_decode('N° - ' . $auxNumero), 1, 1, 'C');
+
+            $pdf -> SetFont('Arial', 'B', 9);
+            $pdf -> Cell(37, 3,  '', 0, 1, 'L');
+            $pdf -> Cell(16, 5,  utf8_decode('DNI/RUC: '), 0, 0, 'L');
+
+            $pdf -> SetFont('Arial', '', 9);
+            $pdf -> Cell(50, 5, $cliente['cliente_dni'], 0, 1, 'L');
+
+            $pdf -> SetFont('Arial', 'B', 9);
+            $pdf -> Cell(37, 5,  utf8_decode('Nombres/Razón Social: '), 0, 0, 'L');
+
+            $pdf -> SetFont('Arial', '', 9);
+            $pdf -> Cell(50, 5, $cliente['cliente_nombre'], 0, 1, 'L');
+
+            $pdf -> SetFont('Arial', 'B', 9);
+            $pdf -> Cell(18, 5,  utf8_decode('Dirección: '), 0, 0, 'L');
+
+            $pdf -> SetFont('Arial', '', 9);
+
+            if ($cliente['cliente_direccion'] == '' || is_null($cliente['cliente_direccion'])) 
+            {
+                $cliente['cliente_direccion'] = '............................................................................................';
+            } 
+            elseif (strlen($cliente['cliente_direccion']) > 60) 
+            {
+                $cliente['cliente_direccion'] = substr($cliente['cliente_direccion'], 0, 60) . '...';
+            }
+
+            $pdf -> Cell(70, 5, $cliente['cliente_direccion'], 0, 1, 'L');
             
             $pdf -> SetFont('Arial', 'B', 9);
-            $pdf -> Cell(25, 5, 'Fecha y hora: ', 0, 0, 'L');
+            $pdf -> Cell(24, 5, 'Fecha y Hora: ', 0, 0, 'L');
 
             $pdf -> SetFont('Arial', '', 9);
             $pdf -> Cell(50, 5, $datosVenta['venta_creation'], 0, 1, 'L');
 
+            $pdf -> Ln();
             $pdf -> SetFont('Arial', 'B', 9);
-            $pdf -> Cell(25, 5, 'Ticket: ', 0, 0, 'L');
+
+            $pdf -> Cell(11, 5, 'Cant.', 1, 0, 'L');
+            $pdf -> Cell(83, 5, 'Nombre', 1, 0, 'L');
+            $pdf -> Cell(23, 5, 'Precio', 1, 0, 'L');
+            $pdf -> Cell(23, 5, 'Importe', 1, 1, 'L');
 
             $pdf -> SetFont('Arial', '', 9);
-            $pdf -> Cell(50, 5, $datosVenta['venta_folio'], 0, 1, 'L');
-
-            $pdf -> Ln();
-            $pdf -> SetFont('Arial', 'B', 7);
-
-            $pdf -> Cell(7, 5, 'Cant.', 0, 0, 'L');
-            $pdf -> Cell(35, 5, 'Nombre', 0, 0, 'L');
-            $pdf -> Cell(15, 5, 'Precio', 0, 0, 'L');
-            $pdf -> Cell(15, 5, 'Importe', 0, 1, 'L');
-
-            $pdf -> SetFont('Arial', '', 7);
 
             foreach ($detalleVenta as $key => $value) 
             {
-                $pdf -> Cell(7, 5, utf8_decode($value['det_venta_cantidad']), 0, 0, 'L');
-                $pdf -> Cell(35, 5, utf8_decode($value['det_venta_nombre']), 0, 0, 'L');
-                $pdf -> Cell(15, 5, 'S/ ' . number_format($value['det_venta_precio'], 2, '.',"'"), 0, 0, 'L');
+                $pdf -> Cell(11, 5, utf8_decode($value['det_venta_cantidad']), 1, 0, 'C');
+                $pdf -> Cell(83, 5, utf8_decode($value['det_venta_nombre']), 1, 0, 'L');
+                $pdf -> Cell(23, 5, 'S/ ' . number_format($value['det_venta_precio'], 2, '.',"'"), 1, 0, 'L');
                 $importe = number_format($value['det_venta_precio'] * $value['det_venta_cantidad'], 2, '.',"'");
-                $pdf -> Cell(15, 5, 'S/ ' . $importe, 0, 1, 'R');
+                $pdf -> Cell(23, 5, 'S/ ' . $importe, 1, 1, 'R');
             }
             
-            $pdf -> Ln();
+            $pdf -> Cell(37, 1,  '', 0, 1, 'L');
+            $pdf -> Cell(105, 5,  '', 0, 0, 'L');
 
-            $pdf -> SetFont('Arial', 'B', 8);
-            $pdf -> Cell(70, 5, 'Total: ' . 'S/ ' . number_format($datosVenta['venta_total'], 2, '.',"'"), 0, 1, 'R');
+            $pdf -> SetFont('Arial', 'B', 9);
+            $pdf -> Cell(35, 5, 'Total: ' . 'S/ ' . number_format($datosVenta['venta_total'], 2, '.',"'"), 0, 1, 'R');
 
-            $pdf -> Ln();
-            $pdf -> MultiCell(70, 5, $leyendaTiket, 0, 'C');
+            $pdf -> MultiCell(140, 5, $leyendaTiket, 0, 'C');
+
+            if ($datosVenta['venta_state'] == 0) 
+            {
+                $pdf -> SetFont('Arial', 'B', 70);
+                $pdf -> SetTextColor(220,50,50);
+
+                //$pdf -> Cell(195, 5, 'ANULADO', 0, 1, 'C');
+                $pdf->RotatedText(60,130,'ANULADO', 70);
+            }
 
             $this -> response -> setHeader('Content-Type', 'application/pdf');
 
             $pdf -> Output('Ticket.pdf', 'I');
         }
 
-        public function eliminar($id)
+        public function anular($idVenta = null)
         {
-            $productos = $this -> detVenta -> where('venta_id', $id) -> findAll();
+            if (!$this -> isLogin) 
+            {
+                return redirect() -> to(base_url());
+            }
+            else
+            {
+                if (!isset($this -> permisosUser[7])) 
+                {
+                    return redirect() -> to(base_url() . '/dashboard');
+                }
+            }
 
-            $this -> productos = new ProductosModel();
+            if (is_null($idVenta)) 
+            {
+                return redirect() -> to(base_url() . '/ventas');
+            }
 
-            foreach ($productos as $key => $value) 
+            $venta = $this -> ventas -> where('venta_id', $idVenta) -> where('venta_state', 1) -> first();
+            
+            if (is_null($venta)) 
+            {
+                return redirect() -> to(base_url() . '/ventas');
+            }
+
+            date_default_timezone_set('America/Lima');
+
+            $now = Time::now('America/Lima', 'es_ES');
+
+            $dateVenta = Time::createFromFormat('Y-m-d H:i:s', $venta['venta_creation'], 'America/Lima');
+            
+            $dateVenta = $dateVenta -> addDays(3);
+            
+            if ($dateVenta -> isBefore($now)) 
+            { 
+                return redirect() -> to(base_url() . '/ventas');
+            }
+
+            $detVenta = $this -> detVenta -> join('producto', 'producto.producto_id = det_venta.producto_id') -> where('venta_id', $idVenta) -> findAll();
+            
+            foreach ($detVenta as $key => $value) 
             {
                 $this -> productos -> actualizaStock($value['producto_id'], $value['det_venta_cantidad'], '+');
             }
 
-            $this -> ventas -> update($id, ['venta_state' => 0]);
+            $this -> ventas -> set('venta_state', 0) -> where('venta_id', $idVenta) -> update();
 
             return redirect() -> to(base_url() . '/ventas');
         }

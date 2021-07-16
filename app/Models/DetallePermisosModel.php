@@ -13,7 +13,7 @@
         protected $returnType     = 'array';
         protected $useSoftDeletes = false;
 
-        protected $allowedFields = ['permiso_id', 'usuario_id', 'det_permiso_state', 'det_permiso_creation', 'det_permiso_update'];
+        protected $allowedFields = ['permiso_id', 'rol_id', 'det_permiso_state', 'det_permiso_creation', 'det_permiso_update'];
 
         protected $useTimestamps = true;
         protected $createdField  = 'det_permiso_creation';
@@ -27,13 +27,36 @@
         {
             $this -> select('det_permiso.*, permiso_nombre');
             $this -> join('permiso', 'det_permiso.permiso_id = permiso.permiso_id');
-            $this -> where('usuario_id', $idUser);
+            $this -> join('rol', 'det_permiso.rol_id = rol.rol_id');
+            $this -> join('usuario', 'usuario.rol_id = rol.rol_id');
+            $this -> where('usuario.usuario_id', $idUser);
 
             if ($state != 3) 
             {
                 $this -> where('det_permiso_state', $state);
             }
             
+            $this -> orderBy('permiso_orden', 'ASC');
+            $datos = $this -> findAll();
+            $newDatos = array();
+
+            foreach ($datos as $key => $value) 
+            {
+                $auxPermiso = $value['permiso_id'];
+                $auxPermiso = intval($auxPermiso);
+
+                $newDatos[$auxPermiso] = $value;
+            }       
+                 
+            return $newDatos;
+        }
+
+        public function getPermisoPorPerfil($id)
+        {
+            $this -> select('det_permiso.*, permiso_nombre');
+            $this -> join('permiso', 'det_permiso.permiso_id = permiso.permiso_id');
+            $this -> join('rol', 'det_permiso.rol_id = rol.rol_id');
+            $this -> where('rol.rol_id', $id);
             $this -> orderBy('permiso_orden', 'ASC');
             $datos = $this -> findAll();
             $newDatos = array();

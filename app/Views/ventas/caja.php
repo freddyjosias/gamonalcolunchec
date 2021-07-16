@@ -12,7 +12,7 @@
 
         <?php } else { ?>
 
-            <h1 class="h2 mb-2 text-gray-800"><?= $title . ' - ' . $caja["caja_nombre"] ?></h1>
+            <h1 class="h2 mb-2 text-gray-800"><?= $title . ' - ' . $caja["caja_nombre"] ?></h1>            
 
         <form method='POST' action='<?= base_url() ?>/ventas/guarda' autocomplete='off' id='form_venta' name='form_venta'>
             
@@ -22,45 +22,26 @@
                         <div class="ui-widget">
                             <input type="hidden" class='form-control' id='id_cliente' name='id_cliente' value='<?= $clienteDefecto['cliente_id'] ?>'>
                             <input type="hidden" class='form-control' id='id_venta' name='id_venta' value='<?= $idUnico ?>'>
-                            <label for="">Nombre Cliente: </label>
+                            <label for="">Nombres/Razón Social: </label>
                             <input type="text" class='form-control' id='cliente' placeholder='Escribe el nombre del cliente' value='<?= $clienteDefecto['cliente_nombre'] ?>'>
                         </div>
                     </div>
 
-                    <div class="col-12 col-sm-3">
-                        <div class="ui-widget">
-                            <label for="">Apellido Cliente: </label>
-                            <input type="text" class='form-control' id='apellido' placeholder='Escribe el apellido del cliente' value='<?= $clienteDefecto['cliente_apellido'] ?>'>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-sm-3">
+                    <div class="col-12 col-sm-2">
                         <div class="ui-widget">
                             <label for=""><span class="docu_cli"><?= $clienteDefecto['cliente_documento'] ?></span> Cliente: </label>
                             <input type="text" class='form-control' id='dni'  placeholder='Escribe el DNI del cliente' value='<?= $clienteDefecto['cliente_dni'] ?>'>
                         </div>
                     </div>
 
-                    <div class="col-12 col-sm-3">
+                    <div class="col-12 col-sm-2">
                         <div class="ui-widget">
                             <label for="">Correo Cliente: </label>
                             <input type="text" class='form-control' id='correo'  value='<?= $clienteDefecto['cliente_correo'] ?>' disabled>
                         </div>
                     </div>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <div class="row">
 
-                    <div class="col-12 col-sm-3">
-                        <div class="ui-widget">
-                            <label for="">Dirección Cliente: </label>
-                            <input type="text" class='form-control' id='direccion'  value='<?= $clienteDefecto['cliente_direccion'] ?>' disabled>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-sm-3">
+                    <div class="col-12 col-sm-2">
                         <div class="ui-widget">
                             <label for="">Teléfono Cliente: </label>
                             <input type="text" class='form-control' id='telefono'  value='<?= $clienteDefecto['cliente_telefono'] ?>' disabled>
@@ -83,6 +64,18 @@
                             <option value="003">Trasferencia</option> -->
                         </select>
 
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group border border-dark border-left-0 border-right-0 border-top-0 pb-4 mb-4">
+                <div class="row">
+
+                    <div class="col-12 col-sm-5">
+                        <div class="ui-widget">
+                            <label for="">Dirección Cliente: </label>
+                            <input type="text" class='form-control' id='direccion'  value='<?= $clienteDefecto['cliente_direccion'] ?>' disabled>
+                        </div>
                     </div>
 
                     <?php if (false) { ?>
@@ -147,6 +140,7 @@
                 <p for="" class='font-weight-bolder h3 text-dark mt-4 '>Total S/ <span class='label_total'>0.00</span></p>
                 <input type="text" id='total' name='total' class='d-none' value='0.00'>
                 <div class="ml-4 mt-2">
+                    <a class="btn btn-info mr-2" href="<?= base_url() ?>/ventas">Regresar</a>
                     <button type="button" id='completa_venta' class="btn btn-success">Completar Venta</button>
                 </div>
 
@@ -161,4 +155,4 @@
 
 </div>
 <!-- End of Main Content -->
-<script src="<?= base_url() ?>/js/caja.js"></script>
+<script src="<?= base_url() ?>/public/js/caja.js"></script>

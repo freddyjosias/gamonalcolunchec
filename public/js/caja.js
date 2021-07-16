@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    let baseURL = 'http://localhost/gamonalcolunche/public';
+    let baseURL = 'http://localhost/licorlandsorftware/';
 
     $('#cliente').keyup(function (e) {
 
@@ -10,20 +10,6 @@ $(document).ready(function() {
             select: function (event, ui) {
                 
                 autocomple(event, ui) 
-            }
-        });
-
-    });
-
-    $('#apellido').keyup(function (e) {
-
-        $('#apellido').autocomplete({
-            source: baseURL + '/clientes/autocompletedata/apellido',
-            minLenght: 3,
-            select: function (event, ui) {
-
-                autocomple(event, ui) 
-                
             }
         });
 
@@ -52,6 +38,7 @@ $(document).ready(function() {
             $('#apellido').val(ui.item.apellido);
             $('#dni').val(ui.item.dni);
             $('#documento').val(ui.item.documento);
+            $('.docu_cli').html(ui.item.documento);
             $('#telefono').val(ui.item.telefono);
             $('#direccion').val(ui.item.direccion);
             $('#correo').val(ui.item.correo);

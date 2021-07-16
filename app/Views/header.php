@@ -17,29 +17,34 @@
 
     <title><?= $title . ' - ' . $nombreTienda ?></title>
 
-    <link rel="shortcut icon" href="<?= base_url() . '/img/' . $logoTienda ?>" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= base_url() . '/public/img/' . $logoTienda ?>" type="image/x-icon">
 
     <!-- Custom fonts for this template -->
-    <link href="<?= base_url() ?>/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="<?= base_url() ?>/public/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="<?= base_url() ?>/css/sb-admin-2.css" rel="stylesheet">
+    <link href="<?= base_url() ?>/public/css/sb-admin-2.css" rel="stylesheet">
 
     <!-- Custom styles for this page -->
-    <link href="<?= base_url() ?>/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <script src="<?= base_url() ?>/vendor/jquery/jquery.min.js"></script>
-    <link href="<?= base_url() ?>/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css">
+    <link href="<?= base_url() ?>/public/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <script src="<?= base_url() ?>/public/vendor/jquery/jquery.min.js"></script>
+    <link href="<?= base_url() ?>/public/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css">
     
     <!--<script src="<?= base_url() ?>/js/jquery-3.5.1.min.js"></script>-->
-    <script src="<?= base_url() ?>/js/jquery-ui/external/jquery/jquery.js"></script>
-    <script src="<?= base_url() ?>/js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="<?= base_url() ?>/public/js/jquery-ui/external/jquery/jquery.js"></script>
+    <script src="<?= base_url() ?>/public/js/jquery-ui/jquery-ui.min.js"></script>
 
     <?php if (isset($css)) {
         foreach ($css as $key => $value) { ?>
-            <link href="<?= base_url() ?>/css/<?= $value ?>.css" rel="stylesheet">
+            <link href="<?= base_url() ?>/public/css/<?= $value ?>.css" rel="stylesheet">
     <?php } 
-    } ?>
+    } 
+    
+    if (isset($anyChart)) { ?>
+        <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" type="text/css" rel="stylesheet">
+        <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css" type="text/css" rel="stylesheet">
+    <?php } ?>
 
 </head>
 
@@ -65,11 +70,25 @@
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
 
+                <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseDash"
+                    aria-expanded="true" aria-controls="collapseDash" type='button'>
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <div id="collapseDash" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+
+                        <a class="collapse-item" href="<?= base_url() ?>/dashboard">Dashboard</a>
+
+                    </div>
+                </div>
+
                 <?php if(isset($permisos[2]) || isset($permisos[10]) || isset($permisos[11]) || isset($permisos[12])) { ?>
                     <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsePages"
                         aria-expanded="true" aria-controls="collapsePages" type='button'>
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Productos</span>
+                        <i class="fas fa-store"></i>
+                        <span>Gestor de Almacen</span>
                     </a>
 
                     <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
@@ -97,7 +116,7 @@
                     <a class="nav-link collapsed" data-toggle="collapse" data-target="#clientes_menu"
                         aria-expanded="true" aria-controls="clientes_menu" type='button'>
                         <i class="fas fa-users"></i>
-                        <span>Clientes</span>
+                        <span>Gestor de Clientes</span>
                     </a>
 
                     <div id="clientes_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
@@ -108,50 +127,34 @@
 
                 <?php } 
                 
-                if(isset($permisos[7]) || isset($permisos[8])) { ?>
+                if(isset($permisos[7]) || isset($permisos[8]) || isset($permisos[5]) || isset($permisos[6]) || isset($permisos[4])) { ?>
                     <a class="nav-link collapsed" data-toggle="collapse" data-target="#caja_menu"
                         aria-expanded="true" aria-controls="caja_menu" type='button'>
                         <i class="fas fa-cash-register"></i>
-                        <span>Ventas</span>
+                        <span>Gestor de Transacciones</span>
                     </a>
 
                     <div id="caja_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <?php if (isset($permisos[8])) { ?>
-                                <a class="collapse-item" href="<?= base_url() ?>/ventas/ventas">Nueva Venta</a>
-                            <?php }
-                            if (isset($permisos[7])) { ?>
+                            <?php  if (isset($permisos[7])) { ?>
                                 <a class="collapse-item" href="<?= base_url() ?>/ventas">Ventas</a>
+                            <?php } 
+                            if (isset($permisos[5])) { ?>
+                                <a class="collapse-item" href="<?= base_url() ?>/compras">Compras</a>
+                            <?php } 
+                            if (isset($permisos[4])) { ?>
+                                <a class="collapse-item" href="<?= base_url() ?>/cajas">Cajas</a>
                             <?php } ?>
                         </div>
                     </div>
                     
                 <?php } 
-                
-                if(isset($permisos[5]) || isset($permisos[6])) { ?>
-                    <a class="nav-link collapsed" data-toggle="collapse" data-target="#compras_menu"
-                        aria-expanded="true" aria-controls="compras_menu" type='button'>
-                        <i class="fas fa-cash-register"></i>
-                        <span>Compras</span>
-                    </a>
 
-                    <div id="compras_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <?php if (isset($permisos[6])) { ?>
-                                <a class="collapse-item" href="<?= base_url() ?>/compras/nuevo">Nueva Compra</a>
-                            <?php }
-                            if (isset($permisos[5])) { ?>
-                                <a class="collapse-item" href="<?= base_url() ?>/compras">Compras</a>
-                            <?php } ?>
-                        </div>
-                    </div>
-                <?php } 
-
-                if(isset($permisos[3]) || isset($permisos[1]) || isset($permisos[13]) || isset($permisos[4])) { ?>
+                if(isset($permisos[3]) || isset($permisos[1]) || isset($permisos[13])) { ?>
                     <a class="nav-link collapsed" data-toggle="collapse" data-target="#admin_menu"
                         aria-expanded="true" aria-controls="admin_menu" type='button'>
                         <i class="fas fa-tools"></i>
-                        <span>Administración</span>
+                        <span>Gestor de Seguridad</span>
                     </a>
 
                     <div id="admin_menu" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
@@ -163,10 +166,7 @@
                                 <a class="collapse-item" href="<?= base_url() ?>/usuarios">Usuarios</a>
                             <?php } 
                             if (isset($permisos[13])) { ?>
-                                <a class="collapse-item" href="<?= base_url() ?>/roles">Roles</a>
-                            <?php }
-                            if (isset($permisos[4])) { ?>
-                                <a class="collapse-item" href="<?= base_url() ?>/cajas">Cajas</a>
+                                <a class="collapse-item" href="<?= base_url() ?>/perfiles">Perfiles</a>
                             <?php } ?>
                         </div>
                     </div>
@@ -356,7 +356,7 @@
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="<?= base_url() ?>/img/undraw_profile_1.svg"
+                                        <img class="rounded-circle" src="<?= base_url() ?>/public/img/undraw_profile_1.svg"
                                             alt="">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
@@ -368,7 +368,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="<?= base_url() ?>/img/undraw_profile_2.svg"
+                                        <img class="rounded-circle" src="<?= base_url() ?>/public/img/undraw_profile_2.svg"
                                             alt="">
                                         <div class="status-indicator"></div>
                                     </div>
@@ -380,7 +380,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="<?= base_url() ?>/img/undraw_profile_3.svg"
+                                        <img class="rounded-circle" src="<?= base_url() ?>/public/img/undraw_profile_3.svg"
                                             alt="">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
@@ -413,24 +413,16 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $user_session->nombre ?></span>
+                                <span class="mr-2 d-none d-lg-inline text-dark small"><?= $user_session->nombre . ' &nbsp; | &nbsp; ' . strtoupper($user_session->perfil) ?></span>
                                 <img class="img-profile rounded-circle"
-                                    src="<?= base_url() ?>/img/undraw_profile.svg">
+                                    src="<?= base_url() ?>/public/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
                                 <a class="dropdown-item" href="<?= base_url() ?>/usuarios/cambiarpassword">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Cambiar contraseña
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="<?= base_url() ?>/usuarios/logout">

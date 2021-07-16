@@ -15,7 +15,6 @@
 
         protected $allowedFields = [
             'cliente_nombre', 
-            'cliente_apellido', 
             'cliente_direccion', 
             'cliente_dni', 
             'cliente_telefono', 

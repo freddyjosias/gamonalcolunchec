@@ -152,7 +152,6 @@
             {
                 $this -> clientes -> save([
                     'cliente_nombre' => $this -> request -> getPost('nombre'), 
-                    'cliente_apellido' => $this -> request -> getPost('apellido'), 
                     'cliente_direccion' => $this -> request -> getPost('direccion'), 
                     'cliente_dni' => $dni, 
                     'cliente_telefono' => $this -> request -> getPost('telefono'), 
@@ -263,7 +262,6 @@
                     $this -> request -> getPost('id'), 
                     [
                         'cliente_nombre' => $this -> request -> getPost('nombre'), 
-                        'cliente_apellido' => $this -> request -> getPost('apellido'), 
                         'cliente_direccion' => $this -> request -> getPost('direccion'), 
                         'cliente_dni' => $dni, 
                         'cliente_telefono' => $this -> request -> getPost('telefono'), 
@@ -375,7 +373,7 @@
                 }
             }
 
-            if ($deQue != 'dni' && $deQue != 'apellido') 
+            if ($deQue != 'dni') 
             {
                 $deQue = null;
             }
@@ -392,10 +390,6 @@
             {
                 $clientes = $this->clientes->like('cliente_dni', $valor)->where('cliente_state', 1)->findAll();
             }
-            else if ($deQue == 'apellido') 
-            {
-                $clientes = $this->clientes->like('cliente_apellido', $valor)->where('cliente_state', 1)->findAll();
-            }
             
 
             if (!empty($clientes)) 
@@ -403,8 +397,7 @@
                 foreach ($clientes as $key => $value) 
                 {
                     $data['id'] = $value['cliente_id'];
-                    $data['value'] = $value['cliente_nombre'] . ' ' . $value['cliente_apellido'] . ' - ' . $value['cliente_dni'];
-                    $data['apellido'] = $value['cliente_apellido'];
+                    $data['value'] = $value['cliente_nombre'] . ' - ' . $value['cliente_dni'];
                     $data['nombre'] = $value['cliente_nombre'];
                     $data['dni'] = $value['cliente_dni'];
                     $data['documento'] = $value['cliente_documento'];

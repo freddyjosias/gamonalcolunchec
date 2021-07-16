@@ -18,19 +18,23 @@
                         <thead>
                             <tr>
                                 <th>Id</th>
-                                <th>Folio</th>
+                                <th>Proveedor</th>
+                                <th>Documento</th>
+                                <th>IGV</th>
                                 <th>Total</th>
                                 <th>Fecha</th>
-                                <th></th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
                                 <th>Id</th>
-                                <th>Folio</th>
+                                <th>Proveedor</th>
+                                <th>Documento</th>
+                                <th>IGV</th>
                                 <th>Total</th>
                                 <th>Fecha</th>
-                                <th></th>
+                                <th>Acciones</th>
                             </tr>
                         </tfoot>
                         <tbody>
@@ -39,12 +43,14 @@
                                     
                                     <tr>
                                         <td><?= $value['compra_id'] ?></td>
-                                        <td><?= $value['compra_folio'] ?></td>
+                                        <td><?= $value['compra_proveedor'] ?></td>
+                                        <td><?= $value['compra_tipodoc'] ?></td>
+                                        <td><?= ($value['compra_igv'] == 1) ? 'SI' : 'NO' ?></td>
                                         <td><?= $value['compratotal'] ?></td>
                                         <td><?= $value['compra_creation'] ?></td>
 
                                         <td class='text-center'>
-                                            <a type='button' href="<?= base_url() ?>/compras/muestracomprapdf/<?= $value['compra_id'] ?>" class='btn btn-primary py-1 my-1 px-2'title=''><i class="fas fa-file-pdf"></i></a>
+                                            <a type='button' href="<?= base_url() ?>/compras/muestracomprapdf/<?= $value['compra_id'] ?>" class='btn btn-warning py-1 my-1 px-2'title=''><i class="fas fa-file-pdf"></i></a>
                                         </td>
                                     </tr>
                                 
@@ -79,8 +85,7 @@
             </div>
                                     
             <div class="modal-footer">
-                <button class="btn btn-light" type="button" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-light" type="button" data-dismiss="modal">No</button>
+                <button class="btn btn-light" type="button" data-dismiss="modal">Cancelar</button>
                 <a class="btn btn-danger btn-ok" type="button">Si</a>
             </div>
         </div>

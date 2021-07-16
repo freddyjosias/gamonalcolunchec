@@ -6,13 +6,16 @@
 
         <div class="">
             <p class="">
-                <a href="<?= base_url() ?>/ventas/eliminados" class='btn btn-warning'>Eliminado</a>
+                <?php if (isset($permisos[8])) { ?>
+                    <a class='btn btn-success' href="<?= base_url() ?>/ventas/ventas">Nueva Venta</a>
+                <?php }?>
+                <a href="<?= base_url() ?>/ventas/eliminados" class='btn btn-warning'>Anuladas</a>
             </p>
         </div>
         <?php 
             date_default_timezone_set('America/Lima');
             $now = new DateTime('NOW');
-            $interval = new DateInterval('PT1H');
+            $interval = new DateInterval('P3D');
             
             if (!is_null($msg)) { ?>
 
@@ -57,11 +60,8 @@
                                         <td><?= $value['venta_total'] ?></td>
                                         <td><?= $value['usuario_user'] ?></td>
 
-                                        <td><a href="<?= base_url() ?>/ventas/muestraTicket/<?= $value['venta_id'] ?>" class='btn btn-warning'><i class="fas fa-file-pdf"></i></a></td>
-
-                                        <td><a type='button' data-href="<?= base_url() ?>/ventas/eliminar/<?= $value['venta_id'] ?>" class='btn btn-danger' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Eliminar Registro'><i class="fas fa-trash-alt"></i></a></td>
-
                                         <td class='text-center'>
+
                                             <a type='button' href="<?= base_url() ?>/ventas/muestraTicket/<?= $value['venta_id'] ?>" class='btn btn-primary py-1 my-1 px-2'title=''><i class="fas fa-file-pdf"></i></a>
                                             <?php
                                                 
@@ -96,19 +96,18 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Eliminar Registro</h5>
+                <h5 class="modal-title">Anular Venta</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
 
             <div class="modal-body">
-                ¿Desea eliminar este registro?
+                ¿Desea anular esta venta?
             </div>
                                     
             <div class="modal-footer">
-                <button class="btn btn-light" type="button" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-light" type="button" data-dismiss="modal">No</button>
+                <button class="btn btn-light" type="button" data-dismiss="modal">Cancelar</button>
                 <a class="btn btn-danger btn-ok" type="button">Si</a>
             </div>
         </div>

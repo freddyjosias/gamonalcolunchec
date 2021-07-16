@@ -12,21 +12,21 @@
 
         <form method='POST' action='<?= base_url() ?>/clientes/actualizar' autocomplete='off'>
         
-            <input type="text" class='form-control d-none' id='id' name='id' autofocus required value='<?= $cliente['cliente_id'] ?>'>
+            <input type="text" class='form-control d-none' id='id' name='id' required value='<?= $cliente['cliente_id'] ?>'>
 
             <div class="form-group">
                 <div class="row">
                     <div class="col-12 col-sm-6">
 
-                        <label for="">Nombre</label>
-                        <input type="text" class='form-control' id='nombre' name='nombre' autofocus required value="<?= $cliente['cliente_nombre'] ?>">
+                        <label for="">DNI/RUC</label>
+                        <input type="tel" class='form-control' id='dni' name='dni' value="<?= $cliente['cliente_dni'] ?>" maxlength="15" autofocus>
 
                     </div>
 
                     <div class="col-12 col-sm-6">
 
-                        <label for="">Apellidos</label>
-                        <input type="text" class='form-control' id='apellido' name='apellido' value="<?= $cliente['cliente_apellido'] ?>">
+                        <label for="">Nombres/Razón Social</label>
+                        <input type="text" class='form-control' id='nombre' name='nombre' required value="<?= $cliente['cliente_nombre'] ?>">
 
                     </div>
                 </div>
@@ -34,12 +34,7 @@
 
             <div class="form-group">
                 <div class="row">
-                    <div class="col-12 col-sm-4">
-
-                        <label for="">DNI/RUC</label>
-                        <input type="tel" class='form-control' id='dni' name='dni' value="<?= $cliente['cliente_dni'] ?>" maxlength="15">
-
-                    </div>
+                    
 
                     <div class="col-12 col-sm-4">
 
@@ -68,6 +63,13 @@
                         <input type="email" class='form-control' id='correo' name='correo' value="<?= $cliente['cliente_correo'] ?>">
 
                     </div>
+
+                    <div class="col-12 col-sm-4">
+
+                        <label for="">Teléfono</label>
+                        <input type="tel" class='form-control' id='telefono' name='telefono' value="<?= $cliente['cliente_telefono'] ?>">
+
+                    </div>
                 </div>
             </div>
 
@@ -79,19 +81,16 @@
                         <input type="text" class='form-control' id='direccion' name='direccion' value="<?= $cliente['cliente_direccion'] ?>">
 
                     </div>
-
-                    <div class="col-12 col-sm-6">
-
-                        <label for="">Teléfono</label>
-                        <input type="tel" class='form-control' id='telefono' name='telefono' value="<?= $cliente['cliente_telefono'] ?>">
-
-                    </div>
                 </div>
             </div>
 
             <div class=''>
                 <a href="<?= base_url() ?>/clientes" class='btn btn-light'>Regresar</a>
                 <button type="submit" class="btn btn-success">Guardar</button>
+            </div>
+
+            <div class="alertas mt-4">
+
             </div>
 
         </form>
@@ -101,3 +100,4 @@
 
 </div>
 <!-- End of Main Content -->
+<script src="<?= base_url() ?>/public/js/usuario.js"></script>

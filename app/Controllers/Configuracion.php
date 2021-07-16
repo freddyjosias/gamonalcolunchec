@@ -155,7 +155,7 @@
 
                     $imgLogo = $this -> request -> getFile('tienda_logo');
                     $imgName = date('Ymd_His_') . 'logotienda.' . $imgLogo -> getExtension();
-                    $imgLogo -> move('./img', $imgName);
+                    $imgLogo -> move('./public/img', $imgName);
 
                     $this -> configModel -> whereIn('configuracion_nombre', ['tienda_logo']) -> set(['configuracion_valor' => $imgName]) -> update();
                 }

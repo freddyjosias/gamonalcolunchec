@@ -6,6 +6,9 @@
         
         <div class="">
             <p class="">
+                <?php if (isset($permisos[6])) { ?>
+                    <a class='btn btn-success' href="<?= base_url() ?>/compras/nuevo">Nueva Compra</a>
+                <?php }  ?>
                 <a href="<?= base_url() ?>/compras/eliminados" class='btn btn-warning'>Compras Anuladas</a>
             </p>
         </div>
@@ -29,7 +32,9 @@
                         <thead>
                             <tr>
                                 <th>Id</th>
-                                <th>Folio</th>
+                                <th>Proveedor</th>
+                                <th>Documento</th>
+                                <th>IGV</th>
                                 <th>Total</th>
                                 <th>Fecha</th>
                                 <th>Acciones</th>
@@ -38,7 +43,9 @@
                         <tfoot>
                             <tr>
                                 <th>Id</th>
-                                <th>Folio</th>
+                                <th>Proveedor</th>
+                                <th>Documento</th>
+                                <th>IGV</th>
                                 <th>Total</th>
                                 <th>Fecha</th>
                                 <th>Acciones</th>
@@ -50,7 +57,9 @@
                                     
                                     <tr>
                                         <td><?= $value['compra_id'] ?></td>
-                                        <td><?= $value['compra_folio'] ?></td>
+                                        <td><?= $value['compra_proveedor'] ?></td>
+                                        <td><?= $value['compra_tipodoc'] ?></td>
+                                        <td><?= ($value['compra_igv'] == 1) ? 'SI' : 'NO' ?></td>
                                         <td><?= $value['compratotal'] ?></td>
                                         <td><?= $value['compra_creation'] ?></td>
 
@@ -88,7 +97,7 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Anular Registro</h5>
+                <h5 class="modal-title">Anular Compra</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -99,8 +108,7 @@
             </div>
                                     
             <div class="modal-footer">
-                <button class="btn btn-light" type="button" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-light" type="button" data-dismiss="modal">No</button>
+                <button class="btn btn-light" type="button" data-dismiss="modal">Cancelar</button>
                 <a class="btn btn-danger btn-ok" type="button">Si</a>
             </div>
         </div>

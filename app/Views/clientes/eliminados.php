@@ -17,7 +17,8 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Nombre</th>
+                                <th>Nombres/Razón Social</th>
+                                <th>DNI/RUC</th>
                                 <th>Dirección</th>
                                 <th>Correo</th>
                                 <th>Acciones</th>
@@ -25,7 +26,8 @@
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>Nombre</th>
+                                <th>Nombres/Razón Social</th>
+                                <th>DNI/RUC</th>
                                 <th>Dirección</th>
                                 <th>Correo</th>
                                 <th>Acciones</th>
@@ -36,9 +38,10 @@
                                 foreach ($datos as $key => $value) { ?>
                                     
                                     <tr>
-                                        <td><?= $value['cliente_nombre'] ?></td>
-                                        <td><?= $value['cliente_direccion'] ?></td>
-                                        <td><?= $value['cliente_correo'] ?></td>
+                                        <td><?= $value['cliente_nombre']?></td>
+                                        <td><?= ($value['cliente_dni'] != '') ? $value['cliente_dni'] : '---' ?></td>
+                                        <td><?= ($value['cliente_direccion'] != '') ? $value['cliente_direccion'] : '---' ?></td>
+                                        <td><?= ($value['cliente_correo'] != '') ? $value['cliente_correo'] : '---' ?></td>
 
                                         <td class="text-center">
                                             <a type='button' data-href="<?= base_url() ?>/clientes/reingresar/<?= $value['cliente_id'] ?>" class='btn btn-success   py-1 my-1 px-2' data-toggle='modal' data-target='#modal-confirma' data-placement='top' title='Reingresar Registro'><i class="fas fa-undo-alt"></i></a>
@@ -77,8 +80,7 @@
             </div>
                                     
             <div class="modal-footer">
-                <button class="btn btn-light" type="button" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-light" type="button" data-dismiss="modal">No</button>
+                <button class="btn btn-light" type="button" data-dismiss="modal">Cancelar</button>
                 <a class="btn btn-danger btn-ok" type="button">Si</a>
             </div>
         </div>

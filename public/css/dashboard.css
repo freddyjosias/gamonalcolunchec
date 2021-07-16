@@ -1,0 +1,32 @@
+.cord_text_prin {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.cord_img_fondo {
+    position: absolute;
+    right: 10px;
+    bottom: -20px;
+    font-size: 75px;
+    opacity: 0.3;
+}
+
+.alert-success  {
+    color: black !important;
+}
+
+.alert-success .color-danger  {
+    color: red !important;
+}
+
+.alert-success .color-primary {
+    color: rgb(54, 189, 54) !important;
+}
+
+.anychart-credits-text {
+    display: none;
+}
+
+.card_prod_min {
+    min-height: 400px;
+}
